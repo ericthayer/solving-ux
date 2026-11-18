@@ -1,0 +1,64 @@
+.frame {
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--sux-radius);
+  background: var(--code-bg);
+  --code-bg: #fbfbf9;
+}
+
+@media (prefers-color-scheme: dark) {
+  .frame {
+    --code-bg: #141517;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.375rem 0.5rem 0.375rem 0.875rem;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.filename {
+  margin: 0;
+  font-family: var(--sux-font-mono);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.scroller {
+  max-height: 36rem;
+  overflow: auto;
+}
+
+.pre {
+  margin: 0;
+  padding: 0.875rem 0;
+  font-family: var(--sux-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  tab-size: 2;
+  background: transparent !important;
+}
+
+.line {
+  display: table-row;
+}
+
+.lineNo {
+  display: table-cell;
+  width: 1%;
+  padding: 0 0.875rem;
+  color: var(--color-muted);
+  text-align: right;
+  user-select: none;
+}
+
+.lineContent {
+  display: table-cell;
+  padding-right: 1rem;
+  white-space: pre;
+}

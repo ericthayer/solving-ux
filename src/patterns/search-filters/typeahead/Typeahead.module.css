@@ -1,0 +1,119 @@
+.root {
+  display: grid;
+  gap: 0.375rem;
+  /* Reserves room for the result count line when the popup is closed. */
+  padding-bottom: 1.75rem;
+  max-width: 28rem;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.hint {
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+}
+
+.field {
+  position: relative;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 1px;
+}
+
+.input[aria-expanded='true'] {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.popup {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: 10;
+}
+
+.popup[data-open] {
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-top: 0;
+  border-end-start-radius: var(--sux-radius, 6px);
+  border-end-end-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  box-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.3);
+}
+
+.listbox {
+  max-height: 20rem;
+  margin: 0;
+  padding: 0.25rem;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.option {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: calc(var(--sux-radius, 6px) - 2px);
+  cursor: pointer;
+}
+
+.option[aria-selected='true'] {
+  background: var(--sux-accent-soft, #e6f2ed);
+  box-shadow: inset 3px 0 0 var(--sux-accent, #0b6e4f);
+}
+
+.optionLabel mark {
+  background: none;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--sux-accent, #0b6e4f);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.optionDescription {
+  color: var(--sux-muted, #52525b);
+  font-size: 0.8125rem;
+}
+
+.status {
+  margin: 0;
+  padding: 0.375rem 0;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.8125rem;
+}
+
+.popup[data-open] .status {
+  padding-inline: 0.625rem;
+  border-top: 1px solid var(--sux-line, #d4d4d8);
+}
+
+.popup[data-open] .status:empty {
+  padding: 0;
+  border: 0;
+}
+
+@media (forced-colors: active) {
+  .option[aria-selected='true'] {
+    outline: 2px solid Highlight;
+  }
+}

@@ -1,0 +1,68 @@
+/* Layout helpers for live demos only. Pattern components never import this file. */
+.split {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+}
+
+.stack {
+  display: grid;
+  gap: 1rem;
+  justify-items: stretch;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.panel {
+  padding: 1rem;
+  border: 1px dashed var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.panelText {
+  margin: 0.5rem 0 0;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.875rem;
+}
+
+.button {
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+.log {
+  margin: 0;
+  padding-inline-start: 0;
+  font-size: 0.8125rem;
+  color: var(--sux-muted, #52525b);
+}
+
+@container (max-width: 36rem) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

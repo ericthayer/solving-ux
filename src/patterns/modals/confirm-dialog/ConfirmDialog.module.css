@@ -1,0 +1,135 @@
+.dialog {
+  width: min(28rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: calc(var(--sux-radius, 6px) + 2px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  box-shadow: 0 24px 48px -12px rgb(0 0 0 / 0.35);
+}
+
+.dialog::backdrop {
+  background: rgb(9 9 11 / 0.55);
+}
+
+.dialog[data-tone='danger'] {
+  border-top: 4px solid var(--sux-danger, #b42318);
+}
+
+.dialog[open] {
+  animation: enter 160ms ease-out;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] {
+    animation: none;
+  }
+}
+
+.panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.description {
+  color: var(--sux-muted, #52525b);
+  line-height: 1.5;
+}
+
+.description p {
+  margin: 0;
+}
+
+.consequences {
+  margin: 0.75rem 0 0;
+  padding-inline-start: 1.25rem;
+  list-style: disc;
+  color: var(--sux-ink, #18181b);
+}
+
+.field {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.input {
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  font: inherit;
+  font-family: var(--sux-font-mono, ui-monospace, monospace);
+}
+
+.error {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-danger-soft, #fdecea);
+  color: var(--sux-danger, #b42318);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.primary,
+.secondary,
+.danger {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: var(--sux-radius, 6px);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary {
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+}
+
+.primary {
+  border: 1px solid var(--sux-accent, #0b6e4f);
+  background: var(--sux-accent, #0b6e4f);
+  color: var(--sux-accent-ink, #fff);
+}
+
+.danger {
+  border: 1px solid var(--sux-danger, #b42318);
+  background: var(--sux-danger, #b42318);
+  color: #fff;
+}
+
+.primary:disabled,
+.danger:disabled,
+.secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.panel :is(button, input):focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
