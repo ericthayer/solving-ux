@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Two token layers:
+ *  --color-*  drive the platform shell (mapped into Tailwind).
+ *  --sux-*    are the public theme contract every pattern's CSS Module reads, with fallbacks.
+ */
+:root {
+  color-scheme: light;
+  --color-canvas: #f6f6f3;
+  --color-surface: #ffffff;
+  --color-sunken: #efefea;
+  --color-ink: #17181a;
+  --color-muted: #55575c;
+  --color-line: #d9d9d3;
+  --color-accent: #0b6e4f;
+  --color-accent-ink: #ffffff;
+  --color-danger: #b42318;
+  --color-warning: #8a5a00;
+  --color-success: #1a7f37;
+  --color-editor: #f0b429;
+
+  --sux-surface: var(--color-surface);
+  --sux-sunken: var(--color-sunken);
+  --sux-ink: var(--color-ink);
+  --sux-muted: var(--color-muted);
+  --sux-line: var(--color-line);
+  --sux-line-strong: #9a9b96;
+  --sux-accent: var(--color-accent);
+  --sux-accent-ink: var(--color-accent-ink);
+  --sux-accent-soft: #e4f1eb;
+  --sux-danger: var(--color-danger);
+  --sux-danger-soft: #fcebe9;
+  --sux-warning: var(--color-warning);
+  --sux-success: var(--color-success);
+  --sux-focus: #1d4ed8;
+  --sux-radius: 6px;
+  --sux-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-canvas: #111213;
+    --color-surface: #1a1b1d;
+    --color-sunken: #232427;
+    --color-ink: #ececea;
+    --color-muted: #a5a7ab;
+    --color-line: #34363a;
+    --color-accent: #4cc79a;
+    --color-accent-ink: #06261b;
+    --color-danger: #ff8a7a;
+    --color-warning: #f2c14e;
+    --color-success: #6fd08c;
+
+    --sux-line-strong: #5d6066;
+    --sux-accent-soft: #15362a;
+    --sux-danger-soft: #3a1b18;
+    --sux-focus: #8ab4ff;
+  }
+}
+
+html {
+  background: var(--color-canvas);
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sux-focus);
+  outline-offset: 2px;
+}
+
+/* <main> receives programmatic focus on navigation; it is a landing point, not a control. */
+#main:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

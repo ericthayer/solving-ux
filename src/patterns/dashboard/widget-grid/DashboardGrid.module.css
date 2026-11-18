@@ -1,0 +1,228 @@
+.root {
+  --widget-pad: 1rem;
+  --widget-gap: 1rem;
+  --stat-size: 1.75rem;
+
+  container-type: inline-size;
+  /* Size containers can't shrink-wrap their content; fill the parent instead. */
+  inline-size: 100%;
+  display: grid;
+  gap: var(--widget-gap);
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.root[data-density='compact'] {
+  --widget-pad: 0.625rem;
+  --widget-gap: 0.5rem;
+  --stat-size: 1.375rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.density {
+  display: inline-flex;
+  margin: 0;
+  padding: 2px;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+}
+
+.densityOption {
+  position: relative;
+}
+
+.densityOption input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.densityOption span {
+  display: block;
+  padding: 0.25rem 0.75rem;
+  border-radius: calc(var(--sux-radius, 6px) - 2px);
+}
+
+.densityOption input:checked + span {
+  background: var(--sux-ink, #18181b);
+  color: var(--sux-surface, #fff);
+}
+
+.densityOption input:focus-visible + span {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--widget-gap);
+}
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 9rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+}
+
+@container (min-width: 40rem) {
+  .widget[data-span='2'] {
+    grid-column: span 2;
+  }
+}
+
+.widgetHeader {
+  padding: var(--widget-pad) var(--widget-pad) 0;
+}
+
+.widgetTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0.125rem 0 0;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.8125rem;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  padding: var(--widget-pad);
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  padding: 0 var(--widget-pad) var(--widget-pad);
+}
+
+.link {
+  color: var(--sux-accent, #0b6e4f);
+  font-weight: 500;
+  text-underline-offset: 2px;
+}
+
+.skeleton {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.skeleton span[aria-hidden] {
+  height: 0.75rem;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--sux-sunken, #f4f4f5) 0%, var(--sux-line, #d4d4d8) 50%, var(--sux-sunken, #f4f4f5) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+.skeleton span[aria-hidden]:nth-child(2) {
+  width: 60%;
+  height: var(--stat-size);
+}
+
+.skeleton span[aria-hidden]:nth-child(4) {
+  width: 80%;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton span[aria-hidden] {
+    animation: none;
+  }
+}
+
+.message {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  color: var(--sux-muted, #52525b);
+}
+
+.message p {
+  margin: 0;
+}
+
+.message strong {
+  color: var(--sux-ink, #18181b);
+}
+
+.button {
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:focus-visible,
+.link:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+.stat p {
+  margin: 0;
+}
+
+.statLabel {
+  color: var(--sux-muted, #52525b);
+}
+
+.statValue {
+  font-size: var(--stat-size);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.statChange {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.statChange[data-good='true'] {
+  color: var(--sux-success, #1a7f37);
+}
+
+.statChange[data-good='false'] {
+  color: var(--sux-danger, #b42318);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

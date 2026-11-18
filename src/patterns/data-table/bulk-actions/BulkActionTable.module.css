@@ -1,0 +1,230 @@
+.root {
+  container-type: inline-size;
+  /* Size containers can't shrink-wrap their content; fill the parent instead. */
+  inline-size: 100%;
+  display: grid;
+  gap: 0.75rem;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.selectionBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-sunken, #f4f4f5);
+}
+
+.selectionBar[data-active] {
+  border-color: var(--sux-accent, #0b6e4f);
+  background: var(--sux-accent-soft, #e6f2ed);
+}
+
+.hint,
+.count,
+.range {
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+}
+
+.count {
+  color: var(--sux-ink, #18181b);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+.button,
+.dangerButton {
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dangerButton {
+  border-color: var(--sux-danger, #b42318);
+  color: var(--sux-danger, #b42318);
+}
+
+.linkButton {
+  padding: 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--sux-accent, #0b6e4f);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.button:focus-visible,
+.dangerButton:focus-visible,
+.linkButton:focus-visible,
+.sortButton:focus-visible,
+.scroller:focus-visible,
+.root input:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+.scroller {
+  overflow: auto;
+  max-height: 28rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.caption {
+  padding: 0.75rem;
+  text-align: start;
+  font-weight: 600;
+  background: var(--sux-surface, #fff);
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--sux-line, #d4d4d8);
+  background: var(--sux-surface, #fff);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--sux-sunken, #f4f4f5);
+  font-weight: 600;
+}
+
+.table tbody th {
+  font-weight: 500;
+}
+
+.table [data-align='end'] {
+  text-align: end;
+}
+
+.table tr[data-selected] > * {
+  background: var(--sux-accent-soft, #e6f2ed);
+}
+
+.checkCell {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 2.75rem;
+}
+
+.frozen {
+  position: sticky;
+  left: 2.75rem;
+  z-index: 1;
+  box-shadow: inset -1px 0 0 var(--sux-line, #d4d4d8);
+}
+
+.table thead .checkCell,
+.table thead .frozen {
+  z-index: 3;
+}
+
+.root input[type='checkbox'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--sux-accent, #0b6e4f);
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sortIcon {
+  width: 0;
+  height: 0;
+  border-inline: 4px solid transparent;
+  border-block-start: 5px solid currentColor;
+  opacity: 0.35;
+}
+
+.sortIcon[data-direction='ascending'] {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.sortIcon[data-direction='descending'] {
+  opacity: 1;
+}
+
+.emptyCell {
+  padding: 2rem !important;
+  text-align: center !important;
+  color: var(--sux-muted, #52525b);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.pagination .range:first-child {
+  margin-inline-end: auto;
+}
+
+@container (max-width: 30rem) {
+  .pagination .range:first-child {
+    display: none;
+  }
+
+  .actions {
+    margin-inline-start: 0;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
