@@ -72,6 +72,10 @@ Pattern CSS reads `--sux-*` custom properties (surface, ink, muted, line, accent
 
 This is a build-time flag, not authentication. Before exposing an editor build beyond the team, put `/editor` behind SSO.
 
+## Deployment
+
+Netlify (`netlify.toml`): builds with `npm run build`, publishes `dist`, and rewrites every path to `index.html` so deep links work on refresh. The public site builds with `VITE_ENABLE_EDITOR=false`. Live: https://solving-ux.netlify.app
+
 ## Stack
 
 React 18, TypeScript (strict), React Router 6, Tailwind CSS 3 (shell), CSS Modules (patterns), prism-react-renderer, Jest + React Testing Library + jest-axe, JSZip + FileSaver, React Context for state, Vite.

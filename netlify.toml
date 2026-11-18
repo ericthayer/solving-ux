@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Public, read-only build. Set VITE_ENABLE_EDITOR=true only on a team-restricted site.
+  VITE_ENABLE_EDITOR = "false"
+
+# Client-side routing: serve the app for every deep link (/patterns/:category/:slug, /editor).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
