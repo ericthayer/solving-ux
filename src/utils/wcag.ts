@@ -7,6 +7,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '1.1.1': { title: 'Non-text content', level: 'A', slug: 'non-text-content' },
   '1.3.1': { title: 'Info and relationships', level: 'A', slug: 'info-and-relationships' },
   '1.3.2': { title: 'Meaningful sequence', level: 'A', slug: 'meaningful-sequence' },
+  '1.3.5': { title: 'Identify input purpose', level: 'AA', slug: 'identify-input-purpose' },
   '1.4.1': { title: 'Use of color', level: 'A', slug: 'use-of-color' },
   '1.4.10': { title: 'Reflow', level: 'AA', slug: 'reflow' },
   '1.4.11': { title: 'Non-text contrast', level: 'AA', slug: 'non-text-contrast' },
