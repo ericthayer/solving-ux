@@ -264,6 +264,12 @@
   background: #d21f1f;
 }
 
+/* Unread shown by font weight alone. */
+.menuItemBold {
+  composes: menuItem;
+  font-weight: 700;
+}
+
 /* One character per box: breaks paste and one-time-code autofill. */
 .codeBox {
   composes: input;

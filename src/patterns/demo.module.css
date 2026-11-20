@@ -18,6 +18,18 @@
   align-items: center;
 }
 
+.rowEnd {
+  composes: row;
+  justify-content: flex-end;
+}
+
+/* Reserves room for overlays (menus, panels) that the stress stage would otherwise clip. */
+.stackTall {
+  composes: stack;
+  align-content: start;
+  min-height: 32rem;
+}
+
 .panel {
   padding: 1rem;
   border: 1px dashed var(--sux-line, #d4d4d8);
