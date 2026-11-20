@@ -104,6 +104,23 @@
   }
 }
 
+.select {
+  max-width: 16rem;
+  min-height: 2.5rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
 /* Data table for demos that place a pattern inside table cells. */
 .tableScroll {
   overflow-x: auto;
