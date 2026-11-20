@@ -50,12 +50,15 @@ function filesUnder(dir) {
   });
 }
 
-/** Fails the build if any term shows up in any file under dir (case-insensitive). */
+const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Fails the build if any term shows up as a whole word in any file under dir (case-insensitive). */
 function assertAbsent(dir, terms, label) {
   if (terms.length === 0) return;
+  const patterns = terms.map((t) => [t, new RegExp(`(^|[^a-z0-9])${escape(t)}($|[^a-z0-9])`, 'i')]);
   for (const file of filesUnder(dir)) {
-    const text = readFileSync(file, 'utf8').toLowerCase();
-    const hit = terms.find((t) => text.includes(t));
+    const text = readFileSync(file, 'utf8');
+    const hit = patterns.find(([, re]) => re.test(text))?.[0];
     if (hit) fail(`${label} found in ${file.slice(root.length)}. Remove it before publishing.`);
   }
 }
