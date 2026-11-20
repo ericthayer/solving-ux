@@ -7,6 +7,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '1.1.1': { title: 'Non-text content', level: 'A', slug: 'non-text-content' },
   '1.3.1': { title: 'Info and relationships', level: 'A', slug: 'info-and-relationships' },
   '1.3.2': { title: 'Meaningful sequence', level: 'A', slug: 'meaningful-sequence' },
+  '1.3.5': { title: 'Identify input purpose', level: 'AA', slug: 'identify-input-purpose' },
   '1.4.1': { title: 'Use of color', level: 'A', slug: 'use-of-color' },
   '1.4.3': { title: 'Contrast (minimum)', level: 'AA', slug: 'contrast-minimum' },
   '1.4.10': { title: 'Reflow', level: 'AA', slug: 'reflow' },
@@ -32,6 +33,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '3.3.3': { title: 'Error suggestion', level: 'AA', slug: 'error-suggestion' },
   '3.3.4': { title: 'Error prevention (legal, financial, data)', level: 'AA', slug: 'error-prevention-legal-financial-data' },
   '3.3.7': { title: 'Redundant entry', level: 'A', slug: 'redundant-entry' },
+  '3.3.8': { title: 'Accessible authentication (minimum)', level: 'AA', slug: 'accessible-authentication-minimum' },
   '4.1.2': { title: 'Name, role, value', level: 'A', slug: 'name-role-value' },
   '4.1.3': { title: 'Status messages', level: 'AA', slug: 'status-messages' },
 };
