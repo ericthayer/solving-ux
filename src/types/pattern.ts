@@ -6,11 +6,13 @@ export const CATEGORIES = [
   { id: 'data-table', label: 'Data Tables' },
   { id: 'navigation', label: 'Navigation' },
   { id: 'forms', label: 'Forms' },
+  { id: 'inputs', label: 'Inputs' },
   { id: 'dashboard', label: 'Dashboards' },
   { id: 'modals', label: 'Modals & Overlays' },
   { id: 'empty-states', label: 'Empty States' },
   { id: 'notifications', label: 'Notifications' },
   { id: 'search-filters', label: 'Search & Filters' },
+  { id: 'permissions', label: 'Permissions' },
 ] as const;
 
 export type CategoryId = (typeof CATEGORIES)[number]['id'];

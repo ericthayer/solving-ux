@@ -1,0 +1,200 @@
+.root {
+  container-type: inline-size;
+  /* Size containers can't shrink-wrap their content; fill the parent instead. */
+  inline-size: 100%;
+  display: grid;
+  gap: 0.5rem;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.hint {
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+}
+
+.dual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.pane {
+  display: grid;
+  gap: 0.375rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+}
+
+.legend {
+  padding: 0 0.25rem;
+  font-weight: 600;
+}
+
+.legendCount {
+  color: var(--sux-muted, #52525b);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.filterLabel {
+  font-weight: 500;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.selectAll,
+.option {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.375rem 0.5rem;
+  cursor: pointer;
+}
+
+.selectAll {
+  margin-top: 0.25rem;
+  border-bottom: 1px solid var(--sux-line, #d4d4d8);
+  font-weight: 500;
+}
+
+.list {
+  max-height: 16rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.option {
+  border-radius: calc(var(--sux-radius, 6px) - 2px);
+}
+
+.option:hover {
+  background: var(--sux-sunken, #f4f4f5);
+}
+
+.option:has(input:checked) {
+  background: var(--sux-accent-soft, #e6f2ed);
+  box-shadow: inset 3px 0 0 var(--sux-accent, #0b6e4f);
+}
+
+.optionText {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.optionDescription {
+  color: var(--sux-muted, #52525b);
+  font-size: 0.8125rem;
+}
+
+.empty,
+.more {
+  margin: 0;
+  padding: 0.5rem;
+  color: var(--sux-muted, #52525b);
+}
+
+.more {
+  padding-block: 0.25rem 0;
+  border-top: 1px solid var(--sux-line, #d4d4d8);
+  font-size: 0.8125rem;
+}
+
+.actions {
+  display: grid;
+  gap: 0.5rem;
+  align-self: center;
+}
+
+.button {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.button[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* The arrow points the other way in right-to-left layouts, like the panes. */
+.arrow:dir(rtl) {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.root input[type='checkbox'] {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0.0625rem 0 0;
+  accent-color: var(--sux-accent, #0b6e4f);
+}
+
+.input:focus-visible,
+.button:focus-visible,
+.root input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+.status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.8125rem;
+}
+
+/* A forced dual layout still reflows: panes stack, buttons sit between them in a row. */
+@container (max-width: 35rem) {
+  .dual {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media (forced-colors: active) {
+  .option:has(input:checked) {
+    outline: 2px solid Highlight;
+  }
+}
