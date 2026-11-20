@@ -45,6 +45,7 @@ export const WCAG_CRITERIA = {
   '1.4.13': { title: 'Content on Hover or Focus', level: 'AA' },
   '2.1.1': { title: 'Keyboard', level: 'A' },
   '2.1.2': { title: 'No Keyboard Trap', level: 'A' },
+  '2.1.4': { title: 'Character Key Shortcuts', level: 'A' },
   '2.2.1': { title: 'Timing Adjustable', level: 'A' },
   '2.2.6': { title: 'Timeouts', level: 'AAA' },
   '2.2.2': { title: 'Pause, Stop, Hide', level: 'A' },

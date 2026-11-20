@@ -15,6 +15,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '1.4.13': { title: 'Content on hover or focus', level: 'AA', slug: 'content-on-hover-or-focus' },
   '2.1.1': { title: 'Keyboard', level: 'A', slug: 'keyboard' },
   '2.1.2': { title: 'No keyboard trap', level: 'A', slug: 'no-keyboard-trap' },
+  '2.1.4': { title: 'Character key shortcuts', level: 'A', slug: 'character-key-shortcuts' },
   '2.2.1': { title: 'Timing adjustable', level: 'A', slug: 'timing-adjustable' },
   '2.2.2': { title: 'Pause, stop, hide', level: 'A', slug: 'pause-stop-hide' },
   '2.2.6': { title: 'Timeouts', level: 'AAA', slug: 'timeouts' },
