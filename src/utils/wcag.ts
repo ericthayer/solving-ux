@@ -20,6 +20,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '2.4.6': { title: 'Headings and labels', level: 'AA', slug: 'headings-and-labels' },
   '2.4.7': { title: 'Focus visible', level: 'AA', slug: 'focus-visible' },
   '2.4.8': { title: 'Location', level: 'AAA', slug: 'location' },
+  '2.4.11': { title: 'Focus not obscured (minimum)', level: 'AA', slug: 'focus-not-obscured-minimum' },
   '2.5.3': { title: 'Label in name', level: 'A', slug: 'label-in-name' },
   '3.2.2': { title: 'On input', level: 'A', slug: 'on-input' },
   '3.3.1': { title: 'Error identification', level: 'A', slug: 'error-identification' },
