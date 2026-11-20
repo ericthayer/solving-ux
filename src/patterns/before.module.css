@@ -281,6 +281,8 @@
   composes: menuItem;
   padding: 0.25rem 0;
   text-align: center;
+}
+
 /* Endless spinner with no role, value, or text, and no reduced-motion handling. */
 .spinner {
   width: 2.5rem;
