@@ -15,6 +15,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '2.1.2': { title: 'No keyboard trap', level: 'A', slug: 'no-keyboard-trap' },
   '2.2.1': { title: 'Timing adjustable', level: 'A', slug: 'timing-adjustable' },
   '2.2.2': { title: 'Pause, stop, hide', level: 'A', slug: 'pause-stop-hide' },
+  '2.2.6': { title: 'Timeouts', level: 'AAA', slug: 'timeouts' },
   '2.3.3': { title: 'Animation from interactions', level: 'AAA', slug: 'animation-from-interactions' },
   '2.4.3': { title: 'Focus order', level: 'A', slug: 'focus-order' },
   '2.4.6': { title: 'Headings and labels', level: 'AA', slug: 'headings-and-labels' },
@@ -28,6 +29,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '3.3.2': { title: 'Labels or instructions', level: 'A', slug: 'labels-or-instructions' },
   '3.3.3': { title: 'Error suggestion', level: 'AA', slug: 'error-suggestion' },
   '3.3.4': { title: 'Error prevention (legal, financial, data)', level: 'AA', slug: 'error-prevention-legal-financial-data' },
+  '3.3.7': { title: 'Redundant entry', level: 'A', slug: 'redundant-entry' },
   '4.1.2': { title: 'Name, role, value', level: 'A', slug: 'name-role-value' },
   '4.1.3': { title: 'Status messages', level: 'AA', slug: 'status-messages' },
 };
