@@ -38,6 +38,11 @@ describe('Pattern library shell', () => {
     expect(within(grid).getAllByText('WCAG 2.2 AA')).toHaveLength(builtInPatterns.length);
   });
 
+  it('groups field-level controls under Inputs', () => {
+    const inputs = builtInPatterns.filter((p) => p.category === 'inputs').map((p) => p.slug);
+    expect(inputs).toEqual(expect.arrayContaining(['number-input', 'transfer-list', 'file-upload', 'date-range']));
+  });
+
   it('filters the sidebar and grid from the top bar search', async () => {
     const { user } = renderAt('/');
     await user.type(screen.getByRole('searchbox', { name: 'Search patterns' }), 'toast');
