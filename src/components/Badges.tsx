@@ -24,7 +24,7 @@ export function WcagBadge({ level }: { level: WcagLevel }): JSX.Element {
       <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true" focusable="false">
         <path d="M2 6.5 5 9l5-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      WCAG 2.1 {level}
+      WCAG 2.2 {level}
     </span>
   );
 }

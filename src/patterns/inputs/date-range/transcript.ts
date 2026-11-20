@@ -1,7 +1,7 @@
 import type { ScreenReaderTranscript } from '../../../types/transcript';
 
 export const dateRangeTranscript: ScreenReaderTranscript = {
-  patternId: 'forms.date-range',
+  patternId: 'inputs.date-range',
   environment: 'NVDA + Chrome',
   steps: [
     {

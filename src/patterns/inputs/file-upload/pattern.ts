@@ -3,11 +3,11 @@ import Demo from './demo';
 import Before from './before';
 
 export const fileUploadPattern: PatternDefinition = {
-  id: 'forms.file-upload',
+  id: 'inputs.file-upload',
   slug: 'file-upload',
   title: 'File upload with drag-and-drop alternative',
   summary: 'Native file picker with drop as an enhancement, limits stated up front, per-file progress, cancel, retry and remove, and one polite summary of the batch.',
-  category: 'forms',
+  category: 'inputs',
   tags: ['forms', 'file upload', 'drag and drop', 'progress', 'error recovery', 'WCAG 2.2'],
   clients: ['client-a', 'client-b'],
   problemStatement:

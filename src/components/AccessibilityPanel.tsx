@@ -24,7 +24,7 @@ export function AccessibilityPanel({ notes, level }: { notes: AccessibilityNote[
   return (
     <div className="grid gap-8">
       <p className="m-0 text-sm text-muted">
-        Target: WCAG 2.1 <strong className="text-ink">{level}</strong>. Verified with jest-axe in the test suite; manual checks cover keyboard
+        Target: WCAG 2.2 <strong className="text-ink">{level}</strong>. Verified with jest-axe in the test suite; manual checks cover keyboard
         paths and NVDA, JAWS, and VoiceOver announcements described below.
       </p>
       {wcag.length > 0 && (

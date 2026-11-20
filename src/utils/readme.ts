@@ -14,7 +14,7 @@ export function buildReadme(pattern: Pattern): string {
   const lines: string[] = [
     `# ${pattern.title}`,
     '',
-    `${category} · WCAG 2.1 ${pattern.wcagLevel} · Updated ${pattern.lastUpdated} by ${pattern.author}`,
+    `${category} · WCAG 2.2 ${pattern.wcagLevel} · Updated ${pattern.lastUpdated} by ${pattern.author}`,
     '',
     pattern.summary,
     '',

@@ -35,7 +35,12 @@ describe('Pattern library shell', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Hard UI problems');
     const grid = screen.getByRole('heading', { name: 'Browse patterns' }).closest('section')!;
     expect(within(grid).getAllByRole('article')).toHaveLength(builtInPatterns.length);
-    expect(within(grid).getAllByText('WCAG 2.1 AA')).toHaveLength(builtInPatterns.length);
+    expect(within(grid).getAllByText('WCAG 2.2 AA')).toHaveLength(builtInPatterns.length);
+  });
+
+  it('groups field-level controls under Inputs', () => {
+    const inputs = builtInPatterns.filter((p) => p.category === 'inputs').map((p) => p.slug);
+    expect(inputs).toEqual(expect.arrayContaining(['number-input', 'transfer-list', 'file-upload', 'date-range']));
   });
 
   it('filters the sidebar and grid from the top bar search', async () => {

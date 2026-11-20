@@ -1,7 +1,7 @@
 import type { ScreenReaderTranscript } from '../../../types/transcript';
 
 export const fileUploadTranscript: ScreenReaderTranscript = {
-  patternId: 'forms.file-upload',
+  patternId: 'inputs.file-upload',
   environment: 'NVDA + Chrome',
   steps: [
     {
