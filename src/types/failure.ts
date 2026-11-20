@@ -45,6 +45,7 @@ export const WCAG_CRITERIA = {
   '2.4.6': { title: 'Headings and Labels', level: 'AA' },
   '2.4.8': { title: 'Location', level: 'AAA' },
   '2.4.11': { title: 'Focus Not Obscured (Minimum)', level: 'AA' },
+  '3.2.1': { title: 'On Focus', level: 'A' },
   '3.2.3': { title: 'Consistent Navigation', level: 'AA' },
   '3.3.1': { title: 'Error Identification', level: 'A' },
   '3.3.2': { title: 'Labels or Instructions', level: 'A' },
