@@ -91,3 +91,53 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Data table for demos that place a pattern inside table cells. */
+.tableScroll {
+  overflow-x: auto;
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.table caption {
+  margin-block-end: 0.5rem;
+  text-align: start;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.75rem;
+  border-block-end: 1px solid var(--sux-line, #d4d4d8);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.table thead th {
+  color: var(--sux-muted, #52525b);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.table tbody th {
+  font-weight: 500;
+}
+
+/* Color-vision previews: check that a demo still reads without hue. */
+.simGrayscale {
+  filter: grayscale(1);
+}
+
+.simDeuteranopia {
+  filter: url('#sux-sim-deuteranopia');
+}
+
+.filterDefs {
+  position: absolute;
+}
