@@ -4,6 +4,10 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import { MemoryRouter } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import { App } from '../App';
+import { builtInPatterns } from '../patterns/registry';
+
+// Derived, so adding a pattern folder does not mean editing this file.
+const TOTAL = builtInPatterns.length;
 
 jest.mock('file-saver', () => ({ saveAs: jest.fn() }));
 expect.extend(toHaveNoViolations);
@@ -33,8 +37,8 @@ describe('Pattern library shell', () => {
     renderAt('/');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Hard UI problems');
     const grid = screen.getByRole('heading', { name: 'Browse patterns' }).closest('section')!;
-    expect(within(grid).getAllByRole('article')).toHaveLength(8);
-    expect(within(grid).getAllByText('WCAG 2.1 AA')).toHaveLength(8);
+    expect(within(grid).getAllByRole('article')).toHaveLength(TOTAL);
+    expect(within(grid).getAllByText('WCAG 2.1 AA')).toHaveLength(TOTAL);
   });
 
   it('filters the sidebar and grid from the top bar search', async () => {
@@ -42,7 +46,7 @@ describe('Pattern library shell', () => {
     await user.type(screen.getByRole('searchbox', { name: 'Search patterns' }), 'toast');
     const nav = screen.getByRole('navigation', { name: 'Patterns' });
     expect(within(nav).getAllByRole('link')).toHaveLength(1);
-    expect(screen.getByText('1 of 8 patterns')).toBeInTheDocument();
+    expect(screen.getByText(`1 of ${TOTAL} patterns`)).toBeInTheDocument();
   });
 
   it('shows the empty state and recovers when filters exclude everything (edge case)', async () => {
@@ -50,7 +54,7 @@ describe('Pattern library shell', () => {
     await user.type(screen.getByRole('searchbox', { name: 'Search patterns' }), 'zzzz');
     expect(screen.getByRole('heading', { name: /No results for/ })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Clear filter' }));
-    expect(screen.getByText('8 of 8 patterns')).toBeInTheDocument();
+    expect(screen.getByText(`${TOTAL} of ${TOTAL} patterns`)).toBeInTheDocument();
   });
 
   it('opens a pattern from a deep link with the requested tab selected', async () => {
