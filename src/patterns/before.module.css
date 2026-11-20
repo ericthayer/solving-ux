@@ -278,4 +278,9 @@
   to {
     transform: rotate(360deg);
   }
+/* Low-contrast greyed-out button: the state is carried by color alone. */
+.btnGreyed {
+  composes: btn;
+  color: #a1a1aa;
+  cursor: default;
 }
