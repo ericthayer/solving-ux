@@ -6,9 +6,14 @@ import { SourceBadges, StatusBadge, WcagBadge } from '../components/Badges';
 import { CodeBlock } from '../components/CodeBlock';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { PropsTable } from '../components/PropsTable';
+import { StressStage } from '../components/StressStage';
+import type { StageMeasurement } from '../components/StressStage';
+import { StressTestBar } from '../components/StressTestBar';
 import { Tabs } from '../components/Tabs';
 import { usePatterns } from '../context/PatternContext';
 import { useEditor } from '../context/EditorContext';
+import { useStressSettings } from '../hooks/useStressSettings';
+import { StressContext } from '../patterns/stress';
 import { CATEGORIES } from '../types/pattern';
 import type { Pattern } from '../types/pattern';
 import { NotFoundPage } from './NotFoundPage';
@@ -19,12 +24,15 @@ const isTab = (value: string | null): value is TabId => TAB_IDS.includes(value a
 
 function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
   const Demo = pattern.component;
+  const stress = useStressSettings();
+  const [measurement, setMeasurement] = useState<StageMeasurement | null>(null);
   return (
     <div className="grid gap-8">
       <section aria-labelledby="demo-heading" className="grid gap-3">
         <h2 id="demo-heading" className="m-0 text-base font-semibold">
           Live demo
         </h2>
+        {Demo && <StressTestBar api={stress} measurement={measurement} />}
         <div className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
           {Demo ? (
             <ErrorBoundary
@@ -38,7 +46,12 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
                 </div>
               )}
             >
-              <Demo />
+              <StressContext.Provider value={stress.context}>
+                <StressStage settings={stress.settings} onMeasure={setMeasurement}>
+                  {/* Remount when data-shaping flags change so demos rebuild their initial state. */}
+                  <Demo key={`${String(stress.settings.longText)}-${String(stress.settings.largeData)}`} />
+                </StressStage>
+              </StressContext.Provider>
             </ErrorBoundary>
           ) : (
             <p className="m-0 text-sm text-muted">
@@ -150,7 +163,7 @@ export function PatternPage(): JSX.Element {
         selected={tab}
         onSelect={(id) => setParams(id === 'preview' ? {} : { tab: id }, { replace: true })}
         tabs={[
-          { id: 'preview', label: 'Preview', panel: <Preview pattern={pattern} /> },
+          { id: 'preview', label: 'Preview', panel: <Preview key={pattern.id} pattern={pattern} /> },
           { id: 'code', label: 'Code', panel: <CodeTab pattern={pattern} /> },
           { id: 'tests', label: 'Tests', panel: <CodeBlock code={pattern.testCode} language="tsx" filename={pattern.files.test} /> },
           { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} /> },

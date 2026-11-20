@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BulkActionTable } from './BulkActionTable';
 import type { Column } from './BulkActionTable';
+import { LARGE_DATA_COUNT, useStressTest } from '../../stress';
 
 type LoanApplication = {
   id: string;
@@ -14,13 +15,14 @@ const BORROWERS = ['Cedar Ridge Farms', 'North Plains Co-op', 'Halvorsen Dairy',
 const REGIONS = ['Midwest', 'Plains', 'Northwest', 'Southeast'];
 const STATUSES: LoanApplication['status'][] = ['Submitted', 'In review', 'Approved'];
 
-const initialRows: LoanApplication[] = Array.from({ length: 27 }, (_, i) => ({
-  id: `APP-${(4100 + i * 7).toString()}`,
-  borrower: BORROWERS[i % BORROWERS.length] ?? 'Unknown',
-  region: REGIONS[i % REGIONS.length] ?? 'Unknown',
-  status: STATUSES[i % STATUSES.length] ?? 'Submitted',
-  amount: 125000 + ((i * 48271) % 900000),
-}));
+const buildRows = (count: number, text: (value: string) => string): LoanApplication[] =>
+  Array.from({ length: count }, (_, i) => ({
+    id: `APP-${(4100 + i * 7).toString()}`,
+    borrower: text(BORROWERS[i % BORROWERS.length] ?? 'Unknown'),
+    region: REGIONS[i % REGIONS.length] ?? 'Unknown',
+    status: STATUSES[i % STATUSES.length] ?? 'Submitted',
+    amount: 125000 + ((i * 48271) % 900000),
+  }));
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
@@ -33,14 +35,18 @@ const columns: Column<LoanApplication>[] = [
 ];
 
 export default function BulkActionTableDemo(): JSX.Element {
-  const [rows, setRows] = useState(initialRows);
+  const stress = useStressTest(['longText', 'largeData']);
+  const [rows, setRows] = useState(() => buildRows(stress.largeData ? LARGE_DATA_COUNT : 27, stress.text));
 
-  const setStatus = (ids: string[], status: LoanApplication['status']): void =>
-    setRows((prev) => prev.map((row) => (ids.includes(row.id) ? { ...row, status } : row)));
+  // Sets keep bulk actions O(n) when all 10,000 rows are selected.
+  const setStatus = (ids: string[], status: LoanApplication['status']): void => {
+    const targets = new Set(ids);
+    setRows((prev) => prev.map((row) => (targets.has(row.id) ? { ...row, status } : row)));
+  };
 
   return (
     <BulkActionTable<LoanApplication>
-      caption="Loan applications"
+      caption={stress.text('Loan applications')}
       rows={rows}
       columns={columns}
       rowLabel={(row) => `${row.id}, ${row.borrower}`}
@@ -52,7 +58,10 @@ export default function BulkActionTableDemo(): JSX.Element {
           id: 'withdraw',
           label: 'Withdraw',
           tone: 'danger',
-          onSelect: (ids) => setRows((prev) => prev.filter((row) => !ids.includes(row.id))),
+          onSelect: (ids) => {
+            const targets = new Set(ids);
+            setRows((prev) => prev.filter((row) => !targets.has(row.id)));
+          },
         },
       ]}
     />
