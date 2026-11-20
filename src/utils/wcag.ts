@@ -22,6 +22,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '2.4.8': { title: 'Location', level: 'AAA', slug: 'location' },
   '2.5.3': { title: 'Label in name', level: 'A', slug: 'label-in-name' },
   '3.2.2': { title: 'On input', level: 'A', slug: 'on-input' },
+  '3.2.6': { title: 'Consistent help', level: 'A', slug: 'consistent-help' },
   '3.3.1': { title: 'Error identification', level: 'A', slug: 'error-identification' },
   '3.3.2': { title: 'Labels or instructions', level: 'A', slug: 'labels-or-instructions' },
   '3.3.3': { title: 'Error suggestion', level: 'AA', slug: 'error-suggestion' },
