@@ -1,0 +1,204 @@
+.root {
+  container-type: inline-size;
+  /* Size containers can't shrink-wrap their content; fill the parent instead. */
+  inline-size: 100%;
+  display: grid;
+  gap: 0.75rem;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.help {
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+}
+
+.scroller {
+  overflow: auto;
+  max-height: 28rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.caption {
+  padding: 0.75rem;
+  text-align: start;
+  font-weight: 600;
+  background: var(--sux-surface, #fff);
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--sux-line, #d4d4d8);
+  background: var(--sux-surface, #fff);
+  text-align: start;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--sux-sunken, #f4f4f5);
+  font-weight: 600;
+}
+
+.table tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  font-weight: 500;
+  box-shadow: inset -1px 0 0 var(--sux-line, #d4d4d8);
+}
+
+.table [data-align='end'] {
+  text-align: end;
+}
+
+/* Read-only cells look read-only, not just behave read-only. */
+.table td[aria-readonly='true'] {
+  color: var(--sux-muted, #52525b);
+  background: var(--sux-sunken, #f4f4f5);
+}
+
+.tag {
+  margin-inline-start: 0.375rem;
+  padding: 0 0.375rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: 999px;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* The active cell gets an inset ring so it is never clipped by the scroller or a sticky neighbour. */
+.table [data-pos]:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: -2px;
+}
+
+.table [data-editing] {
+  padding: 0.25rem;
+  background: var(--sux-accent-soft, #e6f2ed);
+}
+
+.editor {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 7rem;
+  min-height: 2rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  text-align: inherit;
+}
+
+.editor:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 1px;
+}
+
+/* Invalid state is carried by border weight, an icon, and text, never colour alone. */
+.editor[aria-invalid='true'] {
+  border: 2px solid var(--sux-danger, #b42318);
+}
+
+.error,
+.status[data-status='failed'] {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
+  color: var(--sux-danger, #b42318);
+  font-size: 0.8125rem;
+  white-space: normal;
+  text-align: start;
+}
+
+.errorIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: 50%;
+  background: var(--sux-danger, #b42318);
+  color: var(--sux-surface, #fff);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.status {
+  margin-inline-start: 0.375rem;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.75rem;
+}
+
+.status[data-status='saved'] {
+  color: var(--sux-accent, #0b6e4f);
+  font-weight: 700;
+}
+
+.table [data-status='failed'] {
+  box-shadow: inset 3px 0 0 var(--sux-danger, #b42318);
+}
+
+.retry {
+  padding: 0.125rem 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--sux-accent, #0b6e4f);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.retry:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+.value {
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  padding: 2rem !important;
+  text-align: center !important;
+  color: var(--sux-muted, #52525b);
+}
+
+@container (max-width: 30rem) {
+  .table th,
+  .table td {
+    padding-inline: 0.5rem;
+  }
+
+  .editor {
+    min-inline-size: 5rem;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
