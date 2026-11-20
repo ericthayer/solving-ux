@@ -148,7 +148,7 @@ export function CommandPalette({ commands, children, scopeLabel }: CommandPalett
   return (
     <div className={styles.root} onKeyDown={onRootKeyDown}>
       <div className={styles.toolbar}>
-        <button type="button" className={styles.trigger} aria-keyshortcuts="Control+K Meta+K" onClick={() => setPaletteOpen(true)}>
+        <button type="button" className={styles.trigger} aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K" onClick={() => setPaletteOpen(true)}>
           Command palette <kbd className={styles.kbd}>Ctrl K</kbd>
         </button>
         <button type="button" className={styles.secondary} aria-haspopup="dialog" onClick={() => setShortcutsOpen(true)}>
