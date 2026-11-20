@@ -6,26 +6,26 @@ import type { Column } from './BulkActionTable';
 
 expect.extend(toHaveNoViolations);
 
-type Loan = { id: string; borrower: string; amount: number };
+type Order = { id: string; supplier: string; amount: number };
 
-const rows: Loan[] = Array.from({ length: 12 }, (_, i) => ({
+const rows: Order[] = Array.from({ length: 12 }, (_, i) => ({
   id: `L-${100 + i}`,
-  borrower: `Borrower ${String.fromCharCode(76 - i)}`,
+  supplier: `Supplier ${String.fromCharCode(76 - i)}`,
   amount: (i + 1) * 1000,
 }));
 
-const columns: Column<Loan>[] = [
-  { key: 'id', header: 'Loan', sortable: true },
-  { key: 'borrower', header: 'Borrower', sortable: true },
+const columns: Column<Order>[] = [
+  { key: 'id', header: 'Order', sortable: true },
+  { key: 'supplier', header: 'Supplier', sortable: true },
   { key: 'amount', header: 'Amount', sortable: true, align: 'end' },
 ];
 
-function setup(overrides: Partial<Parameters<typeof BulkActionTable<Loan>>[0]> = {}) {
+function setup(overrides: Partial<Parameters<typeof BulkActionTable<Order>>[0]> = {}) {
   const onArchive = jest.fn();
   const user = userEvent.setup();
   const utils = render(
-    <BulkActionTable<Loan>
-      caption="Loan applications"
+    <BulkActionTable<Order>
+      caption="Purchase orders"
       rows={rows}
       columns={columns}
       rowLabel={(row) => row.id}
@@ -40,7 +40,7 @@ function setup(overrides: Partial<Parameters<typeof BulkActionTable<Loan>>[0]> =
 describe('BulkActionTable', () => {
   it('renders a captioned table with the first page of rows', () => {
     setup();
-    const table = screen.getByRole('table', { name: 'Loan applications' });
+    const table = screen.getByRole('table', { name: 'Purchase orders' });
     // 1 header row + 5 body rows
     expect(within(table).getAllByRole('row')).toHaveLength(6);
     expect(screen.getByText('1–5 of 12')).toBeInTheDocument();
@@ -106,8 +106,8 @@ describe('BulkActionTable', () => {
     const { user, rerender } = setup();
     await user.click(screen.getByRole('checkbox', { name: 'Select L-100' }));
     rerender(
-      <BulkActionTable<Loan>
-        caption="Loan applications"
+      <BulkActionTable<Order>
+        caption="Purchase orders"
         rows={rows.slice(1)}
         columns={columns}
         rowLabel={(row) => row.id}

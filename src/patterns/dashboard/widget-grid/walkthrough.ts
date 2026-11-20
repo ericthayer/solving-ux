@@ -27,7 +27,7 @@ export const widgetGridWalkthrough: CodeAnnotation[] = [
     topic: 'semantics',
     title: 'Each card is a named section',
     rationale:
-      'A <section> labelled by its heading shows up in the screen reader landmark and heading lists, so users can jump straight to "Delinquency rate". aria-busy tells assistive tech the content is still arriving.',
+      'A <section> labelled by its heading shows up in the screen reader landmark and heading lists, so users can jump straight to "Late delivery rate". aria-busy tells assistive tech the content is still arriving.',
     wcag: ['1.3.1', '2.4.6'],
   },
   {
@@ -37,7 +37,7 @@ export const widgetGridWalkthrough: CodeAnnotation[] = [
     topic: 'announce',
     title: 'Skeletons with a spoken label',
     rationale:
-      'The shimmer bars are aria-hidden; one visually hidden line says "Loading Portfolio exposure". Data that has already arrived in other cards stays visible instead of hiding behind a page spinner.',
+      'The shimmer bars are aria-hidden; one visually hidden line says "Loading Committed spend". Data that has already arrived in other cards stays visible instead of hiding behind a page spinner.',
     wcag: ['1.1.1'],
   },
   {
@@ -47,7 +47,7 @@ export const widgetGridWalkthrough: CodeAnnotation[] = [
     topic: 'resilience',
     title: 'Errors name the widget and offer a retry',
     rationale:
-      'The message starts with which widget failed, and the Retry button\'s accessible name repeats it ("Retry loading Delinquency rate") so a list of buttons is not six identical "Retry" entries. role="status" announces the failure without stealing focus.',
+      'The message starts with which widget failed, and the Retry button\'s accessible name repeats it ("Retry loading Late delivery rate") so a list of buttons is not six identical "Retry" entries. role="status" announces the failure without stealing focus.',
     wcag: ['4.1.3', '2.4.6', '2.5.3'],
   },
   {

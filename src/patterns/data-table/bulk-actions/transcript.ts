@@ -9,10 +9,10 @@ export const bulkActionsTranscript: ScreenReaderTranscript = {
       keys: 'Tab',
       before: [{ kind: 'speech', text: 'checkbox, not checked' }],
       after: [
-        { kind: 'speech', text: 'Loan applications, region' },
-        { kind: 'speech', text: 'Select APP-4100, Cedar Ridge Farms, checkbox, not checked' },
+        { kind: 'speech', text: 'Purchase orders, region' },
+        { kind: 'speech', text: 'Select PO-4100, Northwind Supply, checkbox, not checked' },
       ],
-      failure: 'The checkbox has no name. Fifty rows sound identical, so the user cannot tell which loan they are about to select.',
+      failure: 'The checkbox has no name. Fifty rows sound identical, so the user cannot tell which order they are about to select.',
       criterion: '4.1.2',
     },
     {
@@ -42,15 +42,15 @@ export const bulkActionsTranscript: ScreenReaderTranscript = {
       criterion: '3.3.4',
     },
     {
-      action: 'Sort by the Borrower column',
+      action: 'Sort by the Supplier column',
       keys: 'Enter on header',
       before: [
-        { kind: 'speech', text: 'Borrower, column header' },
+        { kind: 'speech', text: 'Supplier, column header' },
         { kind: 'silence', note: 'The header is a clickable div. It is not focusable, and the 6px arrow has no text or aria-sort.' },
       ],
       after: [
-        { kind: 'speech', text: 'Borrower, button, column header, sorted ascending' },
-        { kind: 'speech', text: 'Sorted by Borrower, ascending.' },
+        { kind: 'speech', text: 'Supplier, button, column header, sorted ascending' },
+        { kind: 'speech', text: 'Sorted by Supplier, ascending.' },
       ],
       failure: 'Sorting is mouse-only and its state is visual only.',
       criterion: '2.1.1',

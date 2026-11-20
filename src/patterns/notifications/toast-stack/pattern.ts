@@ -74,7 +74,7 @@ notify({ tone: 'success', title: 'Draft saved', action: { label: 'Undo', onClick
     { kind: 'keyboard', keys: 'Tab', action: 'Reach the action and dismiss buttons inside the stack.' },
     { kind: 'aria', attribute: 'aria-label="Notifications (F8)"', detail: 'Names the region and advertises the shortcut.' },
     { kind: 'aria', attribute: 'aria-label="Dismiss: <title>"', detail: 'Each close button says which toast it closes.' },
-    { kind: 'screen-reader', title: 'New toast', detail: 'Hears "Success: Draft saved. Saved to Cedar Ridge Farms renewal." without focus moving.' },
+    { kind: 'screen-reader', title: 'New toast', detail: 'Hears "Success: Draft saved. Saved to Northwind Supply renewal." without focus moving.' },
     { kind: 'screen-reader', title: 'Error toast', detail: 'Interrupts current speech: "Error: Payment file rejected..."' },
   ],
   wcagLevel: 'AA',

@@ -12,7 +12,7 @@ export default function ConfirmDialogBefore(): JSX.Element {
 
   const archive = async (): Promise<void> => {
     setIsError(false);
-    setMessage('Cedar Ridge Farms archived.');
+    setMessage('Northwind Supply archived.');
   };
   const remove = async (): Promise<void> => {
     await new Promise((resolve) => setTimeout(resolve, 700));
@@ -41,7 +41,7 @@ export default function ConfirmDialogBefore(): JSX.Element {
           Archive relationship
         </button>
         <button type="button" className={s.btn} onClick={() => setPending({ action: 'delete', run: remove })} {...failureTarget('focus-not-returned')}>
-          Delete facility FAC-2231
+          Delete contract CTR-2231
         </button>
       </div>
       <p className={s.muted}>Open either dialog, then press Tab a few times.</p>

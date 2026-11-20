@@ -24,7 +24,7 @@ export type BulkActionTableProps<T extends { id: string }> = {
   rows: T[];
   columns: Column<T>[];
   bulkActions: BulkAction[];
-  /** Used for each row checkbox's accessible name, e.g. "Select Loan 1042". */
+  /** Used for each row checkbox's accessible name, e.g. "Select Order 1042". */
   rowLabel: (row: T) => string;
   pageSize?: number;
 };

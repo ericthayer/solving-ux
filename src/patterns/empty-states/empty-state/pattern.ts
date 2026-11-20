@@ -73,7 +73,7 @@ export const emptyStatePattern: PatternDefinition = {
     { kind: 'keyboard', keys: 'Enter / Space', action: 'Activate the action.' },
     { kind: 'aria', attribute: 'aria-labelledby', detail: 'The section is a region named by its heading.' },
     { kind: 'screen-reader', title: 'Copy button', detail: 'Announced as "Copy error reference", then "Copied error reference" after activation.' },
-    { kind: 'screen-reader', title: 'Filtering to zero', detail: 'Hears "No results for halvorsn dairy. 3 filters are narrowing these results." without moving focus.' },
+    { kind: 'screen-reader', title: 'Filtering to zero', detail: 'Hears "No results for harbr logistics. 3 filters are narrowing these results." without moving focus.' },
   ],
   wcagLevel: 'AA',
   lastUpdated: '2026-11-17',

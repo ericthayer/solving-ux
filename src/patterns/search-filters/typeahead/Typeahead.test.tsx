@@ -7,16 +7,16 @@ import type { TypeaheadOption } from './Typeahead';
 expect.extend(toHaveNoViolations);
 
 const options: TypeaheadOption[] = [
-  { id: '1', label: 'Cedar Ridge Farms', description: 'ACCT 10442' },
-  { id: '2', label: 'North Plains Co-op', description: 'ACCT 20019' },
-  { id: '3', label: 'Ridgeview Dairy', description: 'ACCT 30551' },
-  ...Array.from({ length: 500 }, (_, i) => ({ id: `bulk-${i}`, label: `Farm Credit Account ${i}` })),
+  { id: '1', label: 'Oakridge Supply', description: 'ACCT 10442' },
+  { id: '2', label: 'Northwind Industrial', description: 'ACCT 20019' },
+  { id: '3', label: 'Ridgeview Metals', description: 'ACCT 30551' },
+  ...Array.from({ length: 500 }, (_, i) => ({ id: `bulk-${i}`, label: `Supplier Account ${i}` })),
 ];
 
 function setup(onSelect = jest.fn()) {
   const user = userEvent.setup();
-  const { container } = render(<Typeahead label="Borrower" hint="Search by name or account number." options={options} onSelect={onSelect} maxResults={5} />);
-  const input = screen.getByRole('combobox', { name: 'Borrower' });
+  const { container } = render(<Typeahead label="Supplier" hint="Search by name or account number." options={options} onSelect={onSelect} maxResults={5} />);
+  const input = screen.getByRole('combobox', { name: 'Supplier' });
   return { user, input, onSelect, container };
 }
 
@@ -32,8 +32,8 @@ describe('Typeahead', () => {
     const { user, input } = setup();
     await user.type(input, 'ridge');
     const items = within(screen.getByRole('listbox')).getAllByRole('option');
-    expect(items.map((o) => o.textContent)).toEqual(['Ridgeview DairyACCT 30551', 'Cedar Ridge FarmsACCT 10442']);
-    expect(items[1]!.querySelector('mark')).toHaveTextContent('Ridge');
+    expect(items.map((o) => o.textContent)).toEqual(['Ridgeview MetalsACCT 30551', 'Oakridge SupplyACCT 10442']);
+    expect(items[1]!.querySelector('mark')).toHaveTextContent('ridge');
     expect(input).toHaveAttribute('aria-expanded', 'true');
   });
 
@@ -41,12 +41,12 @@ describe('Typeahead', () => {
     const { user, input, onSelect } = setup();
     await user.type(input, 'ridge');
     await user.keyboard('{ArrowDown}{ArrowDown}');
-    const second = screen.getByRole('option', { name: /Cedar Ridge/ });
+    const second = screen.getByRole('option', { name: /Oak\s?ridge Supply/ });
     expect(second).toHaveAttribute('aria-selected', 'true');
     expect(input).toHaveAttribute('aria-activedescendant', second.id);
     await user.keyboard('{Enter}');
     expect(onSelect).toHaveBeenCalledWith(options[0]);
-    expect(input).toHaveValue('Cedar Ridge Farms');
+    expect(input).toHaveValue('Oakridge Supply');
     expect(input).toHaveAttribute('aria-expanded', 'false');
   });
 
@@ -61,7 +61,7 @@ describe('Typeahead', () => {
 
   it('caps rendered results and tells users to narrow (edge case: large data set)', async () => {
     const { user, input } = setup();
-    await user.type(input, 'farm');
+    await user.type(input, 'suppl');
     expect(screen.getAllByRole('option')).toHaveLength(5);
     expect(screen.getByRole('status')).toHaveTextContent('Showing 5 of 501 matches. Keep typing to narrow.');
   });

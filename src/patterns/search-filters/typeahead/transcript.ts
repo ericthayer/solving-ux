@@ -9,7 +9,7 @@ export const typeaheadTranscript: ScreenReaderTranscript = {
       keys: 'Tab',
       before: [{ kind: 'speech', text: 'edit, blank' }],
       after: [
-        { kind: 'speech', text: 'Borrower, combo box, collapsed, autocomplete, Search 960 borrowers by name or account number.' },
+        { kind: 'speech', text: 'Supplier, combo box, collapsed, autocomplete, Search 960 suppliers by name or account number.' },
       ],
       failure: 'The field has no name and nothing says suggestions will appear.',
       criterion: '4.1.2',
@@ -32,17 +32,17 @@ export const typeaheadTranscript: ScreenReaderTranscript = {
       action: 'Move into the results',
       keys: 'Down Arrow',
       before: [{ kind: 'speech', text: 'blank' }],
-      after: [{ kind: 'speech', text: 'Cedar Ridge Farms, ACCT 10037 · NE, 1 of 8' }],
+      after: [{ kind: 'speech', text: 'Northwind Supply, ACCT 10037 · TX, 1 of 8' }],
       failure: 'Arrow keys move the text cursor; the list cannot be reached from the keyboard.',
       criterion: '2.1.1',
     },
     {
-      action: 'Choose a borrower',
+      action: 'Choose a supplier',
       keys: 'Enter',
       before: [{ kind: 'silence', note: 'Enter submits the surrounding form with a partial string.' }],
       after: [
-        { kind: 'speech', text: 'Borrower, combo box, collapsed, Cedar Ridge Farms' },
-        { kind: 'speech', text: 'Selected Cedar Ridge Farms (ACCT 10037 · NE).' },
+        { kind: 'speech', text: 'Supplier, combo box, collapsed, Northwind Supply' },
+        { kind: 'speech', text: 'Selected Northwind Supply (ACCT 10037 · TX).' },
       ],
     },
     {

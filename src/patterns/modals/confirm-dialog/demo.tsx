@@ -18,7 +18,7 @@ export default function ConfirmDialogDemo(): JSX.Element {
           {text('Archive relationship')}
         </button>
         <button type="button" className={demo.button} onClick={() => setScenario('delete')}>
-          Delete facility FAC-2231
+          Delete contract CTR-2231
         </button>
       </div>
       <p className={demo.log} aria-live="polite">
@@ -27,27 +27,27 @@ export default function ConfirmDialogDemo(): JSX.Element {
 
       <ConfirmDialog
         open={scenario === 'archive'}
-        title={text('Archive Cedar Ridge Farms?')}
+        title={text('Archive Northwind Supply?')}
         description={<p>{text('Archived relationships are hidden from search and reports. You can restore them from Settings for 90 days.')}</p>}
         confirmLabel={text('Archive')}
-        onConfirm={() => setLog('Cedar Ridge Farms archived.')}
+        onConfirm={() => setLog('Northwind Supply archived.')}
         onClose={() => setScenario('none')}
       />
 
       <ConfirmDialog
         open={scenario === 'delete'}
         tone="danger"
-        title="Delete facility FAC-2231?"
+        title="Delete contract CTR-2231?"
         description={<p>This cannot be undone. The following will also be removed:</p>}
-        consequences={['2 scheduled draws ($1.4M total)', '14 covenant checks', 'All attached documents'].map(text)}
+        consequences={['2 scheduled orders ($1.4M total)', '14 compliance checks', 'All attached documents'].map(text)}
         requireText="FAC-2231"
-        confirmLabel={text('Delete facility')}
+        confirmLabel={text('Delete contract')}
         onConfirm={async () => {
           await new Promise((resolve) => setTimeout(resolve, 700));
           setAttempts((n) => n + 1);
           // First attempt fails to show in-dialog error recovery.
-          if (attempts === 0) throw new Error('The facility has a draw in progress. Wait for it to settle, then try again.');
-          setLog('Facility FAC-2231 deleted.');
+          if (attempts === 0) throw new Error('The contract has an order in progress. Wait for it to close, then try again.');
+          setLog('Contract CTR-2231 deleted.');
         }}
         onClose={() => setScenario('none')}
       />

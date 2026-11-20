@@ -17,19 +17,19 @@ const MENU: Item[] = [
         label: 'Relationships',
         children: [
           { id: 'hierarchies', label: 'Entity hierarchies' },
-          { id: 'exposure', label: 'Exposure', children: [{ id: 'by-industry', label: 'By industry' }, { id: 'by-region', label: 'By region' }] },
+          { id: 'spend', label: 'Spend', children: [{ id: 'by-industry', label: 'By industry' }, { id: 'by-region', label: 'By region' }] },
         ],
       },
     ],
   },
-  { id: 'servicing', label: 'Servicing', children: [{ id: 'payments', label: 'Payments' }, { id: 'escrow', label: 'Escrow' }] },
+  { id: 'receiving', label: 'Receiving', children: [{ id: 'payments', label: 'Payments' }, { id: 'returns', label: 'Returns' }] },
   { id: 'reports', label: 'Reports' },
 ];
 
 /** Breadcrumbs are authored per page, separately from the menu, and drift out of date. */
 const CRUMBS: Record<string, string> = {
-  'by-region': 'Home > Reports > Regional exposure',
-  'by-industry': 'Home > Customers > Exposure',
+  'by-region': 'Home > Reports > Regional spend',
+  'by-industry': 'Home > Customers > Spend',
   payments: 'Home > Payments',
 };
 
@@ -74,7 +74,7 @@ export default function NestedNavBefore(): JSX.Element {
       <p className={s.muted} {...failureTarget('breadcrumb-mismatch')}>
         {CRUMBS[page] ?? 'Home'}
       </p>
-      <p>Page content for {page}. Hover Customers, then Relationships, then Exposure.</p>
+      <p>Page content for {page}. Hover Customers, then Relationships, then Spend.</p>
     </div>
   );
 }

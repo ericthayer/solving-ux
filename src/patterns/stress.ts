@@ -25,7 +25,7 @@ export const LARGE_DATA_COUNT = 10_000;
 /** One unbreakable token, the kind that blows out fixed-width cells and buttons. */
 const LONG_WORD = 'Landwirtschaftsgenossenschaftsverbandsverbindlichkeiten';
 const LONG_SENTENCE =
-  'Additional disclosure required by the Northern Agricultural Credit District applies to this record and must stay readable when it wraps across several lines.';
+  'Additional disclosure required by the Northern Regional Trade Compliance Office applies to this record and must stay readable when it wraps across several lines.';
 
 /** Expands a string the way translation and real-world data do: longer, and with an unbroken word. */
 export function expandText(value: string): string {

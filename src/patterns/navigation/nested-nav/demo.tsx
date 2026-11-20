@@ -17,10 +17,10 @@ const baseItems: NavItem[] = [
         label: 'Relationships',
         children: [
           { id: 'hierarchies', label: 'Entity hierarchies', href: '#hierarchies' },
-          { id: 'guarantors', label: 'Guarantors', href: '#guarantors' },
+          { id: 'contacts', label: 'Contacts', href: '#contacts' },
           {
-            id: 'exposure',
-            label: 'Exposure',
+            id: 'spend',
+            label: 'Spend',
             children: [
               { id: 'by-industry', label: 'By industry', href: '#by-industry' },
               { id: 'by-region', label: 'By region', href: '#by-region' },
@@ -31,12 +31,12 @@ const baseItems: NavItem[] = [
     ],
   },
   {
-    id: 'servicing',
-    label: 'Servicing',
+    id: 'receiving',
+    label: 'Receiving',
     children: [
       { id: 'payments', label: 'Payments', href: '#payments' },
-      { id: 'escrow', label: 'Escrow', href: '#escrow' },
-      { id: 'covenants', label: 'Covenant tracking', href: '#covenants' },
+      { id: 'returns', label: 'Returns', href: '#returns' },
+      { id: 'compliance', label: 'Compliance tracking', href: '#compliance' },
     ],
   },
   { id: 'reports', label: 'Reports', href: '#reports' },

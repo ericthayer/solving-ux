@@ -6,13 +6,13 @@ export const confirmDialogTranscript: ScreenReaderTranscript = {
   steps: [
     {
       action: 'Open the delete confirmation',
-      keys: 'Enter on "Delete facility FAC-2231"',
+      keys: 'Enter on "Delete contract CTR-2231"',
       before: [
-        { kind: 'speech', text: 'Delete facility FAC-2231, button' },
+        { kind: 'speech', text: 'Delete contract CTR-2231, button' },
         { kind: 'silence', note: 'A div overlay appears. Focus stays on the trigger behind it, so nothing about the dialog is read.' },
       ],
       after: [
-        { kind: 'speech', text: 'Delete facility FAC-2231?, alert dialog' },
+        { kind: 'speech', text: 'Delete contract CTR-2231?, alert dialog' },
         { kind: 'speech', text: 'This cannot be undone. The following will also be removed:' },
         { kind: 'speech', text: 'Type FAC-2231 to confirm, edit, blank' },
       ],
@@ -28,7 +28,7 @@ export const confirmDialogTranscript: ScreenReaderTranscript = {
       ],
       after: [
         { kind: 'speech', text: 'Cancel, button' },
-        { kind: 'speech', text: 'Delete facility, button, unavailable' },
+        { kind: 'speech', text: 'Delete contract, button, unavailable' },
       ],
       failure: 'OK does not say what it does. Every dialog in the app sounds the same, from archive to permanent delete.',
       criterion: '2.4.6',
@@ -36,7 +36,7 @@ export const confirmDialogTranscript: ScreenReaderTranscript = {
     {
       action: 'Keep tabbing',
       keys: 'Tab',
-      before: [{ kind: 'speech', text: 'Search borrowers, edit' }],
+      before: [{ kind: 'speech', text: 'Search suppliers, edit' }],
       after: [{ kind: 'speech', text: 'Type FAC-2231 to confirm, edit, blank' }],
       failure: 'Focus escapes into the page behind the overlay.',
       criterion: '2.4.3',
@@ -48,7 +48,7 @@ export const confirmDialogTranscript: ScreenReaderTranscript = {
         { kind: 'silence', note: 'The dialog closes. An error banner appears at the top of the page without being announced.' },
       ],
       after: [
-        { kind: 'speech', text: 'alert, The facility has a draw in progress. Wait for it to settle, then try again.' },
+        { kind: 'speech', text: 'alert, The contract has an order in progress. Wait for it to close, then try again.' },
       ],
       failure: 'The error is out of context and unspoken; the user believes the delete worked.',
       criterion: '4.1.3',
@@ -57,7 +57,7 @@ export const confirmDialogTranscript: ScreenReaderTranscript = {
       action: 'Close the dialog',
       keys: 'Escape',
       before: [{ kind: 'speech', text: 'document' }],
-      after: [{ kind: 'speech', text: 'Delete facility FAC-2231, button' }],
+      after: [{ kind: 'speech', text: 'Delete contract CTR-2231, button' }],
       failure: 'Focus resets to the top of the document; the user has to find their place again.',
       criterion: '2.4.3',
     },

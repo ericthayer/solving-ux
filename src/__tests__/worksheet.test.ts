@@ -36,7 +36,7 @@ describe('worksheet utils', () => {
   it('exports a summary table, ordered findings, and absolute pattern links', () => {
     const sheet: Worksheet = {
       version: 1,
-      appName: 'Loan portal',
+      appName: 'Supplier portal',
       auditor: 'Sam',
       findings: [
         finding({ id: 'a', title: 'Tiny hint text', severity: 'minor', category: 'forms' }),
@@ -53,7 +53,7 @@ describe('worksheet utils', () => {
       ],
     };
     const md = worksheetToMarkdown(sheet, opts);
-    expect(md).toContain('# UX audit: Loan portal');
+    expect(md).toContain('# UX audit: Supplier portal');
     expect(md).toContain('- **Findings:** 2 (1 critical, 1 minor)');
     expect(md).toContain('| 1 | Wizard loses data | Critical | Forms | 3.3.1 |');
     expect(md).toContain('| 2 | Tiny hint text | Minor | Forms | — |');
@@ -90,7 +90,7 @@ describe('worksheet utils', () => {
   });
 
   it('builds a safe filename', () => {
-    expect(markdownFilename('Acme / Loan Portal!', '2026-11-20')).toBe('ux-audit-acme-loan-portal-2026-11-20.md');
+    expect(markdownFilename('Acme / Supplier Portal!', '2026-11-20')).toBe('ux-audit-acme-supplier-portal-2026-11-20.md');
     expect(markdownFilename('', '2026-11-20')).toBe('ux-audit-app-2026-11-20.md');
   });
 });

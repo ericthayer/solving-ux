@@ -11,7 +11,7 @@ export const widgetGridPattern: PatternDefinition = {
   tags: ['dashboard', 'loading states', 'density', 'responsive grid', 'kpi'],
   clients: ['client-a', 'client-b'],
   problemStatement:
-    'Portfolio dashboards render 12+ widgets that each fetch independently. While loading, the page shows one full-screen spinner; if any request fails, the whole dashboard shows "Something went wrong." Widgets stuff 50-row tables into fixed-height cards with nested scrollbars. KPI trend arrows are red and green only.',
+    'Operations dashboards render 12+ widgets that each fetch independently. While loading, the page shows one full-screen spinner; if any request fails, the whole dashboard shows "Something went wrong." Widgets stuff 50-row tables into fixed-height cards with nested scrollbars. KPI trend arrows are red and green only.',
   beforeState: {
     summary: 'Fixed 4-column dashboard with a global spinner and nested scrolling cards.',
     failures: [
@@ -19,7 +19,7 @@ export const widgetGridPattern: PatternDefinition = {
         id: 'global-failure',
         description: 'One failed request blanks the entire dashboard.',
         refs: [{ kind: 'heuristic', id: 'H9' }, { kind: 'heuristic', id: 'H1' }],
-        target: { label: 'Dashboard body', revealedBy: 'Check "Covenant service times out", then click Reload' },
+        target: { label: 'Dashboard body', revealedBy: 'Check "Contracts service times out", then click Reload' },
       },
       {
         id: 'global-spinner',
@@ -31,13 +31,13 @@ export const widgetGridPattern: PatternDefinition = {
         id: 'scroll-trap',
         description: 'Cards with long lists create scroll traps inside a scrolling page.',
         refs: [{ kind: 'wcag', criterion: '2.1.1' }, { kind: 'heuristic', id: 'H8' }],
-        target: { label: 'Largest relationships list' },
+        target: { label: 'Largest suppliers list' },
       },
       {
         id: 'color-only-trend',
         description: 'Up/down meaning conveyed by red/green arrows only (fails 1.4.1).',
         refs: [{ kind: 'wcag', criterion: '1.4.1' }],
-        target: { label: 'Exposure trend arrow' },
+        target: { label: 'Spend trend arrow' },
       },
       {
         id: 'fixed-columns',
@@ -61,8 +61,8 @@ export const widgetGridPattern: PatternDefinition = {
     { name: 'Widget.viewAll', type: '{ label: string; href: string }', required: false, description: 'Link to the full data set. Shown only in the ready state.' },
     { name: 'Stat', type: '{ label, value, change? }', required: false, description: 'KPI block. change.direction is written out as "Up 3.1%" for screen readers and color-blind users.' },
   ],
-  usage: `<DashboardGrid title="Portfolio health">
-  <Widget title="Exposure" state={query.isLoading ? { status: 'loading' } : { status: 'ready', content: <Stat label="Total" value="$4.2B" /> }} />
+  usage: `<DashboardGrid title="Supply chain health">
+  <Widget title="Spend" state={query.isLoading ? { status: 'loading' } : { status: 'ready', content: <Stat label="Total" value="$4.2B" /> }} />
 </DashboardGrid>`,
   accessibilityNotes: [
     { kind: 'wcag', criterion: '1.4.1', level: 'A', title: 'Use of color', detail: 'KPI changes are written as "Up 0.08 pts"; arrows are decorative (aria-hidden).' },
@@ -72,8 +72,8 @@ export const widgetGridPattern: PatternDefinition = {
     { kind: 'keyboard', keys: 'Enter / Space', action: 'Retry a failed widget.' },
     { kind: 'aria', attribute: 'aria-busy="true"', detail: 'On a widget while it loads; removed when content arrives.' },
     { kind: 'aria', attribute: 'role="region" via section + aria-labelledby', detail: 'Every widget is a named landmark, navigable with the screen reader region list.' },
-    { kind: 'screen-reader', title: 'Loading', detail: 'Hidden text "Loading Covenant breaches" replaces the visual skeleton.' },
-    { kind: 'screen-reader', title: 'Failure', detail: 'role="status" announces "Covenant breaches did not load. The covenant service timed out." without stealing focus.' },
+    { kind: 'screen-reader', title: 'Loading', detail: 'Hidden text "Loading Contract breaches" replaces the visual skeleton.' },
+    { kind: 'screen-reader', title: 'Failure', detail: 'role="status" announces "Contract breaches did not load. The contracts service timed out." without stealing focus.' },
   ],
   wcagLevel: 'AA',
   lastUpdated: '2026-11-17',

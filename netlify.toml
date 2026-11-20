@@ -1,8 +1,8 @@
 [build]
-  # One isolated app per client under unlisted paths; see scripts/build-clients.mjs.
-  # Requires SUX_CLIENT_PATHS (and optionally SUX_FORBIDDEN_TERMS) in the Netlify site environment.
+  # One client-neutral site at the root; see scripts/build-public.mjs.
+  # Reads SUX_FORBIDDEN_TERMS and SUX_LEGACY_PATHS from the Netlify site environment.
   # Redirects and headers are generated into dist/_redirects and dist/_headers.
-  command = "npm run build:clients"
+  command = "npm run build:public"
   publish = "dist"
 
 [build.environment]

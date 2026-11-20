@@ -62,7 +62,7 @@ export type FailureRef = { kind: 'wcag'; criterion: WcagCriterionId } | { kind: 
 export type FailureTarget = {
   /** Plain-language name of the element, e.g. "Select-all checkbox". */
   label: string;
-  /** Interaction that makes the target appear, e.g. "Click Delete facility". Omit when it renders immediately. */
+  /** Interaction that makes the target appear, e.g. "Click Delete contract". Omit when it renders immediately. */
   revealedBy?: string;
 };
 

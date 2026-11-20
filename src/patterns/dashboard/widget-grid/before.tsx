@@ -9,21 +9,21 @@ const RELATIONSHIPS = Array.from({ length: 25 }, (_, i) => `Relationship ${(i + 
 
 export default function DashboardGridBefore(): JSX.Element {
   const [status, setStatus] = useState<Status>('ready');
-  const [failCovenants, setFailCovenants] = useState(false);
+  const [failContracts, setFailContracts] = useState(false);
 
   useEffect(() => {
     if (status !== 'loading') return undefined;
     // Every widget waits for the slowest request, and any single failure fails the page.
-    const timer = setTimeout(() => setStatus(failCovenants ? 'failed' : 'ready'), 1400);
+    const timer = setTimeout(() => setStatus(failContracts ? 'failed' : 'ready'), 1400);
     return () => clearTimeout(timer);
-  }, [status, failCovenants]);
+  }, [status, failContracts]);
 
   return (
     <div className={s.frame}>
       <div className={s.toolbar}>
-        <span className={s.spacer}>Portfolio health</span>
+        <span className={s.spacer}>Supply chain health</span>
         <label>
-          <input type="checkbox" checked={failCovenants} onChange={(e) => setFailCovenants(e.target.checked)} /> Covenant service times out
+          <input type="checkbox" checked={failContracts} onChange={(e) => setFailContracts(e.target.checked)} /> Contracts service times out
         </label>
         <button type="button" className={s.btn} onClick={() => setStatus('loading')}>
           Reload
@@ -39,22 +39,22 @@ export default function DashboardGridBefore(): JSX.Element {
         {status === 'ready' && (
           <div className={s.fixedGrid} {...failureTarget('fixed-columns')}>
             <section className={s.card}>
-              <h4 className={s.cardTitle}>Committed exposure</h4>
+              <h4 className={s.cardTitle}>Committed spend</h4>
               <span className={s.big}>$4.21B</span>{' '}
               <span className={s.up} {...failureTarget('color-only-trend')}>
                 ▲ 3.1%
               </span>
             </section>
             <section className={s.card}>
-              <h4 className={s.cardTitle}>30+ day delinquency</h4>
+              <h4 className={s.cardTitle}>Late deliveries (30 days)</h4>
               <span className={s.big}>0.42%</span> <span className={s.down}>▲ 0.08</span>
             </section>
             <section className={s.card}>
-              <h4 className={s.cardTitle}>Covenant breaches</h4>
+              <h4 className={s.cardTitle}>Contract breaches</h4>
               <span className={s.big}>0</span>
             </section>
             <section className={s.card}>
-              <h4 className={s.cardTitle}>Largest relationships</h4>
+              <h4 className={s.cardTitle}>Largest suppliers</h4>
               <ol className={s.shortScroll} {...failureTarget('scroll-trap')}>
                 {RELATIONSHIPS.map((r) => (
                   <li key={r}>{r}</li>

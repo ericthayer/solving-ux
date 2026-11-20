@@ -25,13 +25,13 @@ function Harness(props: HarnessProps): JSX.Element {
   return (
     <>
       <button type="button" onClick={() => setOpen(true)}>
-        Delete facility
+        Delete contract
       </button>
       <ConfirmDialog
         open={open}
-        title="Delete facility?"
-        description={<p>This removes the facility from the borrower record.</p>}
-        confirmLabel="Delete facility"
+        title="Delete contract?"
+        description={<p>This removes the contract from the supplier record.</p>}
+        confirmLabel="Delete contract"
         tone="danger"
         onConfirm={jest.fn()}
         onClose={() => setOpen(false)}
@@ -44,7 +44,7 @@ function Harness(props: HarnessProps): JSX.Element {
 async function openDialog(props: HarnessProps = {}) {
   const user = userEvent.setup();
   render(<Harness {...props} />);
-  const trigger = screen.getByRole('button', { name: 'Delete facility' });
+  const trigger = screen.getByRole('button', { name: 'Delete contract' });
   await user.click(trigger);
   return { user, trigger };
 }
@@ -52,8 +52,8 @@ async function openDialog(props: HarnessProps = {}) {
 describe('ConfirmDialog', () => {
   it('opens as a labelled alertdialog for destructive actions', async () => {
     await openDialog();
-    const dialog = screen.getByRole('alertdialog', { name: 'Delete facility?' });
-    expect(dialog).toHaveAccessibleDescription('This removes the facility from the borrower record.');
+    const dialog = screen.getByRole('alertdialog', { name: 'Delete contract?' });
+    expect(dialog).toHaveAccessibleDescription('This removes the contract from the supplier record.');
   });
 
   it('focuses Cancel first and returns focus to the trigger on close', async () => {
@@ -77,7 +77,7 @@ describe('ConfirmDialog', () => {
   it('requires the exact confirmation text before enabling the action', async () => {
     const onConfirm = jest.fn();
     const { user } = await openDialog({ requireText: 'FAC-2231', onConfirm });
-    const confirm = screen.getAllByRole('button', { name: 'Delete facility' }).at(-1)!;
+    const confirm = screen.getAllByRole('button', { name: 'Delete contract' }).at(-1)!;
     expect(screen.getByLabelText(/Type FAC-2231 to confirm/)).toHaveFocus();
     expect(confirm).toBeDisabled();
     await user.keyboard('FAC-2231{Enter}');
@@ -85,10 +85,10 @@ describe('ConfirmDialog', () => {
   });
 
   it('stays open and announces the error when confirm fails (edge case)', async () => {
-    const onConfirm = jest.fn().mockRejectedValue(new Error('Facility has an active draw.'));
+    const onConfirm = jest.fn().mockRejectedValue(new Error('Contract has an open order.'));
     const { user } = await openDialog({ onConfirm });
-    await user.click(screen.getAllByRole('button', { name: 'Delete facility' }).at(-1)!);
-    expect(await screen.findByRole('alert')).toHaveTextContent('Facility has an active draw.');
+    await user.click(screen.getAllByRole('button', { name: 'Delete contract' }).at(-1)!);
+    expect(await screen.findByRole('alert')).toHaveTextContent('Contract has an open order.');
     expect(screen.getByRole('alertdialog')).toBeInTheDocument();
   });
 
@@ -99,7 +99,7 @@ describe('ConfirmDialog', () => {
   });
 
   it('has no axe violations while open', async () => {
-    await openDialog({ consequences: ['2 scheduled draws will be cancelled.'] });
+    await openDialog({ consequences: ['2 scheduled orders will be cancelled.'] });
     expect(await axe(document.body)).toHaveNoViolations();
   });
 });

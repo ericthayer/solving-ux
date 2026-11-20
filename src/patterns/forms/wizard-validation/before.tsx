@@ -8,13 +8,13 @@ type Field = { name: string; label: string; required?: boolean; type?: string; t
 
 const FIELDS: Field[] = [
   { name: 'legalName', label: 'Legal entity name', required: true },
-  { name: 'entityType', label: 'Entity type (LLC, Cooperative, Sole proprietor)', required: true },
-  { name: 'memberCount', label: 'Number of members (cooperatives only)', type: 'number' },
-  { name: 'patronage', label: 'Patronage refund policy (cooperatives only)' },
+  { name: 'entityType', label: 'Entity type (LLC, Partnership, Sole proprietor)', required: true },
+  { name: 'memberCount', label: 'Number of partners (partnerships only)', type: 'number' },
+  { name: 'profitSharing', label: 'Profit-sharing policy (partnerships only)' },
   { name: 'taxId', label: 'Tax ID (EIN)', required: true, test: (v) => /^\d{2}-\d{7}$/.test(v) },
-  { name: 'purpose', label: 'Loan purpose', required: true },
-  { name: 'amount', label: 'Requested amount (USD)', required: true, type: 'number', test: (v) => Number(v) >= 10000 },
-  { name: 'acreage', label: 'Acreage', type: 'number' },
+  { name: 'purpose', label: 'Supply category', required: true },
+  { name: 'amount', label: 'Annual contract value (USD)', required: true, type: 'number', test: (v) => Number(v) >= 10000 },
+  { name: 'sites', label: 'Service sites', type: 'number' },
   { name: 'contactEmail', label: 'Contact email', required: true, type: 'email', test: (v) => /^\S+@\S+\.\S+$/.test(v) },
   { name: 'phone', label: 'Phone', type: 'tel' },
 ];

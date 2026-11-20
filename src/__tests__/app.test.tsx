@@ -70,7 +70,7 @@ describe('Pattern library shell', () => {
     await user.keyboard('{End}');
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Success criteria');
     await user.keyboard('{Home}');
-    expect(screen.getByRole('table', { name: 'Loan applications' })).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Purchase orders' })).toBeInTheDocument();
   });
 
   it('copies the deep link and exports a ZIP from the keyboard menu', async () => {
@@ -106,11 +106,11 @@ describe('Pattern library shell', () => {
     await screen.findByRole('tablist');
     const toggle = screen.getByRole('group', { name: 'Demo version' });
     expect(within(toggle).getByRole('radio', { name: 'After · fixed' })).toBeChecked();
-    expect(screen.getByRole('table', { name: 'Loan applications' })).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Purchase orders' })).toBeInTheDocument();
 
     await user.click(within(toggle).getByRole('radio', { name: 'Before · broken' }));
     expect(screen.getByText('Deliberately broken')).toBeInTheDocument();
-    expect(screen.queryByRole('table', { name: 'Loan applications' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('table', { name: 'Purchase orders' })).not.toBeInTheDocument();
     expect(document.querySelector('[data-failure="select-all-scope"]')).not.toBeNull();
 
     // The demo choice survives a tab round trip.
@@ -153,9 +153,9 @@ describe('Pattern library shell', () => {
     expect(screen.getByText('Fix 1 field before saving.')).toHaveAttribute('role', 'alert');
     expect(title).toHaveFocus();
 
-    await user.type(title, 'Borrower typeahead');
+    await user.type(title, 'Supplier typeahead');
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    expect(await screen.findByRole('heading', { level: 1, name: 'Borrower typeahead' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Supplier typeahead' })).toBeInTheDocument();
   });
 
   it('has no axe violations on the home and pattern pages', async () => {

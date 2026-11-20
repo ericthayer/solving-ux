@@ -8,7 +8,7 @@ export const wizardValidationWalkthrough: CodeAnnotation[] = [
     topic: 'resilience',
     title: 'Hidden fields cannot block the form',
     rationale:
-      'The audited form showed cooperative-only fields to every borrower type. Here conditional fields are declared in config, and a hidden field is never validated or submitted, so it cannot fail "Continue" with an error the user cannot see.',
+      'The audited form showed partnership-only fields to every supplier type. Here conditional fields are declared in config, and a hidden field is never validated or submitted, so it cannot fail "Continue" with an error the user cannot see.',
     wcag: ['3.3.1'],
   },
   {

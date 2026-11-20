@@ -12,7 +12,7 @@ function Controls(): JSX.Element {
   return (
     <div className={demo.stack}>
       <div className={demo.row}>
-        <button type="button" className={demo.button} onClick={() => notify({ tone: 'success', title: text('Draft saved'), description: text('Saved to Cedar Ridge Farms renewal.') })}>
+        <button type="button" className={demo.button} onClick={() => notify({ tone: 'success', title: text('Draft saved'), description: text('Saved to Northwind Supply renewal.') })}>
           Success
         </button>
         <button type="button" className={demo.button} onClick={() => notify({ tone: 'info', title: text('Export started'), description: text('You will get an email when the file is ready.') })}>

@@ -11,7 +11,7 @@ export const confirmDialogPattern: PatternDefinition = {
   tags: ['modal', 'dialog', 'confirmation', 'destructive action', 'focus management'],
   clients: ['client-a', 'client-b'],
   problemStatement:
-    'Every action, from saving a note to deleting a facility, triggers the same "Are you sure?" modal with OK and Cancel. Users click through without reading. Modals are div overlays that leave the background page tabbable, do not close on Escape, and drop focus at the top of the page when dismissed. When the action fails, the modal closes and an error appears somewhere else on the page, or not at all.',
+    'Every action, from saving a note to deleting a contract, triggers the same "Are you sure?" modal with OK and Cancel. Users click through without reading. Modals are div overlays that leave the background page tabbable, do not close on Escape, and drop focus at the top of the page when dismissed. When the action fails, the modal closes and an error appears somewhere else on the page, or not at all.',
   beforeState: {
     summary: 'Generic div-based "Are you sure? OK / Cancel" modal used for all actions.',
     failures: [
@@ -37,13 +37,13 @@ export const confirmDialogPattern: PatternDefinition = {
         id: 'focus-not-returned',
         description: 'Focus is not returned to the trigger on close.',
         refs: [{ kind: 'wcag', criterion: '2.4.3' }],
-        target: { label: 'Delete facility button' },
+        target: { label: 'Delete contract button' },
       },
       {
         id: 'error-after-close',
         description: 'Errors from the action are shown after the dialog closes, out of context.',
         refs: [{ kind: 'heuristic', id: 'H9' }, { kind: 'wcag', criterion: '4.1.3' }, { kind: 'wcag', criterion: '3.3.1' }],
-        target: { label: 'Page-level error message', revealedBy: 'Delete the facility and click OK' },
+        target: { label: 'Page-level error message', revealedBy: 'Delete the contract and click OK' },
       },
     ],
   },
@@ -53,7 +53,7 @@ export const confirmDialogPattern: PatternDefinition = {
   beforeComponent: Before,
   props: [
     { name: 'open', type: 'boolean', required: true, description: 'Controlled visibility. The component calls showModal() and close() for you.' },
-    { name: 'title', type: 'string', required: true, description: 'Phrase as a question naming the object, e.g. "Delete facility FAC-2231?"' },
+    { name: 'title', type: 'string', required: true, description: 'Phrase as a question naming the object, e.g. "Delete contract CTR-2231?"' },
     { name: 'description', type: 'ReactNode', required: true, description: 'What happens and whether it can be undone. Linked with aria-describedby.' },
     { name: 'confirmLabel', type: 'string', required: true, description: 'Verb + object. Never "OK" or "Yes".' },
     { name: 'cancelLabel', type: 'string', required: false, defaultValue: '"Cancel"', description: 'Label for the dismiss button.' },
@@ -66,11 +66,11 @@ export const confirmDialogPattern: PatternDefinition = {
   usage: `<ConfirmDialog
   open={isOpen}
   tone="danger"
-  title="Delete facility FAC-2231?"
+  title="Delete contract CTR-2231?"
   description={<p>This cannot be undone.</p>}
   requireText="FAC-2231"
-  confirmLabel="Delete facility"
-  onConfirm={() => api.deleteFacility(id)}
+  confirmLabel="Delete contract"
+  onConfirm={() => api.deleteContract(id)}
   onClose={() => setOpen(false)}
 />`,
   accessibilityNotes: [
@@ -82,7 +82,7 @@ export const confirmDialogPattern: PatternDefinition = {
     { kind: 'keyboard', keys: 'Enter', action: 'In the confirm text field, submits once the text matches.' },
     { kind: 'aria', attribute: 'role="alertdialog"', detail: 'Applied for danger tone so screen readers treat it as urgent.' },
     { kind: 'aria', attribute: 'aria-labelledby / aria-describedby', detail: 'Title and description are read when the dialog opens.' },
-    { kind: 'screen-reader', title: 'On open', detail: 'Announces "Delete facility FAC-2231?, alert dialog, This cannot be undone..." then the focused control.' },
+    { kind: 'screen-reader', title: 'On open', detail: 'Announces "Delete contract CTR-2231?, alert dialog, This cannot be undone..." then the focused control.' },
     { kind: 'screen-reader', title: 'On failure', detail: 'role="alert" reads the error while focus stays where it was.' },
   ],
   wcagLevel: 'AA',
