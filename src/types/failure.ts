@@ -34,9 +34,11 @@ export type HeuristicId = (typeof HEURISTICS)[number]['id'];
 
 /** WCAG 2.2 success criteria referenced by built-in failures. Add entries as patterns need them. */
 export const WCAG_CRITERIA = {
+  '1.1.1': { title: 'Non-text Content', level: 'A' },
   '1.3.1': { title: 'Info and Relationships', level: 'A' },
   '1.4.1': { title: 'Use of Color', level: 'A' },
   '1.4.10': { title: 'Reflow', level: 'AA' },
+  '1.4.11': { title: 'Non-text Contrast', level: 'AA' },
   '1.4.13': { title: 'Content on Hover or Focus', level: 'AA' },
   '2.1.1': { title: 'Keyboard', level: 'A' },
   '2.1.2': { title: 'No Keyboard Trap', level: 'A' },
