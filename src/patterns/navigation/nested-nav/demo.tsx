@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { NestedNav, findPath } from './NestedNav';
 import type { NavItem } from './NestedNav';
 import demo from '../../demo.module.css';
+import { useStressTest } from '../../stress';
 
-const items: NavItem[] = [
+const baseItems: NavItem[] = [
   { id: 'overview', label: 'Overview', href: '#overview' },
   {
     id: 'customers',
@@ -41,7 +42,12 @@ const items: NavItem[] = [
   { id: 'reports', label: 'Reports', href: '#reports' },
 ];
 
+const relabel = (list: NavItem[], t: (value: string) => string): NavItem[] =>
+  list.map((item) => ('children' in item ? { ...item, label: t(item.label), children: relabel(item.children, t) } : { ...item, label: t(item.label) }));
+
 export default function NestedNavDemo(): JSX.Element {
+  const stress = useStressTest(['longText']);
+  const items = useMemo(() => relabel(baseItems, stress.text), [stress.text]);
   const [currentId, setCurrentId] = useState('by-region');
   const current = findPath(items, currentId)?.at(-1);
 

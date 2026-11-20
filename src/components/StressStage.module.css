@@ -1,0 +1,27 @@
+/*
+ * The sizer is unzoomed and sets the visual width. The stage inside it is zoomed, so its
+ * CSS-pixel width is sizer width / zoom: the same reflow a user at 200% or 400% browser zoom gets.
+ */
+.sizer {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  margin-inline: auto;
+  overflow-x: auto;
+}
+
+.sizer[data-width='320'] { inline-size: 320px; }
+.sizer[data-width='480'] { inline-size: 480px; }
+.sizer[data-width='768'] { inline-size: 768px; }
+.sizer[data-width='1024'] { inline-size: 1024px; }
+
+.sizer[data-constrained] {
+  outline: 1px dashed var(--sux-line-strong, #9a9b96);
+  outline-offset: 4px;
+}
+
+.stage {
+  container-type: inline-size;
+}
+
+.stage[data-zoom='2'] { zoom: 2; }
+.stage[data-zoom='4'] { zoom: 4; }
