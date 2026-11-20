@@ -1,0 +1,248 @@
+.root {
+  position: relative;
+  display: inline-block;
+  /* Room for the badge so it never paints outside the component's box. */
+  padding-block-start: 0.375rem;
+  padding-inline-end: 0.375rem;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  cursor: pointer;
+}
+
+.trigger:hover,
+.trigger[aria-expanded='true'] {
+  background: var(--sux-sunken, #f4f4f5);
+}
+
+.bell {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Numeric count, not a dot: the number is the signal, color only reinforces it. */
+.badge {
+  position: absolute;
+  inset-block-start: -0.375rem;
+  inset-inline-end: -0.375rem;
+  min-width: 1.25rem;
+  padding: 0 0.3125rem;
+  border: 2px solid var(--sux-surface, #fff);
+  border-radius: 999px;
+  background: var(--sux-danger, #b42318);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1rem;
+  text-align: center;
+}
+
+.panel {
+  position: absolute;
+  inset-block-start: calc(100% + 0.5rem);
+  inset-inline-end: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(24rem, 100cqi);
+  max-height: min(28rem, 70vh);
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  box-shadow: 0 16px 32px -16px rgb(0 0 0 / 0.35);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  padding: 0.75rem 1rem;
+  border-block-end: 1px solid var(--sux-line, #d4d4d8);
+}
+
+.heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.summary {
+  color: var(--sux-muted, #52525b);
+}
+
+.header .linkButton {
+  margin-inline-start: auto;
+}
+
+.scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.group + .group {
+  border-block-start: 1px solid var(--sux-line, #d4d4d8);
+}
+
+.groupHeading {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0.375rem 1rem;
+  background: var(--sux-sunken, #f4f4f5);
+  color: var(--sux-muted, #52525b);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 0.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.item + .item {
+  border-block-start: 1px solid var(--sux-line, #d4d4d8);
+}
+
+.item[data-read='false'] {
+  background: var(--sux-accent-soft, #eef6f2);
+}
+
+/* Unread shows a dot and a bolder title; screen readers get the word "Unread". */
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-block-start: 0.375rem;
+  border-radius: 50%;
+}
+
+.item[data-read='false'] .dot {
+  background: var(--sux-accent, #0b6e4f);
+}
+
+.content {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.title,
+.body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.item[data-read='false'] .title {
+  font-weight: 700;
+}
+
+.body,
+.time {
+  color: var(--sux-muted, #52525b);
+}
+
+.time {
+  font-size: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: center;
+  margin-block-start: 0.25rem;
+}
+
+.action {
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.linkButton {
+  min-height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--sux-accent, #0b6e4f);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.linkButton[aria-disabled='true'] {
+  color: var(--sux-muted, #52525b);
+  text-decoration: none;
+  cursor: default;
+}
+
+.empty {
+  margin: 0;
+  padding: 1.5rem 1rem;
+  color: var(--sux-muted, #52525b);
+  text-align: center;
+}
+
+.root button:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+@media (forced-colors: active) {
+  .item[data-read='false'] .dot {
+    background: CanvasText;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

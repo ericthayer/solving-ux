@@ -12,6 +12,7 @@ export const CATEGORIES = [
   { id: 'empty-states', label: 'Empty States' },
   { id: 'notifications', label: 'Notifications' },
   { id: 'search-filters', label: 'Search & Filters' },
+  { id: 'permissions', label: 'Permissions' },
 ] as const;
 
 export type CategoryId = (typeof CATEGORIES)[number]['id'];
