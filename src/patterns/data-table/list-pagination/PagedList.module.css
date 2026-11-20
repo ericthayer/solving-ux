@@ -1,0 +1,155 @@
+.root {
+  container-type: inline-size;
+  inline-size: 100%;
+  display: grid;
+  gap: 0.75rem;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.label {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.summary,
+.hint,
+.empty {
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  padding: 2rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  text-align: center;
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  list-style: none;
+  background: var(--sux-surface, #fff);
+}
+
+.item {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--sux-line, #d4d4d8);
+  overflow-wrap: anywhere;
+  /* Keeps a restored or newly focused item clear of sticky headers. */
+  scroll-margin-block: 4rem;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+.list:focus-visible,
+.item:focus-visible,
+.button:focus-visible,
+.pageButton:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+/* Programmatic focus on a list item is a "you are here" marker, not a control. */
+.item:focus {
+  background: var(--sux-accent-soft, #e6f2ed);
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.button,
+.pageButton {
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pageButton {
+  min-width: 2rem;
+  padding: 0 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Current page: fill plus weight plus underline, so state never depends on color alone. */
+.pageButton[aria-current='page'] {
+  border-color: var(--sux-accent, #0b6e4f);
+  background: var(--sux-accent-soft, #e6f2ed);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gap {
+  padding: 0 0.25rem;
+  color: var(--sux-muted, #52525b);
+}
+
+.loader {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+}
+
+.sentinel {
+  block-size: 1px;
+  inline-size: 100%;
+}
+
+@container (max-width: 24rem) {
+  .pages li:not(:has([aria-current])) {
+    display: none;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
