@@ -263,3 +263,26 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* Endless spinner with no role, value, or text, and no reduced-motion handling. */
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 4px solid #fff;
+  border-top-color: #2b5797;
+  border-radius: 50%;
+  animation: before-spin 700ms linear infinite;
+}
+
+@keyframes before-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Low-contrast greyed-out button: the state is carried by color alone. */
+.btnGreyed {
+  composes: btn;
+  color: #a1a1aa;
+  cursor: default;
+}
