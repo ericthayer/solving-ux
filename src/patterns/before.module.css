@@ -263,3 +263,9 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* Unread shown by font weight alone. */
+.menuItemBold {
+  composes: menuItem;
+  font-weight: 700;
+}
