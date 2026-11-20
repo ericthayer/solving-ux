@@ -264,6 +264,7 @@
   background: #d21f1f;
 }
 
+/* Approval workflow: status shown as a colored dot only. */
 /* Two fixed-width multi-select boxes side by side that never reflow. */
 .transferRow {
   display: flex;
@@ -455,6 +456,21 @@
   height: 10px;
   border-radius: 50%;
   vertical-align: middle;
+}
+
+.dotPending {
+  composes: dot;
+  background: #e0a800;
+}
+
+.dotApproved {
+  composes: dot;
+  background: #138a36;
+}
+
+.dotRejected {
+  composes: dot;
+  background: #d21f1f;
 }
 
 .dotGreen {
