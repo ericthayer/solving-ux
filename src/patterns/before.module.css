@@ -269,6 +269,52 @@
   display: flex;
   flex-direction: column;
   block-size: var(--demo-viewport-height, 30rem);
+}
+
+/* Side panel (modals/side-panel): fixed-width overlay that slides over the list and hides it. */
+.panelListScroll {
+  max-height: 12rem;
+}
+
+.slideOver {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: grid;
+  align-content: start;
+  width: 26rem;
+  border-left: 2px solid #2b5797;
+  background: var(--sux-surface, #fff);
+  box-shadow: -4px 0 8px rgb(0 0 0 / 0.25);
+}
+
+.slideOverHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: linear-gradient(#4a7cc2, #2b5797);
+  color: #fff;
+  font-weight: 700;
+}
+
+.iconClose {
+  padding: 0 0.25rem;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.slideOverBody {
+  display: grid;
+  gap: 0.375rem;
+  padding: 0.5rem;
+}
+
+/* Fixed-height feed that appends rows whenever it nears the bottom. */
+.feed {
+  max-height: 10rem;
   overflow: auto;
   border: 1px solid var(--sux-line-strong, #a1a1aa);
 }
@@ -306,4 +352,156 @@
   display: grid;
   gap: 0.75rem;
   padding: 0.5rem;
+}
+
+/* Page numbers as bare text; the current one differs by color only. */
+.pageLink {
+  padding: 0 0.25rem;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pageLinkCurrent {
+  composes: pageLink;
+  color: #2b5797;
+}
+
+/* Coach-mark product tour: dimmed page, floating bubble, ring on the step's element. */
+.coachDim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: rgb(0 0 0 / 0.45);
+}
+
+.coachMark {
+  position: absolute;
+  top: 3.25rem;
+  left: 25%;
+  z-index: 4;
+  display: grid;
+  gap: 0.375rem;
+  width: min(15rem, 70%);
+  padding: 0.5rem;
+  border: 1px solid #000;
+  background: #ffffe1;
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 0.3);
+}
+
+.coachRing {
+  position: relative;
+  z-index: 4;
+  outline: 3px solid #ffcc00;
+}
+
+.fakeLink {
+  color: #2b5797;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Indentation is the only cue for depth in the tree view Before demo. */
+.indent {
+  padding-inline-start: 16px;
+}
+
+/* Unread shown by font weight alone. */
+.menuItemBold {
+  composes: menuItem;
+  font-weight: 700;
+}
+
+/* One character per box: breaks paste and one-time-code autofill. */
+.codeBox {
+  composes: input;
+  width: 2em;
+  text-align: center;
+}
+
+/* Distorted text CAPTCHA with no alternative. */
+.captcha {
+  composes: big;
+  font-style: italic;
+  letter-spacing: 0.4em;
+  text-decoration: line-through;
+  user-select: none;
+}
+
+/* Status dots that differ by hue only. Yellow is about 1.1:1 against white. */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.dotGreen {
+  composes: dot;
+  background: #2ecc40;
+}
+
+.dotRed {
+  composes: dot;
+  background: #ff4136;
+}
+
+.dotYellow {
+  composes: dot;
+  background: #ffef5c;
+}
+
+.dotBlue {
+  composes: dot;
+  background: #4a90e2;
+}
+
+.pastelBadge {
+  padding: 0 0.375rem;
+  border-radius: 8px;
+  background: #e8f0fb;
+  color: #9db4d6;
+  font-size: 10px;
+}
+
+/* Date range: read-only input plus an icon div. */
+.dateControl {
+  display: flex;
+  gap: 2px;
+}
+
+/* Date range: a mouse-only month of plain divs. */
+.dayGrid {
+  composes: menuDrop;
+  grid-template-columns: repeat(7, 1.75rem);
+  min-width: 0;
+}
+
+.dayCell {
+  composes: menuItem;
+  padding: 0.25rem 0;
+  text-align: center;
+}
+
+/* Endless spinner with no role, value, or text, and no reduced-motion handling. */
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 4px solid #fff;
+  border-top-color: #2b5797;
+  border-radius: 50%;
+  animation: before-spin 700ms linear infinite;
+}
+
+@keyframes before-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Low-contrast greyed-out button: the state is carried by color alone. */
+.btnGreyed {
+  composes: btn;
+  color: #a1a1aa;
+  cursor: default;
 }
