@@ -15,16 +15,18 @@ import { StressStage } from '../components/StressStage';
 import type { StageMeasurement } from '../components/StressStage';
 import { StressTestBar } from '../components/StressTestBar';
 import { Tabs } from '../components/Tabs';
+import { WalkthroughTab } from '../components/WalkthroughTab';
 import { usePatterns } from '../context/PatternContext';
 import { useEditor } from '../context/EditorContext';
 import { useStressSettings } from '../hooks/useStressSettings';
 import { StressContext } from '../patterns/stress';
 import { getTranscript } from '../patterns/transcripts';
+import { getWalkthrough } from '../patterns/walkthroughs';
 import { CATEGORIES } from '../types/pattern';
 import type { Pattern } from '../types/pattern';
 import { NotFoundPage } from './NotFoundPage';
 
-const TAB_IDS = ['preview', 'code', 'tests', 'accessibility'] as const;
+const TAB_IDS = ['preview', 'code', 'walkthrough', 'tests', 'accessibility'] as const;
 type TabId = (typeof TAB_IDS)[number];
 const isTab = (value: string | null): value is TabId => TAB_IDS.includes(value as TabId);
 
@@ -136,7 +138,9 @@ export function PatternPage(): JSX.Element {
   const { editorMode } = useEditor();
   const pattern = getPattern(category, slug);
   const tabParam = params.get('tab');
-  const tab: TabId = isTab(tabParam) ? tabParam : 'preview';
+  const walkthrough = pattern ? getWalkthrough(pattern.category, pattern.slug) : [];
+  const hasWalkthrough = walkthrough.length > 0;
+  const tab: TabId = isTab(tabParam) && (tabParam !== 'walkthrough' || hasWalkthrough) ? tabParam : 'preview';
   const version: DemoVersion = params.get('demo') === 'before' ? 'before' : 'after';
 
   /** Updates one query param and keeps the rest, so tab and demo version deep-link together. */
@@ -207,6 +211,7 @@ export function PatternPage(): JSX.Element {
             panel: <Preview key={pattern.id} pattern={pattern} version={version} onVersionChange={(v) => setParam('demo', v === 'before' ? 'before' : null)} />,
           },
           { id: 'code', label: 'Code', panel: <CodeTab pattern={pattern} /> },
+          ...(hasWalkthrough ? [{ id: 'walkthrough' as const, label: 'Walkthrough', panel: <WalkthroughTab pattern={pattern} annotations={walkthrough} /> }] : []),
           { id: 'tests', label: 'Tests', panel: <CodeBlock code={pattern.testCode} language="tsx" filename={pattern.files.test} /> },
           { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityTab pattern={pattern} /> },
         ]}

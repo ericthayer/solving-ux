@@ -10,7 +10,7 @@ type CodeBlockProps = {
   filename: string;
 };
 
-function usePrefersDark(): boolean {
+export function usePrefersDark(): boolean {
   const query = '(prefers-color-scheme: dark)';
   const [dark, setDark] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(query).matches);
   useEffect(() => {
