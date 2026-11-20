@@ -1,0 +1,82 @@
+/* Tab-order overlay. Reads the shared --sux-* theme contract; --sux-focus is the library's focus-ring color. */
+
+.layer {
+  position: fixed;
+  z-index: 2147483000;
+  pointer-events: none;
+  overflow: clip;
+  overflow-clip-margin: 14px;
+  margin: 0;
+}
+
+.path {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.path polyline {
+  fill: none;
+  stroke: var(--sux-focus, #1d4ed8);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+
+.outline {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1.5px dashed var(--sux-focus, #1d4ed8);
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.badge {
+  position: absolute;
+  box-sizing: border-box;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  transform: translate(-45%, -45%);
+  border-radius: 10px;
+  background: var(--sux-focus, #1d4ed8);
+  color: var(--sux-surface, #ffffff);
+  font: 600 11px/20px var(--sux-font-mono, ui-monospace, monospace);
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--sux-surface, #ffffff);
+}
+
+/* Positive tabindex reorders focus away from reading order: flag it in the warning color. */
+.badge.warn {
+  background: var(--sux-warning, #8a5a00);
+}
+
+.outline.active {
+  border-style: solid;
+  border-width: 2px;
+  opacity: 1;
+}
+
+.badge.active {
+  transform: translate(-45%, -45%) scale(1.2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge {
+    transition: transform 120ms ease-out;
+  }
+}
+
+@media (forced-colors: active) {
+  .badge {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+  .outline,
+  .path polyline {
+    border-color: Highlight;
+    stroke: Highlight;
+  }
+}

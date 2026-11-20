@@ -26,9 +26,23 @@ VITE_ENABLE_EDITOR=true npm run dev
 | Production component (copy-paste ready, no dependencies beyond React) | `<Component>.tsx` + `<Component>.module.css` |
 | Tests: render, keyboard, ARIA, edge cases, axe | `<Component>.test.tsx` |
 | Live demo used by the Preview tab | `demo.tsx` |
+| Deliberately broken Before demo, shown by the Preview tab's Before/After toggle (`?demo=before`) | `before.tsx` (shared legacy styles in `src/patterns/before.module.css`) |
 | Props docs, usage, accessibility notes (WCAG, keyboard, ARIA, screen reader) | `pattern.ts` |
 
 `scripts/gen-sources.mjs` reads each pattern folder and writes `src/patterns/sources.generated.ts`, so the Code tab, Tests tab, ZIP, and JSON exports always show the exact files that run and pass tests. It runs automatically before `dev`, `build`, `test`, and `typecheck`.
+
+## Audit failures as data
+
+`beforeState.failures` is a list of structured `Failure` records, defined and documented in `src/types/failure.ts`:
+
+| Field | Meaning |
+| --- | --- |
+| `id` | Kebab-case, unique within the pattern. Global key: `failureKey(pattern.id, id)`, e.g. `forms.wizard-validation#clears-data`. |
+| `description` | One sentence, shown in the Before card. |
+| `refs` | WCAG 2.2 success criteria (`{ kind: 'wcag', criterion: '1.4.1' }`) and/or Nielsen heuristics (`{ kind: 'heuristic', id: 'H5' }`). Titles and levels live in `WCAG_CRITERIA` and `HEURISTICS`. |
+| `target` | `label` names the element in plain words; `revealedBy` says what interaction makes it appear, if it is not on screen at first render. |
+
+`before.tsx` marks each target with `{...failureTarget(id)}`, which renders `data-failure="<id>"`. `src/__tests__/failures.test.tsx` fails if a failure lacks refs or a target, if an immediately visible target is missing from the Before demo, or if the demo marks an unknown id. Hotspots, exercises, and indexes should read from this model rather than parse descriptions.
 
 ## Patterns (v1: one per category)
 
@@ -45,7 +59,7 @@ VITE_ENABLE_EDITOR=true npm run dev
 
 ## Adding a pattern
 
-1. Create `src/patterns/<category>/<slug>/` with `<Component>.tsx`, `<Component>.module.css`, `<Component>.test.tsx`, `demo.tsx`, and `pattern.ts`.
+1. Create `src/patterns/<category>/<slug>/` with `<Component>.tsx`, `<Component>.module.css`, `<Component>.test.tsx`, `demo.tsx`, `before.tsx`, and `pattern.ts`.
 2. Register the definition in `src/patterns/registry.ts`.
 3. `npm test`. The registry test fails if the pattern lacks an axe test, an edge-case test, props docs, or any of the four accessibility note kinds.
 

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { ConfirmDialog } from './ConfirmDialog';
 import demo from '../../demo.module.css';
+import { useStressTest } from '../../stress';
 
 type Scenario = 'none' | 'archive' | 'delete';
 
 export default function ConfirmDialogDemo(): JSX.Element {
+  const { text } = useStressTest(['longText']);
   const [scenario, setScenario] = useState<Scenario>('none');
   const [log, setLog] = useState('No action taken yet.');
   const [attempts, setAttempts] = useState(0);
@@ -13,7 +15,7 @@ export default function ConfirmDialogDemo(): JSX.Element {
     <div className={demo.stack}>
       <div className={demo.row}>
         <button type="button" className={demo.button} onClick={() => setScenario('archive')}>
-          Archive relationship
+          {text('Archive relationship')}
         </button>
         <button type="button" className={demo.button} onClick={() => setScenario('delete')}>
           Delete facility FAC-2231
@@ -25,9 +27,9 @@ export default function ConfirmDialogDemo(): JSX.Element {
 
       <ConfirmDialog
         open={scenario === 'archive'}
-        title="Archive Cedar Ridge Farms?"
-        description={<p>Archived relationships are hidden from search and reports. You can restore them from Settings for 90 days.</p>}
-        confirmLabel="Archive"
+        title={text('Archive Cedar Ridge Farms?')}
+        description={<p>{text('Archived relationships are hidden from search and reports. You can restore them from Settings for 90 days.')}</p>}
+        confirmLabel={text('Archive')}
         onConfirm={() => setLog('Cedar Ridge Farms archived.')}
         onClose={() => setScenario('none')}
       />
@@ -37,9 +39,9 @@ export default function ConfirmDialogDemo(): JSX.Element {
         tone="danger"
         title="Delete facility FAC-2231?"
         description={<p>This cannot be undone. The following will also be removed:</p>}
-        consequences={['2 scheduled draws ($1.4M total)', '14 covenant checks', 'All attached documents']}
+        consequences={['2 scheduled draws ($1.4M total)', '14 covenant checks', 'All attached documents'].map(text)}
         requireText="FAC-2231"
-        confirmLabel="Delete facility"
+        confirmLabel={text('Delete facility')}
         onConfirm={async () => {
           await new Promise((resolve) => setTimeout(resolve, 700));
           setAttempts((n) => n + 1);

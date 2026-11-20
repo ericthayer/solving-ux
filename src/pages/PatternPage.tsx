@@ -2,14 +2,25 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { AccessibilityPanel } from '../components/AccessibilityPanel';
 import { AuditSummary } from '../components/AuditSummary';
+import { BeforeDemoNotice } from '../components/BeforeDemoNotice';
 import { SourceBadges, StatusBadge, WcagBadge } from '../components/Badges';
 import { CodeBlock } from '../components/CodeBlock';
+import { DemoInspector } from '../components/demo-inspector';
+import { DemoVersionToggle } from '../components/DemoVersionToggle';
+import type { DemoVersion } from '../components/DemoVersionToggle';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { PropsTable } from '../components/PropsTable';
+import { ScreenReaderTranscript } from '../components/ScreenReaderTranscript';
+import { StressStage } from '../components/StressStage';
+import type { StageMeasurement } from '../components/StressStage';
+import { StressTestBar } from '../components/StressTestBar';
 import { Tabs } from '../components/Tabs';
 import { WalkthroughTab } from '../components/WalkthroughTab';
 import { usePatterns } from '../context/PatternContext';
 import { useEditor } from '../context/EditorContext';
+import { useStressSettings } from '../hooks/useStressSettings';
+import { StressContext } from '../patterns/stress';
+import { getTranscript } from '../patterns/transcripts';
 import { getWalkthrough } from '../patterns/walkthroughs';
 import { CATEGORIES } from '../types/pattern';
 import type { Pattern } from '../types/pattern';
@@ -19,18 +30,30 @@ const TAB_IDS = ['preview', 'code', 'walkthrough', 'tests', 'accessibility'] as 
 type TabId = (typeof TAB_IDS)[number];
 const isTab = (value: string | null): value is TabId => TAB_IDS.includes(value as TabId);
 
-function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
-  const Demo = pattern.component;
+type PreviewProps = { pattern: Pattern; version: DemoVersion; onVersionChange: (version: DemoVersion) => void };
+
+function Preview({ pattern, version, onVersionChange }: PreviewProps): JSX.Element {
+  const showBefore = version === 'before' && pattern.beforeComponent !== null;
+  const Demo = showBefore ? pattern.beforeComponent : pattern.component;
+  const stress = useStressSettings();
+  const [measurement, setMeasurement] = useState<StageMeasurement | null>(null);
   return (
     <div className="grid gap-8">
       <section aria-labelledby="demo-heading" className="grid gap-3">
-        <h2 id="demo-heading" className="m-0 text-base font-semibold">
-          Live demo
-        </h2>
-        <div className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="demo-heading" className="m-0 text-base font-semibold">
+            Live demo
+          </h2>
+          {pattern.beforeComponent && pattern.component && <DemoVersionToggle value={showBefore ? 'before' : 'after'} onChange={onVersionChange} />}
+        </div>
+        {showBefore && <BeforeDemoNotice failures={pattern.beforeState.failures} />}
+        {Demo && <StressTestBar api={stress} measurement={measurement} />}
+        <DemoInspector
+          className={`rounded-md border p-5 [container-type:inline-size] lg:p-8 ${showBefore ? 'overflow-clip border-dashed border-line bg-sunken' : 'border-line bg-surface'}`}
+        >
           {Demo ? (
             <ErrorBoundary
-              key={pattern.id}
+              key={`${pattern.id}:${showBefore ? 'before' : 'after'}`}
               fallback={(error, reset) => (
                 <div role="alert" className="grid gap-2 text-sm">
                   <p className="m-0 font-semibold">The demo crashed: {error.message}</p>
@@ -40,7 +63,12 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
                 </div>
               )}
             >
-              <Demo />
+              <StressContext.Provider value={stress.context}>
+                <StressStage settings={stress.settings} onMeasure={setMeasurement}>
+                  {/* Remount when data-shaping flags change so demos rebuild their initial state. */}
+                  <Demo key={`${String(stress.settings.longText)}-${String(stress.settings.largeData)}`} />
+                </StressStage>
+              </StressContext.Provider>
             </ErrorBoundary>
           ) : (
             <p className="m-0 text-sm text-muted">
@@ -48,7 +76,7 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
               registered. The Code and Tests tabs show the submitted source.
             </p>
           )}
-        </div>
+        </DemoInspector>
       </section>
       {pattern.usage && (
         <section aria-labelledby="usage-heading" className="grid gap-3">
@@ -93,6 +121,16 @@ function CodeTab({ pattern }: { pattern: Pattern }): JSX.Element {
   );
 }
 
+function AccessibilityTab({ pattern }: { pattern: Pattern }): JSX.Element {
+  const transcript = getTranscript(pattern.id);
+  return (
+    <div className="grid gap-8">
+      <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} />
+      {transcript && <ScreenReaderTranscript transcript={transcript} />}
+    </div>
+  );
+}
+
 export function PatternPage(): JSX.Element {
   const { category = '', slug = '' } = useParams();
   const [params, setParams] = useSearchParams();
@@ -103,6 +141,19 @@ export function PatternPage(): JSX.Element {
   const walkthrough = pattern ? getWalkthrough(pattern.category, pattern.slug) : [];
   const hasWalkthrough = walkthrough.length > 0;
   const tab: TabId = isTab(tabParam) && (tabParam !== 'walkthrough' || hasWalkthrough) ? tabParam : 'preview';
+  const version: DemoVersion = params.get('demo') === 'before' ? 'before' : 'after';
+
+  /** Updates one query param and keeps the rest, so tab and demo version deep-link together. */
+  const setParam = (key: 'tab' | 'demo', value: string | null): void =>
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === null) next.delete(key);
+        else next.set(key, value);
+        return next;
+      },
+      { replace: true },
+    );
 
   useEffect(() => {
     if (pattern) document.title = `${pattern.title} · Solving UX`;
@@ -152,13 +203,17 @@ export function PatternPage(): JSX.Element {
       <Tabs<TabId>
         label="Pattern details"
         selected={tab}
-        onSelect={(id) => setParams(id === 'preview' ? {} : { tab: id }, { replace: true })}
+        onSelect={(id) => setParam('tab', id === 'preview' ? null : id)}
         tabs={[
-          { id: 'preview', label: 'Preview', panel: <Preview pattern={pattern} /> },
+          {
+            id: 'preview',
+            label: 'Preview',
+            panel: <Preview key={pattern.id} pattern={pattern} version={version} onVersionChange={(v) => setParam('demo', v === 'before' ? 'before' : null)} />,
+          },
           { id: 'code', label: 'Code', panel: <CodeTab pattern={pattern} /> },
           ...(hasWalkthrough ? [{ id: 'walkthrough' as const, label: 'Walkthrough', panel: <WalkthroughTab pattern={pattern} annotations={walkthrough} /> }] : []),
           { id: 'tests', label: 'Tests', panel: <CodeBlock code={pattern.testCode} language="tsx" filename={pattern.files.test} /> },
-          { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} /> },
+          { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityTab pattern={pattern} /> },
         ]}
       />
     </article>

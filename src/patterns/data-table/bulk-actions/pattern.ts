@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const bulkActionsPattern: PatternDefinition = {
   id: 'data-table.bulk-actions',
@@ -14,16 +15,42 @@ export const bulkActionsPattern: PatternDefinition = {
   beforeState: {
     summary: 'A 14-column grid with checkbox selection and a "More actions" overflow menu.',
     failures: [
-      'Select-all checkbox silently selects every record across all pages.',
-      'Selection count is not shown; actions run against an unknown number of rows.',
-      'Sort state is shown only by a 6px arrow with no programmatic aria-sort.',
-      'Horizontal scroll hides the account number column.',
-      'Checkboxes have no accessible name; screen readers announce "checkbox, not checked" 50 times.',
+      {
+        id: 'select-all-scope',
+        description: 'Select-all checkbox silently selects every record across all pages.',
+        refs: [{ kind: 'heuristic', id: 'H1' }, { kind: 'heuristic', id: 'H5' }, { kind: 'wcag', criterion: '3.3.4' }],
+        target: { label: 'Select-all checkbox in the header row' },
+      },
+      {
+        id: 'selection-count',
+        description: 'Selection count is not shown; actions run against an unknown number of rows.',
+        refs: [{ kind: 'heuristic', id: 'H1' }, { kind: 'wcag', criterion: '4.1.3' }],
+        target: { label: '"More actions" menu button' },
+      },
+      {
+        id: 'sort-state',
+        description: 'Sort state is shown only by a 6px arrow with no programmatic aria-sort.',
+        refs: [{ kind: 'wcag', criterion: '1.3.1' }, { kind: 'wcag', criterion: '4.1.2' }, { kind: 'wcag', criterion: '2.1.1' }],
+        target: { label: 'Sort arrow in the Application header' },
+      },
+      {
+        id: 'frozen-column',
+        description: 'Horizontal scroll hides the account number column.',
+        refs: [{ kind: 'heuristic', id: 'H6' }, { kind: 'wcag', criterion: '2.1.1' }],
+        target: { label: 'Horizontally scrolling grid' },
+      },
+      {
+        id: 'checkbox-names',
+        description: 'Checkboxes have no accessible name; screen readers announce "checkbox, not checked" 50 times.',
+        refs: [{ kind: 'wcag', criterion: '4.1.2' }, { kind: 'wcag', criterion: '1.3.1' }],
+        target: { label: 'Row selection checkboxes' },
+      },
     ],
   },
   designRationale:
     'The action bar is always present, so selecting rows never shifts the layout, and it doubles as the selection count. Select-all is scoped to the visible page, with an explicit "Select all N rows" escalation, so scope is never ambiguous. Sorting uses a native button inside the header with aria-sort, giving screen reader users the same state sighted users get. The first column is a row header and stays frozen, so every cell keeps its context during horizontal scroll.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'caption', type: 'string', required: true, description: 'Visible table caption. Also names the scroll region and pagination landmark.' },
     { name: 'rows', type: 'T[] (T extends { id: string })', required: true, description: 'Row data. Selections for ids that disappear are dropped automatically.' },

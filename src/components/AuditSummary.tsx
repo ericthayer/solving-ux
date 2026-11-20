@@ -22,9 +22,9 @@ export function AuditSummary({ pattern }: { pattern: Pattern }): JSX.Element {
           </h3>
           <ul className="m-0 grid gap-1.5 pl-0 text-sm">
             {pattern.beforeState.failures.map((failure) => (
-              <li key={failure} className="flex gap-2">
+              <li key={failure.id} className="flex gap-2">
                 <span aria-hidden="true" className="mt-[0.4rem] h-1.5 w-1.5 flex-none rounded-full bg-danger" />
-                <span>{failure}</span>
+                <span>{failure.description}</span>
               </li>
             ))}
           </ul>

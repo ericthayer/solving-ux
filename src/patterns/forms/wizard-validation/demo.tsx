@@ -1,66 +1,69 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { WizardForm } from './WizardForm';
 import type { Values, WizardStep } from './WizardForm';
 import demo from '../../demo.module.css';
+import { useStressTest } from '../../stress';
 
-const steps: WizardStep[] = [
+const buildSteps = (t: (value: string) => string): WizardStep[] => [
   {
     id: 'borrower',
-    title: 'Borrower',
+    title: t('Borrower'),
     fields: [
-      { name: 'legalName', label: 'Legal entity name', type: 'text', required: true, hint: 'As it appears on your tax filings.' },
+      { name: 'legalName', label: t('Legal entity name'), type: 'text', required: true, hint: t('As it appears on your tax filings.') },
       {
         name: 'entityType',
-        label: 'Entity type',
+        label: t('Entity type'),
         type: 'radio',
         required: true,
         options: [
-          { value: 'llc', label: 'Limited liability company' },
-          { value: 'coop', label: 'Cooperative' },
-          { value: 'sole', label: 'Sole proprietor' },
+          { value: 'llc', label: t('Limited liability company') },
+          { value: 'coop', label: t('Cooperative') },
+          { value: 'sole', label: t('Sole proprietor') },
         ],
       },
       {
         name: 'memberCount',
-        label: 'Number of members',
+        label: t('Number of members'),
         type: 'number',
         required: true,
         visibleWhen: (v) => v.entityType === 'coop',
         validate: (value) => (Number.isInteger(Number(value)) && Number(value) >= 2 ? null : 'Enter a whole number of 2 or more.'),
       },
-      { name: 'taxId', label: 'Tax ID (EIN)', type: 'text', required: true, hint: 'Format: 12-3456789', validate: (v) => (/^\d{2}-\d{7}$/.test(v) ? null : 'Enter the EIN as 2 digits, a hyphen, then 7 digits.') },
+      { name: 'taxId', label: t('Tax ID (EIN)'), type: 'text', required: true, hint: t('Format: 12-3456789'), validate: (v) => (/^\d{2}-\d{7}$/.test(v) ? null : 'Enter the EIN as 2 digits, a hyphen, then 7 digits.') },
     ],
   },
   {
     id: 'request',
-    title: 'Request',
+    title: t('Request'),
     fields: [
       {
         name: 'purpose',
-        label: 'Loan purpose',
+        label: t('Loan purpose'),
         type: 'select',
         required: true,
         options: [
-          { value: 'equipment', label: 'Equipment' },
-          { value: 'operating', label: 'Operating line' },
-          { value: 'real-estate', label: 'Real estate' },
+          { value: 'equipment', label: t('Equipment') },
+          { value: 'operating', label: t('Operating line') },
+          { value: 'real-estate', label: t('Real estate') },
         ],
       },
-      { name: 'amount', label: 'Requested amount (USD)', type: 'number', required: true, validate: (v) => (Number(v) >= 10000 ? null : 'The minimum request is $10,000.') },
-      { name: 'acreage', label: 'Acreage', type: 'number', required: false, visibleWhen: (v) => v.purpose === 'real-estate' },
+      { name: 'amount', label: t('Requested amount (USD)'), type: 'number', required: true, validate: (v) => (Number(v) >= 10000 ? null : 'The minimum request is $10,000.') },
+      { name: 'acreage', label: t('Acreage'), type: 'number', required: false, visibleWhen: (v) => v.purpose === 'real-estate' },
     ],
   },
   {
     id: 'contact',
-    title: 'Contact',
+    title: t('Contact'),
     fields: [
-      { name: 'contactEmail', label: 'Contact email', type: 'email', required: true, validate: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Enter an email address like name@example.com.') },
-      { name: 'phone', label: 'Phone', type: 'tel', required: false },
+      { name: 'contactEmail', label: t('Contact email'), type: 'email', required: true, validate: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Enter an email address like name@example.com.') },
+      { name: 'phone', label: t('Phone'), type: 'tel', required: false },
     ],
   },
 ];
 
 export default function WizardFormDemo(): JSX.Element {
+  const stress = useStressTest(['longText']);
+  const steps = useMemo(() => buildSteps(stress.text), [stress.text]);
   const [submitted, setSubmitted] = useState<Values | null>(null);
   const [failNext, setFailNext] = useState(true);
 

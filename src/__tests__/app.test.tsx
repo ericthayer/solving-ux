@@ -101,6 +101,34 @@ describe('Pattern library shell', () => {
     expect(screen.getByRole('button', { name: 'Export' })).toHaveFocus();
   });
 
+  it('toggles the live demo between the broken Before and the fixed After, and deep-links it', async () => {
+    const { user } = renderAt('/patterns/data-table/bulk-actions');
+    await screen.findByRole('tablist');
+    const toggle = screen.getByRole('group', { name: 'Demo version' });
+    expect(within(toggle).getByRole('radio', { name: 'After · fixed' })).toBeChecked();
+    expect(screen.getByRole('table', { name: 'Loan applications' })).toBeInTheDocument();
+
+    await user.click(within(toggle).getByRole('radio', { name: 'Before · broken' }));
+    expect(screen.getByText('Deliberately broken')).toBeInTheDocument();
+    expect(screen.queryByRole('table', { name: 'Loan applications' })).not.toBeInTheDocument();
+    expect(document.querySelector('[data-failure="select-all-scope"]')).not.toBeNull();
+
+    // The demo choice survives a tab round trip.
+    await user.click(screen.getByRole('tab', { name: 'Code' }));
+    await user.click(screen.getByRole('tab', { name: 'Preview' }));
+    expect(screen.getByRole('radio', { name: 'Before · broken' })).toBeChecked();
+  });
+
+  it('opens the Before demo from a deep link and falls back to After for unknown values (edge case)', async () => {
+    const before = renderAt('/patterns/modals/confirm-dialog?demo=before');
+    await screen.findByRole('tablist');
+    expect(screen.getByRole('radio', { name: 'Before · broken' })).toBeChecked();
+    before.unmount();
+    renderAt('/patterns/modals/confirm-dialog?demo=nonsense');
+    await screen.findByRole('tablist');
+    expect(screen.getByRole('radio', { name: 'After · fixed' })).toBeChecked();
+  });
+
   it('renders a not-found page for unknown patterns (edge case)', async () => {
     renderAt('/patterns/forms/does-not-exist');
     expect(await screen.findByRole('heading', { name: 'This pattern does not exist' })).toBeInTheDocument();

@@ -1,4 +1,4 @@
-import { Link, useMatch, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useMatch, useNavigate } from 'react-router-dom';
 import { usePatterns } from '../context/PatternContext';
 import { useEditor } from '../context/EditorContext';
 import { CopyLinkButton } from './CopyLinkButton';
@@ -55,6 +55,14 @@ export function TopBar({ onToggleNav, navOpen }: { onToggleNav: () => void; navO
         </form>
 
         <div className="ml-auto flex items-center gap-2">
+          <NavLink
+            to="/worksheet"
+            className={({ isActive }) =>
+              `inline-flex min-h-[2.25rem] items-center rounded px-2 text-sm font-medium no-underline ${isActive ? 'text-ink underline decoration-2 underline-offset-4' : 'text-muted hover:text-ink'}`
+            }
+          >
+            Audit worksheet
+          </NavLink>
           {pattern && (
             <>
               <CopyLinkButton pattern={pattern} />

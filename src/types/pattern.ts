@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { Failure } from './failure';
 
 export const CATEGORIES = [
   { id: 'data-table', label: 'Data Tables' },
@@ -29,9 +30,10 @@ export type PropDoc = {
   description: string;
 };
 
+/** The audited "before" state. Failures are structured; see src/types/failure.ts. */
 export type BeforeState = {
   summary: string;
-  failures: string[];
+  failures: Failure[];
 };
 
 /** Raw source text for a pattern, produced by scripts/gen-sources.mjs. */
@@ -59,6 +61,8 @@ export type Pattern = {
   sourceApps: SourceApp[];
   /** Live demo. Editor-created drafts have no component until registered in code. */
   component: ComponentType | null;
+  /** Deliberately broken reproduction of beforeState. Marks each failure with data-failure. */
+  beforeComponent: ComponentType | null;
   code: string;
   styles: string;
   testCode: string;

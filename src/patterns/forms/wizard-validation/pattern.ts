@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const wizardValidationPattern: PatternDefinition = {
   id: 'forms.wizard-validation',
@@ -14,16 +15,42 @@ export const wizardValidationPattern: PatternDefinition = {
   beforeState: {
     summary: 'Single-page application form with submit-time validation.',
     failures: [
-      'Errors appear only after submit, often 30+ fields above the button.',
-      'Error text is red only and not linked to its field (fails 1.4.1 and 3.3.1).',
-      'Cooperative-only fields are shown to every borrower type.',
-      'A failed submit clears all entered data.',
-      'Required fields are marked with an asterisk that has no text equivalent.',
+      {
+        id: 'submit-only-validation',
+        description: 'Errors appear only after submit, often 30+ fields above the button.',
+        refs: [{ kind: 'heuristic', id: 'H5' }, { kind: 'wcag', criterion: '3.3.1' }],
+        target: { label: 'Submit application button' },
+      },
+      {
+        id: 'color-only-errors',
+        description: 'Error text is red only and not linked to its field (fails 1.4.1 and 3.3.1).',
+        refs: [{ kind: 'wcag', criterion: '1.4.1' }, { kind: 'wcag', criterion: '3.3.1' }, { kind: 'wcag', criterion: '3.3.3' }],
+        target: { label: 'Error banner and red field labels', revealedBy: 'Submit the form with empty fields' },
+      },
+      {
+        id: 'irrelevant-fields',
+        description: 'Cooperative-only fields are shown to every borrower type.',
+        refs: [{ kind: 'heuristic', id: 'H8' }, { kind: 'wcag', criterion: '3.3.2' }],
+        target: { label: 'Number of members field' },
+      },
+      {
+        id: 'clears-data',
+        description: 'A failed submit clears all entered data.',
+        refs: [{ kind: 'wcag', criterion: '3.3.7' }, { kind: 'heuristic', id: 'H9' }],
+        target: { label: 'Application form' },
+      },
+      {
+        id: 'asterisk-only',
+        description: 'Required fields are marked with an asterisk that has no text equivalent.',
+        refs: [{ kind: 'wcag', criterion: '3.3.2' }, { kind: 'wcag', criterion: '1.3.1' }],
+        target: { label: 'Required-field asterisks' },
+      },
     ],
   },
   designRationale:
     'Splitting the form into short steps cuts what users hold in working memory at once. Validation runs when a field loses focus, then re-checks on every keystroke once the field has been touched: no scolding while typing, fast confirmation when fixing. Continue with errors shows a focused summary whose links jump to each field, the GOV.UK pattern with the best evidence base. Optional fields are labelled "(optional)" instead of marking required ones, since most fields are required. Conditional fields are driven by visibleWhen, and hidden values are removed from the payload. Failed submits keep all data and say so.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'steps', type: 'WizardStep[]', required: true, description: 'Ordered steps, each with an id, title, and field configs. A review step is appended automatically.' },
     { name: 'onSubmit', type: '(values: Values) => void | Promise<void>', required: true, description: 'Receives only visible field values. Reject the promise to show the recoverable error state.' },
