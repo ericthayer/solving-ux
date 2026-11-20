@@ -9,7 +9,7 @@ export const toastStackPattern: PatternDefinition = {
   summary: 'Provider plus useToast hook with a capped, queued stack, severity-based timing, pause on hover or focus, and separate polite and assertive live regions.',
   category: 'notifications',
   tags: ['toast', 'notifications', 'live region', 'alerts', 'status'],
-  sourceApps: ['ISW', 'CoBank'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Batch jobs fire one toast per record, so a 40-row import stacks 40 toasts over the page. Every toast disappears after 3 seconds, including errors, so failures are missed. Toasts are injected as new DOM nodes with role="alert" each time, which screen readers often skip. Undo actions vanish before keyboard users can reach them.',
   beforeState: {

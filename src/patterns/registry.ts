@@ -1,13 +1,7 @@
 import type { Pattern, PatternDefinition } from '../types/pattern';
+import { CATEGORIES } from '../types/pattern';
+import { catalogPatterns } from './catalog.generated';
 import { patternSources } from './sources.generated';
-import { bulkActionsPattern } from './data-table/bulk-actions/pattern';
-import { nestedNavPattern } from './navigation/nested-nav/pattern';
-import { wizardValidationPattern } from './forms/wizard-validation/pattern';
-import { widgetGridPattern } from './dashboard/widget-grid/pattern';
-import { confirmDialogPattern } from './modals/confirm-dialog/pattern';
-import { emptyStatePattern } from './empty-states/empty-state/pattern';
-import { toastStackPattern } from './notifications/toast-stack/pattern';
-import { typeaheadPattern } from './search-filters/typeahead/pattern';
 
 /** Joins a hand-written definition with the source text generated from its folder. */
 export function buildPattern(definition: PatternDefinition): Pattern {
@@ -24,13 +18,7 @@ export function buildPattern(definition: PatternDefinition): Pattern {
   };
 }
 
-export const builtInPatterns: Pattern[] = [
-  bulkActionsPattern,
-  nestedNavPattern,
-  wizardValidationPattern,
-  widgetGridPattern,
-  confirmDialogPattern,
-  emptyStatePattern,
-  toastStackPattern,
-  typeaheadPattern,
-].map(buildPattern);
+const categoryOrder = (p: PatternDefinition): number => CATEGORIES.findIndex((c) => c.id === p.category);
+
+/** Every pattern folder in this build's scope (see scripts/gen-sources.mjs), in category order. */
+export const builtInPatterns: Pattern[] = [...catalogPatterns].sort((a, b) => categoryOrder(a) - categoryOrder(b)).map(buildPattern);

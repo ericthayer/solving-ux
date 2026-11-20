@@ -17,7 +17,7 @@ export function PatternCard({ pattern }: { pattern: Pattern }): JSX.Element {
       <p className="m-0 flex-1 text-sm leading-relaxed text-muted">{pattern.summary}</p>
       <div className="flex flex-wrap items-center gap-2">
         <WcagBadge level={pattern.wcagLevel} />
-        <SourceBadges apps={pattern.sourceApps} />
+        <SourceBadges clients={pattern.clients} />
         <StatusBadge status={pattern.status} />
       </div>
     </article>

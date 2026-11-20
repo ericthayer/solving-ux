@@ -1,9 +1,11 @@
+import { basePath } from '../appConfig';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { EMPTY_WORKSHEET } from '../types/worksheet';
 import type { Finding, FindingDraft, Worksheet, WorksheetMeta } from '../types/worksheet';
 import { parseWorksheet } from '../utils/worksheet';
 
-export const WORKSHEET_STORAGE_KEY = 'solving-ux:audit-worksheet';
+// Client builds share one origin; each keeps its own worksheet.
+export const WORKSHEET_STORAGE_KEY = `solving-ux:audit-worksheet${basePath}`;
 
 export type AuditWorksheetApi = {
   sheet: Worksheet;

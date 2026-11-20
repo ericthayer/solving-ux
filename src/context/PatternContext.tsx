@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { CLIENT_IDS, isClientId } from '../types/client';
+import type { ClientId } from '../types/client';
 import type { BeforeState, EditablePatternFields, Pattern } from '../types/pattern';
 import { builtInPatterns } from '../patterns/registry';
 import { EMPTY_FILTERS, filterPatterns } from '../utils/filter';
@@ -16,21 +18,36 @@ type StoredState = {
   created: Omit<Pattern, 'component' | 'beforeComponent'>[];
 };
 
+// Editor state only exists in the team build; client builds never read or write it.
 const STORAGE_KEY = 'solving-ux:patterns:v1';
 const EMPTY_STATE: StoredState = { overrides: {}, created: [] };
 
 function load(): StoredState {
+  if (!__TEAM_BUILD__) return EMPTY_STATE;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return EMPTY_STATE;
     const parsed = JSON.parse(raw) as Partial<StoredState>;
-    // Failures were plain strings before schema v2; upgrade them in place.
-    const upgrade = <T extends { beforeState: BeforeState }>(entry: T): T => ({
-      ...entry,
-      beforeState: { ...entry.beforeState, failures: normalizeFailures(entry.beforeState?.failures) },
+    // Failures were plain strings before schema v2; upgrade them in place. Client attribution
+    // replaced named source apps; legacy values are dropped so built-in patterns keep their own.
+    const upgrade = <T extends { beforeState: BeforeState; clients?: ClientId[] }>(entry: T): T => {
+      const { sourceApps: _legacy, ...rest } = entry as T & { sourceApps?: unknown };
+      const clients = Array.isArray(rest.clients) ? rest.clients.filter(isClientId) : [];
+      return {
+        ...(rest as T),
+        ...(clients.length > 0 ? { clients } : { clients: undefined }),
+        beforeState: { ...entry.beforeState, failures: normalizeFailures(entry.beforeState?.failures) },
+      };
+    };
+    const dropEmpty = <T extends object>(entry: T): T =>
+      Object.fromEntries(Object.entries(entry).filter(([, v]) => v !== undefined)) as T;
+    const overrides = Object.fromEntries(Object.entries(parsed.overrides ?? {}).map(([id, entry]) => [id, dropEmpty(upgrade(entry))]));
+    // A legacy draft with no valid client stays visible to the team build under every client.
+    const created = (parsed.created ?? []).map((entry) => {
+      const next = upgrade(entry);
+      return { ...next, clients: next.clients ?? [...CLIENT_IDS] };
     });
-    const overrides = Object.fromEntries(Object.entries(parsed.overrides ?? {}).map(([id, entry]) => [id, upgrade(entry)]));
-    return { overrides, created: (parsed.created ?? []).map(upgrade) };
+    return { overrides, created };
   } catch {
     return EMPTY_STATE;
   }
@@ -60,7 +77,7 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      if (__TEAM_BUILD__) localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     } catch {
       // Quota or privacy mode: edits still apply for this session.
     }

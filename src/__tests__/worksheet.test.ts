@@ -90,7 +90,7 @@ describe('worksheet utils', () => {
   });
 
   it('builds a safe filename', () => {
-    expect(markdownFilename('CoBank / Loan Portal!', '2026-11-20')).toBe('ux-audit-cobank-loan-portal-2026-11-20.md');
+    expect(markdownFilename('Acme / Loan Portal!', '2026-11-20')).toBe('ux-audit-acme-loan-portal-2026-11-20.md');
     expect(markdownFilename('', '2026-11-20')).toBe('ux-audit-app-2026-11-20.md');
   });
 });

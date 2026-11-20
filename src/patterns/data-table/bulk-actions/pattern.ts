@@ -9,7 +9,7 @@ export const bulkActionsPattern: PatternDefinition = {
   summary: 'Sortable, paginated table with page and cross-page selection, a persistent action bar, and a frozen identifier column.',
   category: 'data-table',
   tags: ['table', 'selection', 'sorting', 'pagination', 'frozen columns'],
-  sourceApps: ['Both'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Loan and account grids select rows with unlabeled checkboxes, then hide bulk actions in a kebab menu above the table. Users cannot tell how many rows are selected after paging, whether "select all" means this page or every record, or which column is sorted. Wide tables scroll the identifier column off screen, so users lose track of which row they are editing.',
   beforeState: {

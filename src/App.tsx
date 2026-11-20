@@ -9,9 +9,11 @@ import { NotFoundPage } from './pages/NotFoundPage';
 
 // Detail and editor routes carry the syntax highlighter and editor forms; load them on demand.
 const PatternPage = lazy(() => import('./pages/PatternPage').then((m) => ({ default: m.PatternPage })));
-const EditorPage = lazy(() => import('./pages/EditorPage').then((m) => ({ default: m.EditorPage })));
+// Editor routes exist only in the team build; the import is compiled out of client builds.
+const editorOnly = <T,>(load: () => Promise<T>): Promise<T> => (__TEAM_BUILD__ ? load() : Promise.reject(new Error('Editor is not available in this build.')));
+const EditorPage = lazy(() => editorOnly(() => import('./pages/EditorPage')).then((m) => ({ default: m.EditorPage })));
 const WorksheetPage = lazy(() => import('./pages/WorksheetPage').then((m) => ({ default: m.WorksheetPage })));
-const PatternEditorPage = lazy(() => import('./pages/PatternEditorPage').then((m) => ({ default: m.PatternEditorPage })));
+const PatternEditorPage = lazy(() => editorOnly(() => import('./pages/PatternEditorPage')).then((m) => ({ default: m.PatternEditorPage })));
 
 function Loading(): JSX.Element {
   return (
@@ -29,9 +31,13 @@ export function AppRoutes(): JSX.Element {
           <Route index element={<HomePage />} />
           <Route path="patterns/:category/:slug" element={<PatternPage />} />
           <Route path="worksheet" element={<WorksheetPage />} />
-          <Route path="editor" element={<EditorPage />} />
-          <Route path="editor/new" element={<PatternEditorPage />} />
-          <Route path="editor/:id" element={<PatternEditorPage />} />
+          {__TEAM_BUILD__ && (
+            <>
+              <Route path="editor" element={<EditorPage />} />
+              <Route path="editor/new" element={<PatternEditorPage />} />
+              <Route path="editor/:id" element={<PatternEditorPage />} />
+            </>
+          )}
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

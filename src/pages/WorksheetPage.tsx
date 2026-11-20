@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { basePath } from '../appConfig';
 import { ExportPanel } from '../components/worksheet/ExportPanel';
 import { FindingForm } from '../components/worksheet/FindingForm';
 import type { FindingFormHandle } from '../components/worksheet/FindingForm';
@@ -34,7 +35,7 @@ export function WorksheetPage(): JSX.Element {
   const findings = useMemo(() => sortFindings(sheet.findings), [sheet.findings]);
   const date = today();
   const markdown = useMemo(
-    () => worksheetToMarkdown(sheet, { patterns: published, baseUrl: window.location.origin, date }),
+    () => worksheetToMarkdown(sheet, { patterns: published, baseUrl: `${window.location.origin}${basePath}`, date }),
     [sheet, published, date],
   );
 

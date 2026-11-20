@@ -1,13 +1,17 @@
-import type { PatternStatus, SourceApp, WcagLevel } from '../types/pattern';
+import { CLIENT_LABELS } from '../types/client';
+import type { ClientId } from '../types/client';
+import type { PatternStatus, WcagLevel } from '../types/pattern';
 
 const base = 'inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide';
 
-export function SourceBadges({ apps }: { apps: SourceApp[] }): JSX.Element {
+/** Client attribution for the unscoped team build. Compiled out of client builds. */
+export function SourceBadges({ clients }: { clients: ClientId[] }): JSX.Element | null {
+  if (!__TEAM_BUILD__) return null;
   return (
     <ul className="flex flex-wrap gap-1" aria-label="Observed in">
-      {apps.map((app) => (
-        <li key={app} className={`${base} border border-line bg-surface text-ink`}>
-          {app === 'Both' ? 'CoBank + ISW' : app}
+      {clients.map((client) => (
+        <li key={client} className={`${base} border border-line bg-surface text-ink`}>
+          {CLIENT_LABELS[client]}
         </li>
       ))}
     </ul>

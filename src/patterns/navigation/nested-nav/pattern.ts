@@ -9,7 +9,7 @@ export const nestedNavPattern: PatternDefinition = {
   summary: 'Disclosure-based side navigation that keeps the current location open, derives breadcrumbs from the tree, and collapses into a menu on small screens.',
   category: 'navigation',
   tags: ['navigation', 'breadcrumbs', 'disclosure', 'responsive', 'deep hierarchy'],
-  sourceApps: ['ISW', 'CoBank'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Workspaces with four or more levels of hierarchy use hover-only flyout menus. Flyouts close when the pointer drifts, cannot be opened by keyboard, and reset on every page load, so users rebuild their path from the top each time. Breadcrumbs are maintained by hand per page and drift out of sync with the menu.',
   beforeState: {

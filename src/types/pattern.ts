@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { ClientId } from './client';
 import type { Failure } from './failure';
 
 export const CATEGORIES = [
@@ -13,7 +14,6 @@ export const CATEGORIES = [
 ] as const;
 
 export type CategoryId = (typeof CATEGORIES)[number]['id'];
-export type SourceApp = 'CoBank' | 'ISW' | 'Both';
 export type WcagLevel = 'A' | 'AA' | 'AAA';
 
 export type AccessibilityNote =
@@ -58,7 +58,8 @@ export type Pattern = {
   problemStatement: string;
   beforeState: BeforeState;
   designRationale: string;
-  sourceApps: SourceApp[];
+  /** Opaque client ids where this failure was observed. Drives per-client builds; never shown in a client build. */
+  clients: ClientId[];
   /** Live demo. Editor-created drafts have no component until registered in code. */
   component: ComponentType | null;
   /** Deliberately broken reproduction of beforeState. Marks each failure with data-failure. */
@@ -85,7 +86,7 @@ export type EditablePatternFields = Pick<
   | 'tags'
   | 'problemStatement'
   | 'designRationale'
-  | 'sourceApps'
+  | 'clients'
   | 'wcagLevel'
   | 'author'
   | 'status'

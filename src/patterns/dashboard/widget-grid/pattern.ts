@@ -9,7 +9,7 @@ export const widgetGridPattern: PatternDefinition = {
   summary: 'Container-responsive widget grid with explicit loading, error, empty, and ready states per widget, a density switch, and "view all" overflow.',
   category: 'dashboard',
   tags: ['dashboard', 'loading states', 'density', 'responsive grid', 'kpi'],
-  sourceApps: ['Both'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Portfolio dashboards render 12+ widgets that each fetch independently. While loading, the page shows one full-screen spinner; if any request fails, the whole dashboard shows "Something went wrong." Widgets stuff 50-row tables into fixed-height cards with nested scrollbars. KPI trend arrows are red and green only.',
   beforeState: {

@@ -1,6 +1,8 @@
-import type { Pattern, SourceApp } from '../types/pattern';
+import type { ClientId } from '../types/client';
+import type { Pattern } from '../types/pattern';
 
-export type SourceFilter = 'All' | SourceApp;
+/** Client filter for the unscoped team build. Client builds hide it; every pattern there is already in scope. */
+export type SourceFilter = 'All' | ClientId | 'Both';
 
 export type PatternFilters = {
   query: string;
@@ -10,13 +12,13 @@ export type PatternFilters = {
 
 export const EMPTY_FILTERS: PatternFilters = { query: '', tag: '', source: 'All' };
 
-/** "Both" on a pattern means it was observed in CoBank and ISW, so it matches either app filter. */
+/** "Both" matches patterns observed at every client; a single client matches any pattern seen there. */
 export function matchesSource(pattern: Pattern, source: SourceFilter): boolean {
-  if (source === 'All') return true;
-  const apps = new Set(pattern.sourceApps);
-  const both = apps.has('Both') || (apps.has('CoBank') && apps.has('ISW'));
-  if (source === 'Both') return both;
-  return both || apps.has(source);
+  // Client builds have no client filter and no client data; compiled down to `return true`.
+  if (!__TEAM_BUILD__ || source === 'All') return true;
+  const clients = new Set(pattern.clients);
+  if (source === 'Both') return clients.has('client-a') && clients.has('client-b');
+  return clients.has(source);
 }
 
 export function matchesQuery(pattern: Pattern, query: string): boolean {

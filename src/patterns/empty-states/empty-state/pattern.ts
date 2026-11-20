@@ -9,7 +9,7 @@ export const emptyStatePattern: PatternDefinition = {
   summary: 'One component, four typed variants: first use, no results, load error with reference id, and no access with a path to request it.',
   category: 'empty-states',
   tags: ['empty state', 'error state', 'zero data', 'onboarding', 'permissions'],
-  sourceApps: ['Both'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Empty tables show "No data" whether the user is new, filtered everything out, hit a server error, or lacks permission. Users cannot tell whether to wait, change filters, call support, or ask for access, so they file tickets for all four. Error screens show stack traces or a generic "Error 500" with no way to retry.',
   beforeState: {
