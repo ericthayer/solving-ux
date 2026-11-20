@@ -55,6 +55,7 @@ export const WCAG_CRITERIA = {
   '2.5.8': { title: 'Target Size (Minimum)', level: 'AA' },
   '3.2.2': { title: 'On Input', level: 'A' },
   '3.2.3': { title: 'Consistent Navigation', level: 'AA' },
+  '3.2.6': { title: 'Consistent Help', level: 'A' },
   '3.2.4': { title: 'Consistent Identification', level: 'AA' },
   '3.3.1': { title: 'Error Identification', level: 'A' },
   '3.3.2': { title: 'Labels or Instructions', level: 'A' },

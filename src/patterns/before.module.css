@@ -264,6 +264,40 @@
   background: #d21f1f;
 }
 
+/* Coach-mark product tour: dimmed page, floating bubble, ring on the step's element. */
+.coachDim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: rgb(0 0 0 / 0.45);
+}
+
+.coachMark {
+  position: absolute;
+  top: 3.25rem;
+  left: 25%;
+  z-index: 4;
+  display: grid;
+  gap: 0.375rem;
+  width: min(15rem, 70%);
+  padding: 0.5rem;
+  border: 1px solid #000;
+  background: #ffffe1;
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 0.3);
+}
+
+.coachRing {
+  position: relative;
+  z-index: 4;
+  outline: 3px solid #ffcc00;
+}
+
+.fakeLink {
+  color: #2b5797;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Indentation is the only cue for depth in the tree view Before demo. */
 .indent {
   padding-inline-start: 16px;

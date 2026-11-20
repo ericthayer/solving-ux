@@ -27,6 +27,7 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '2.5.7': { title: 'Dragging movements', level: 'AA', slug: 'dragging-movements' },
   '2.5.8': { title: 'Target size (minimum)', level: 'AA', slug: 'target-size-minimum' },
   '3.2.2': { title: 'On input', level: 'A', slug: 'on-input' },
+  '3.2.6': { title: 'Consistent help', level: 'A', slug: 'consistent-help' },
   '3.2.4': { title: 'Consistent identification', level: 'AA', slug: 'consistent-identification' },
   '3.3.1': { title: 'Error identification', level: 'A', slug: 'error-identification' },
   '3.3.2': { title: 'Labels or instructions', level: 'A', slug: 'labels-or-instructions' },
