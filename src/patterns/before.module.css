@@ -263,3 +263,22 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* Fixed-height feed that appends rows whenever it nears the bottom. */
+.feed {
+  max-height: 10rem;
+  overflow: auto;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+}
+
+/* Page numbers as bare text; the current one differs by color only. */
+.pageLink {
+  padding: 0 0.25rem;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pageLinkCurrent {
+  composes: pageLink;
+  color: #2b5797;
+}
