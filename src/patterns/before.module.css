@@ -263,3 +263,10 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* Low-contrast greyed-out button: the state is carried by color alone. */
+.btnGreyed {
+  composes: btn;
+  color: #a1a1aa;
+  cursor: default;
+}
