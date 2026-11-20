@@ -49,6 +49,12 @@
   cursor: pointer;
 }
 
+.button[aria-current='page'] {
+  border-color: var(--sux-ink, #18181b);
+  box-shadow: inset 0 -3px 0 var(--sux-ink, #18181b);
+  font-weight: 600;
+}
+
 .button:focus-visible {
   outline: 2px solid var(--sux-focus, #1d4ed8);
   outline-offset: 2px;
@@ -59,6 +65,25 @@
   padding-inline-start: 0;
   font-size: 0.8125rem;
   color: var(--sux-muted, #52525b);
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
 }
 
 @container (max-width: 36rem) {
