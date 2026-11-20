@@ -14,7 +14,8 @@ export const EMPTY_FILTERS: PatternFilters = { query: '', tag: '', source: 'All'
 
 /** "Both" matches patterns observed at every client; a single client matches any pattern seen there. */
 export function matchesSource(pattern: Pattern, source: SourceFilter): boolean {
-  if (source === 'All') return true;
+  // Client builds have no client filter and no client data; compiled down to `return true`.
+  if (!__TEAM_BUILD__ || source === 'All') return true;
   const clients = new Set(pattern.clients);
   if (source === 'Both') return clients.has('client-a') && clients.has('client-b');
   return clients.has(source);

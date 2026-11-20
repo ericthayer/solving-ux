@@ -1,5 +1,4 @@
 import { useSearchParams } from 'react-router-dom';
-import { activeClient } from '../appConfig';
 import { PatternCard } from '../components/PatternCard';
 import { usePatterns } from '../context/PatternContext';
 import { EmptyState } from '../patterns/empty-states/empty-state/EmptyState';
@@ -12,9 +11,11 @@ export function HomePage(): JSX.Element {
   const [params, setParams] = useSearchParams();
   const category = params.get('category') ?? '';
   const visible = category ? filtered.filter((p) => p.category === category) : filtered;
-  // Per-client counts are team-build only; a client build never hints that other clients exist.
+  // Per-client counts are team-build only and compiled out of client builds.
+  // Only categories this build has patterns in, so a client URL shows no empty sections.
+  const categories = CATEGORIES.filter((c) => patterns.some((p) => p.category === c.id));
   const clientStats: [string, number][] =
-    activeClient === null ? CLIENT_IDS.map((id) => [`Seen in ${CLIENT_LABELS[id]}`, patterns.filter((p) => p.clients.includes(id)).length]) : [];
+    __TEAM_BUILD__ ? CLIENT_IDS.map((id) => [`Seen in ${CLIENT_LABELS[id]}`, patterns.filter((p) => p.clients.includes(id)).length]) : [];
 
   return (
     <div className="grid gap-8">
@@ -31,7 +32,7 @@ export function HomePage(): JSX.Element {
           {(
             [
               ['Patterns', patterns.length],
-              ['Categories', CATEGORIES.length],
+              ['Categories', categories.length],
               ...clientStats,
             ] as [string, number][]
           ).map(([label, value]) => (
@@ -55,7 +56,7 @@ export function HomePage(): JSX.Element {
 
         <nav aria-label="Filter by category">
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
-            {[{ id: '', label: 'All' }, ...CATEGORIES].map((c) => {
+            {[{ id: '', label: 'All' }, ...categories].map((c) => {
               const current = c.id === category;
               return (
                 <li key={c.id || 'all'}>

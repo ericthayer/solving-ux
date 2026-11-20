@@ -94,7 +94,7 @@ Production (`npm run build:clients`, run by Netlify) builds one isolated app per
 
 - `scripts/gen-sources.mjs` with `VITE_CLIENT` set keeps only that client's pattern folders, so no other client's content is in the bundle.
 - Each app is served under its own unlisted path from `SUX_CLIENT_PATHS` (`client-a=<path>,client-b=<path>`), set in the Netlify environment, not in the repo.
-- Client builds drop every client attribution: no "Observed in" filter, no client badges, no per-client counts.
+- Client builds compile out every client attribution with the `__TEAM_BUILD__` flag (`src/globals.d.ts`): no "Observed in" filter, client badges, per-client counts, client ids, or editor routes, and each pattern's `clients` list is blanked. Categories with no patterns are hidden. The build fails if any team-only string reaches a client app.
 - The site root is a neutral page with no links; unknown paths 404 to it. `_headers` sends `X-Robots-Tag: noindex` and `Referrer-Policy: no-referrer` on every path, and `robots.txt` disallows all without naming any path.
 - If `SUX_FORBIDDEN_TERMS` (comma list, Netlify environment only) is set, the build fails when any term appears anywhere in `dist/`.
 

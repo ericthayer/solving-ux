@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { activeClient } from '../appConfig';
 import { usePatterns } from '../context/PatternContext';
 import { CATEGORIES } from '../types/pattern';
 import { activeFilterCount, allTags } from '../utils/filter';
@@ -7,7 +6,7 @@ import type { SourceFilter } from '../utils/filter';
 import { patternPath } from '../utils/slug';
 import { CLIENT_LABELS } from '../types/client';
 
-const SOURCES: { value: SourceFilter; label: string }[] = [
+const sources = (): { value: SourceFilter; label: string }[] => [
   { value: 'All', label: 'All' },
   { value: 'client-a', label: CLIENT_LABELS['client-a'] },
   { value: 'client-b', label: CLIENT_LABELS['client-b'] },
@@ -21,11 +20,11 @@ export function Sidebar({ onNavigate }: { onNavigate: () => void }): JSX.Element
 
   return (
     <div className="grid gap-6 p-4">
-      {activeClient === null && (
+      {__TEAM_BUILD__ && (
       <fieldset className="m-0 grid gap-2 border-0 p-0">
         <legend className="mb-2 p-0 font-mono text-xs uppercase tracking-wider text-muted">Observed in</legend>
         <div className="grid grid-cols-4 rounded border border-line p-0.5">
-          {SOURCES.map((source) => (
+          {sources().map((source) => (
             <label key={source.value} className="relative">
               <input
                 type="radio"
@@ -75,7 +74,7 @@ export function Sidebar({ onNavigate }: { onNavigate: () => void }): JSX.Element
       </div>
 
       <nav aria-label="Patterns" className="grid gap-5">
-        {CATEGORIES.map((category) => {
+        {CATEGORIES.filter((category) => patterns.some((p) => p.category === category.id)).map((category) => {
           const items = filtered.filter((p) => p.category === category.id);
           return (
             <section key={category.id} aria-labelledby={`nav-${category.id}`}>

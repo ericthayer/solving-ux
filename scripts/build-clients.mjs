@@ -132,6 +132,10 @@ writeFileSync(
 
 writeFileSync(join(dist, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
 
+// Team-only attribution must be compiled out of every client app (see __TEAM_BUILD__ in src/globals.d.ts).
+const TEAM_ONLY = [...CLIENT_IDS, 'client a', 'client b', 'observed in', 'seen in'];
+for (const slug of paths.values()) assertAbsent(join(dist, slug), TEAM_ONLY, 'Team-only client attribution');
+
 // Each client's output must not reference another client's path, and nothing may contain a forbidden term.
 for (const [client, slug] of paths) {
   const others = [...paths].filter(([id]) => id !== client).map(([, s]) => s);

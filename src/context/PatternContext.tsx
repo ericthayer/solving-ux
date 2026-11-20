@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { activeClient } from '../appConfig';
 import { CLIENT_IDS, isClientId } from '../types/client';
 import type { ClientId } from '../types/client';
 import type { BeforeState, EditablePatternFields, Pattern } from '../types/pattern';
@@ -19,11 +18,12 @@ type StoredState = {
   created: Omit<Pattern, 'component' | 'beforeComponent'>[];
 };
 
-// Client builds share one origin, so each keeps its own key and never reads another client's edits.
-const STORAGE_KEY = activeClient ? `solving-ux:${activeClient}:patterns:v1` : 'solving-ux:patterns:v1';
+// Editor state only exists in the team build; client builds never read or write it.
+const STORAGE_KEY = 'solving-ux:patterns:v1';
 const EMPTY_STATE: StoredState = { overrides: {}, created: [] };
 
 function load(): StoredState {
+  if (!__TEAM_BUILD__) return EMPTY_STATE;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return EMPTY_STATE;
@@ -77,7 +77,7 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+      if (__TEAM_BUILD__) localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     } catch {
       // Quota or privacy mode: edits still apply for this session.
     }
@@ -89,8 +89,7 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
       return override ? { ...p, ...override } : p;
     });
     const created = stored.created.map((p): Pattern => ({ ...p, ...stored.overrides[p.id], component: null, beforeComponent: null }));
-    const inScope = (p: Pattern): boolean => activeClient === null || p.clients.includes(activeClient);
-    return [...merged, ...created].filter(inScope);
+    return [...merged, ...created];
   }, [seed, stored]);
 
   const patterns = useMemo(() => (editorMode ? all : all.filter((p) => p.status === 'published')), [all, editorMode]);

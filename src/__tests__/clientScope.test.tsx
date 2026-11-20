@@ -41,9 +41,15 @@ describe('client scoping', () => {
   });
 
   it('shows client labels in the team build and nothing in a client build', () => {
-    const { container, rerender } = render(<SourceBadges clients={['client-a', 'client-b']} scoped={false} />);
+    const globals = globalThis as { __TEAM_BUILD__?: boolean };
+    const { container, rerender } = render(<SourceBadges clients={['client-a', 'client-b']} />);
     expect(screen.getByRole('list', { name: 'Observed in' })).toHaveTextContent('Client AClient B');
-    rerender(<SourceBadges clients={['client-a', 'client-b']} scoped />);
-    expect(container).toBeEmptyDOMElement();
+    globals.__TEAM_BUILD__ = false;
+    try {
+      rerender(<SourceBadges clients={['client-b']} />);
+      expect(container).toBeEmptyDOMElement();
+    } finally {
+      globals.__TEAM_BUILD__ = true;
+    }
   });
 });
