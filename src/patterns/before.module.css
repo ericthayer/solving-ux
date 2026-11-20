@@ -264,6 +264,27 @@
   background: #d21f1f;
 }
 
+/* Two fixed-width multi-select boxes side by side that never reflow. */
+.transferRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: max-content;
+}
+
+.multiSelect {
+  width: 13rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  font: inherit;
+}
+
+.btnStack {
+  display: grid;
+  gap: 0.25rem;
+}
+
 /* Sticky focus Before (navigation/sticky-focus): bars always pinned, no scroll padding, save bar first in the DOM. */
 .stickyPage {
   display: flex;
