@@ -1,0 +1,184 @@
+.root {
+  container-type: inline-size;
+  /* Size containers can't shrink-wrap their content; fill the parent instead. */
+  inline-size: 100%;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.tree {
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+}
+
+.group {
+  margin: 0;
+  margin-inline-start: 0.875rem;
+  padding: 0;
+  padding-inline-start: 0.5rem;
+  list-style: none;
+  border-inline-start: 1px solid var(--sux-line, #d4d4d8);
+}
+
+/* Cap visual indentation at level 5 so deep hierarchies stay readable in narrow panels. aria-level still carries the depth. */
+.group .group .group .group .group {
+  margin-inline-start: 0;
+}
+
+/* The treeitem holds focus; the row draws it, so the ring hugs one line instead of the whole subtree. */
+.item,
+.item:focus-visible {
+  outline: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: calc(var(--sux-radius, 6px) - 2px);
+  cursor: pointer;
+}
+
+.row:hover {
+  background: var(--sux-sunken, #f4f4f5);
+}
+
+.item:focus-visible > .row {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: -2px;
+}
+
+.item[aria-selected='true'] > .row {
+  background: var(--sux-accent-soft, #e6f2ed);
+  color: var(--sux-accent, #0b6e4f);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--sux-accent, #0b6e4f);
+}
+
+/* Toggle: a 24px hit area so the chevron meets target size (2.5.8) without growing the row. */
+.toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-inline-start: -0.25rem;
+}
+
+.toggle[data-parent]::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 120ms ease-out;
+}
+
+[dir='rtl'] .toggle[data-parent]::before {
+  transform: rotate(135deg);
+}
+
+.item[aria-expanded='true'] > .row > .toggle::before {
+  transform: rotate(45deg);
+}
+
+.check {
+  flex: none;
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid var(--sux-line-strong, #71717a);
+  border-radius: 3px;
+  background: var(--sux-surface, #fff);
+}
+
+.check[data-state='true'],
+.check[data-state='mixed'] {
+  border-color: var(--sux-accent, #0b6e4f);
+  background: var(--sux-accent, #0b6e4f);
+}
+
+/* Check mark and dash are shapes, not color alone, so the three states differ in forced colors too. */
+.check[data-state='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0.3rem;
+  top: 0.05rem;
+  width: 0.3rem;
+  height: 0.6rem;
+  border-right: 2px solid var(--sux-surface, #fff);
+  border-bottom: 2px solid var(--sux-surface, #fff);
+  transform: rotate(45deg);
+}
+
+.check[data-state='mixed']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0.15rem;
+  top: calc(50% - 1px);
+  height: 2px;
+  background: var(--sux-surface, #fff);
+}
+
+.label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  margin-inline-start: auto;
+  color: var(--sux-muted, #52525b);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.status[data-state='error'] {
+  color: var(--sux-danger, #b42318);
+}
+
+@container (max-width: 20rem) {
+  .group {
+    margin-inline-start: 0.5rem;
+    padding-inline-start: 0.25rem;
+  }
+
+  .status {
+    flex-basis: 100%;
+    margin-inline-start: 2rem;
+    white-space: normal;
+  }
+
+  .row {
+    flex-wrap: wrap;
+  }
+}
+
+@media (forced-colors: active) {
+  .check[data-state='true'],
+  .check[data-state='mixed'] {
+    background: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle[data-parent]::before {
+    transition: none;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
