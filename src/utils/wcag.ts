@@ -22,6 +22,8 @@ export const WCAG_CRITERIA: Record<string, Criterion> = {
   '2.4.7': { title: 'Focus visible', level: 'AA', slug: 'focus-visible' },
   '2.4.8': { title: 'Location', level: 'AAA', slug: 'location' },
   '2.5.3': { title: 'Label in name', level: 'A', slug: 'label-in-name' },
+  '2.5.7': { title: 'Dragging movements', level: 'AA', slug: 'dragging-movements' },
+  '2.5.8': { title: 'Target size (minimum)', level: 'AA', slug: 'target-size-minimum' },
   '3.2.2': { title: 'On input', level: 'A', slug: 'on-input' },
   '3.3.1': { title: 'Error identification', level: 'A', slug: 'error-identification' },
   '3.3.2': { title: 'Labels or instructions', level: 'A', slug: 'labels-or-instructions' },
