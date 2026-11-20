@@ -7,13 +7,15 @@ import { CodeBlock } from '../components/CodeBlock';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { PropsTable } from '../components/PropsTable';
 import { Tabs } from '../components/Tabs';
+import { WalkthroughTab } from '../components/WalkthroughTab';
 import { usePatterns } from '../context/PatternContext';
 import { useEditor } from '../context/EditorContext';
+import { getWalkthrough } from '../patterns/walkthroughs';
 import { CATEGORIES } from '../types/pattern';
 import type { Pattern } from '../types/pattern';
 import { NotFoundPage } from './NotFoundPage';
 
-const TAB_IDS = ['preview', 'code', 'tests', 'accessibility'] as const;
+const TAB_IDS = ['preview', 'code', 'walkthrough', 'tests', 'accessibility'] as const;
 type TabId = (typeof TAB_IDS)[number];
 const isTab = (value: string | null): value is TabId => TAB_IDS.includes(value as TabId);
 
@@ -98,7 +100,9 @@ export function PatternPage(): JSX.Element {
   const { editorMode } = useEditor();
   const pattern = getPattern(category, slug);
   const tabParam = params.get('tab');
-  const tab: TabId = isTab(tabParam) ? tabParam : 'preview';
+  const walkthrough = pattern ? getWalkthrough(pattern.category, pattern.slug) : [];
+  const hasWalkthrough = walkthrough.length > 0;
+  const tab: TabId = isTab(tabParam) && (tabParam !== 'walkthrough' || hasWalkthrough) ? tabParam : 'preview';
 
   useEffect(() => {
     if (pattern) document.title = `${pattern.title} · Solving UX`;
@@ -152,6 +156,7 @@ export function PatternPage(): JSX.Element {
         tabs={[
           { id: 'preview', label: 'Preview', panel: <Preview pattern={pattern} /> },
           { id: 'code', label: 'Code', panel: <CodeTab pattern={pattern} /> },
+          ...(hasWalkthrough ? [{ id: 'walkthrough' as const, label: 'Walkthrough', panel: <WalkthroughTab pattern={pattern} annotations={walkthrough} /> }] : []),
           { id: 'tests', label: 'Tests', panel: <CodeBlock code={pattern.testCode} language="tsx" filename={pattern.files.test} /> },
           { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} /> },
         ]}
