@@ -10,6 +10,7 @@ import { NotFoundPage } from './pages/NotFoundPage';
 // Detail and editor routes carry the syntax highlighter and editor forms; load them on demand.
 const PatternPage = lazy(() => import('./pages/PatternPage').then((m) => ({ default: m.PatternPage })));
 const EditorPage = lazy(() => import('./pages/EditorPage').then((m) => ({ default: m.EditorPage })));
+const WorksheetPage = lazy(() => import('./pages/WorksheetPage').then((m) => ({ default: m.WorksheetPage })));
 const PatternEditorPage = lazy(() => import('./pages/PatternEditorPage').then((m) => ({ default: m.PatternEditorPage })));
 
 function Loading(): JSX.Element {
@@ -27,6 +28,7 @@ export function AppRoutes(): JSX.Element {
         <Route element={<AppShell />}>
           <Route index element={<HomePage />} />
           <Route path="patterns/:category/:slug" element={<PatternPage />} />
+          <Route path="worksheet" element={<WorksheetPage />} />
           <Route path="editor" element={<EditorPage />} />
           <Route path="editor/new" element={<PatternEditorPage />} />
           <Route path="editor/:id" element={<PatternEditorPage />} />
