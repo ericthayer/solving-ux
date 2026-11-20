@@ -3,11 +3,11 @@ import Demo from './demo';
 import Before from './before';
 
 export const dateRangePattern: PatternDefinition = {
-  id: 'forms.date-range',
+  id: 'inputs.date-range',
   slug: 'date-range',
   title: 'Date and date-range input',
   summary: 'Typed date entry with the format in the label and a tolerant parser, an optional APG calendar dialog, range presets, range validation, and a stated time zone.',
-  category: 'forms',
+  category: 'inputs',
   tags: ['forms', 'date picker', 'date range', 'calendar', 'validation', 'keyboard'],
   clients: ['client-a', 'client-b'],
   problemStatement:

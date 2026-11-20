@@ -29,6 +29,12 @@ const forbidden = list(process.env.SUX_FORBIDDEN_TERMS).map((t) => t.toLowerCase
 const legacy = list(process.env.SUX_LEGACY_PATHS);
 for (const slug of legacy) if (!SLUG.test(slug)) fail(`Legacy path "${slug}" must be 8-64 lowercase letters, digits, or dashes.`);
 
+// Patterns that changed category keep their old URLs working.
+const movedPatterns = [
+  ['forms/file-upload', 'inputs/file-upload'],
+  ['forms/date-range', 'inputs/date-range'],
+];
+
 const run = (cmd, args, env = {}) => execFileSync(cmd, args, { cwd: root, stdio: 'inherit', env: { ...process.env, ...env } });
 
 // gen + tsc, then the public bundle with team-only code compiled out (vite.config.ts).
@@ -37,7 +43,12 @@ run('npx', ['vite', 'build', '--emptyOutDir'], { SUX_PUBLIC_BUILD: 'true', VITE_
 
 writeFileSync(
   join(dist, '_redirects'),
-  [...legacy.flatMap((slug) => [`/${slug}  /  301!`, `/${slug}/*  /:splat  301!`]), '/*  /index.html  200', ''].join('\n'),
+  [
+    ...legacy.flatMap((slug) => [`/${slug}  /  301!`, `/${slug}/*  /:splat  301!`]),
+    ...movedPatterns.map(([from, to]) => `/patterns/${from}  /patterns/${to}  301!`),
+    '/*  /index.html  200',
+    '',
+  ].join('\n'),
 );
 
 writeFileSync(
