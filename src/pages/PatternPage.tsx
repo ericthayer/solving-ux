@@ -4,6 +4,7 @@ import { AccessibilityPanel } from '../components/AccessibilityPanel';
 import { AuditSummary } from '../components/AuditSummary';
 import { SourceBadges, StatusBadge, WcagBadge } from '../components/Badges';
 import { CodeBlock } from '../components/CodeBlock';
+import { DemoInspector } from '../components/demo-inspector';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { PropsTable } from '../components/PropsTable';
 import { Tabs } from '../components/Tabs';
@@ -25,7 +26,7 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
         <h2 id="demo-heading" className="m-0 text-base font-semibold">
           Live demo
         </h2>
-        <div className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
+        <DemoInspector className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
           {Demo ? (
             <ErrorBoundary
               key={pattern.id}
@@ -46,7 +47,7 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
               registered. The Code and Tests tabs show the submitted source.
             </p>
           )}
-        </div>
+        </DemoInspector>
       </section>
       {pattern.usage && (
         <section aria-labelledby="usage-heading" className="grid gap-3">
