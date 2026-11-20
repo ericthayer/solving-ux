@@ -35,7 +35,7 @@ const relabel = (list: TreeNode[], t: (value: string) => string): TreeNode[] =>
 
 const ARCHIVED: TreeNode[] = [account('acct-9001', 'Lakeside Mills'), account('acct-9002', 'Prairie Freight'), account('acct-9003', 'Oakridge Textiles')];
 
-/** Simulated network call. The first expand is slow on purpose so the loading state is visible. */
+/** Simulated network call. The delay is deliberate so the loading state and its announcement are visible. */
 const loadChildren = (node: TreeNode): Promise<TreeNode[]> =>
   new Promise((resolve) => window.setTimeout(() => resolve(node.id === 'archived' ? ARCHIVED : []), 900));
 
