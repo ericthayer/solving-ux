@@ -6,6 +6,7 @@ export const CATEGORIES = [
   { id: 'data-table', label: 'Data Tables' },
   { id: 'navigation', label: 'Navigation' },
   { id: 'forms', label: 'Forms' },
+  { id: 'inputs', label: 'Inputs' },
   { id: 'dashboard', label: 'Dashboards' },
   { id: 'modals', label: 'Modals & Overlays' },
   { id: 'empty-states', label: 'Empty States' },
