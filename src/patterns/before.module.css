@@ -263,3 +263,37 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* Status dots that differ by hue only. Yellow is about 1.1:1 against white. */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.dotGreen {
+  composes: dot;
+  background: #2ecc40;
+}
+
+.dotRed {
+  composes: dot;
+  background: #ff4136;
+}
+
+.dotYellow {
+  composes: dot;
+  background: #ffef5c;
+}
+
+.dotBlue {
+  composes: dot;
+  background: #4a90e2;
+}
+
+.dotGrey {
+  composes: dot;
+  background: #c8c8c8;
+}

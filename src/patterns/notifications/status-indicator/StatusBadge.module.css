@@ -1,0 +1,176 @@
+/*
+ * Tone colors are icon and border color only. Text stays on --sux-ink, so contrast never depends on the tone,
+ * and every tone hue meets 3:1 against the surface (WCAG 1.4.11) in light and dark themes.
+ */
+[data-tone='success'] {
+  --tone: var(--sux-success, #1a7f37);
+}
+
+[data-tone='warning'] {
+  --tone: var(--sux-warning, #8a5a00);
+}
+
+[data-tone='error'] {
+  --tone: var(--sux-danger, #b42318);
+}
+
+[data-tone='info'] {
+  --tone: var(--sux-focus, #1d4ed8);
+}
+
+[data-tone='pending'],
+[data-tone='neutral'] {
+  --tone: var(--sux-muted, #52525b);
+}
+
+.badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.375rem;
+  max-inline-size: 100%;
+  padding: 0.125rem 0.5rem 0.125rem 0.375rem;
+  border: 1px solid var(--tone);
+  border-radius: 999px;
+  background: var(--sux-surface, #fff);
+  background: color-mix(in srgb, var(--tone) 9%, var(--sux-surface, #fff));
+  color: var(--sux-ink, #18181b);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+/* Pending and neutral are not outcomes; a dashed border separates them from finished states without color. */
+.badge[data-tone='pending'],
+.badge[data-tone='neutral'] {
+  border-style: dashed;
+}
+
+.icon {
+  flex: none;
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.shapeFilled {
+  fill: var(--tone);
+  stroke: var(--tone);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.shapeOutline {
+  fill: var(--sux-surface, #fff);
+  stroke: var(--tone);
+  stroke-width: 1.5;
+}
+
+.badge[data-tone='pending'] .shapeOutline {
+  stroke-dasharray: 2.4 1.6;
+}
+
+.glyphKnockout,
+.glyphStroke {
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.glyphKnockout {
+  stroke: var(--sux-surface, #fff);
+}
+
+.glyphStroke {
+  stroke: var(--tone);
+}
+
+.label {
+  font-weight: 600;
+}
+
+.detail {
+  padding-inline-start: 0.375rem;
+  border-inline-start: 1px solid var(--sux-line-strong, #a1a1aa);
+  color: var(--sux-muted, #52525b);
+}
+
+.legend {
+  container-type: inline-size;
+  margin: 0;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.8125rem;
+}
+
+.legendCaption {
+  margin-block-end: 0.5rem;
+  font-weight: 600;
+}
+
+.legendList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0;
+}
+
+.legendItem {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.legendTerm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 600;
+}
+
+.legendMeaning {
+  margin: 0;
+  padding-inline-start: 1.375rem;
+  color: var(--sux-muted, #52525b);
+  line-height: 1.45;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@container (max-width: 20rem) {
+  .legendMeaning {
+    padding-inline-start: 0;
+  }
+}
+
+/* Windows High Contrast: SVG fills are not forced, so map them to system colors. Shapes still differ. */
+@media (forced-colors: active) {
+  .badge {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .shapeFilled {
+    fill: CanvasText;
+    stroke: CanvasText;
+  }
+
+  .shapeOutline,
+  .glyphStroke {
+    stroke: CanvasText;
+  }
+
+  .shapeOutline {
+    fill: Canvas;
+  }
+
+  .glyphKnockout {
+    stroke: Canvas;
+  }
+}
