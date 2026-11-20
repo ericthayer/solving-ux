@@ -263,3 +263,19 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* One character per box: breaks paste and one-time-code autofill. */
+.codeBox {
+  composes: input;
+  width: 2em;
+  text-align: center;
+}
+
+/* Distorted text CAPTCHA with no alternative. */
+.captcha {
+  composes: big;
+  font-style: italic;
+  letter-spacing: 0.4em;
+  text-decoration: line-through;
+  user-select: none;
+}
