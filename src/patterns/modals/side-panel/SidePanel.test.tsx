@@ -104,6 +104,16 @@ describe('SidePanel', () => {
     expect(second).toHaveFocus();
   });
 
+  it('stays open when a nested widget handles Escape first (edge case)', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: 'Inspect fire doors' }));
+    const region = screen.getByRole('region', { name: 'Inspect fire doors' });
+    const handled = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    handled.preventDefault();
+    fireEvent(screen.getByRole('button', { name: 'Delete record' }), handled);
+    expect(region).toBeInTheDocument();
+  });
+
   it('lands on the list when the triggering row no longer exists (edge case)', async () => {
     const { user } = setup();
     await user.click(screen.getByRole('button', { name: 'Inspect fire doors' }));
