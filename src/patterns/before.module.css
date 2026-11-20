@@ -264,6 +264,25 @@
   background: #d21f1f;
 }
 
+/* Date range: read-only input plus an icon div. */
+.dateControl {
+  display: flex;
+  gap: 2px;
+}
+
+/* Date range: a mouse-only month of plain divs. */
+.dayGrid {
+  composes: menuDrop;
+  grid-template-columns: repeat(7, 1.75rem);
+  min-width: 0;
+}
+
+.dayCell {
+  composes: menuItem;
+  padding: 0.25rem 0;
+  text-align: center;
+}
+
 /* Endless spinner with no role, value, or text, and no reduced-motion handling. */
 .spinner {
   width: 2.5rem;
