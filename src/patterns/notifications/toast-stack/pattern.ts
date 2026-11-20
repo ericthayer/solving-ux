@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const toastStackPattern: PatternDefinition = {
   id: 'notifications.toast-stack',
@@ -14,16 +15,42 @@ export const toastStackPattern: PatternDefinition = {
   beforeState: {
     summary: 'Unbounded toast stack, 3-second timeout for every severity.',
     failures: [
-      'No cap on visible toasts; they cover primary actions.',
-      'Errors auto-dismiss before they are read (fails 2.2.1).',
-      'Undo links disappear before keyboard users can Tab to them.',
-      'Live regions are created on the fly, so announcements are unreliable.',
-      'Severity is shown by color only.',
+      {
+        id: 'unbounded',
+        description: 'No cap on visible toasts; they cover primary actions.',
+        refs: [{ kind: 'wcag', criterion: '2.4.11' }, { kind: 'heuristic', id: 'H8' }],
+        target: { label: 'Toast stack', revealedBy: 'Click Burst of 6' },
+      },
+      {
+        id: 'error-auto-dismiss',
+        description: 'Errors auto-dismiss before they are read (fails 2.2.1).',
+        refs: [{ kind: 'wcag', criterion: '2.2.1' }, { kind: 'heuristic', id: 'H9' }],
+        target: { label: 'Error toast message', revealedBy: 'Click Error' },
+      },
+      {
+        id: 'undo-vanishes',
+        description: 'Undo links disappear before keyboard users can Tab to them.',
+        refs: [{ kind: 'wcag', criterion: '2.2.1' }, { kind: 'wcag', criterion: '2.1.1' }, { kind: 'heuristic', id: 'H3' }],
+        target: { label: 'Undo link', revealedBy: 'Click Success with Undo' },
+      },
+      {
+        id: 'live-region-on-the-fly',
+        description: 'Live regions are created on the fly, so announcements are unreliable.',
+        refs: [{ kind: 'wcag', criterion: '4.1.3' }],
+        target: { label: 'Each toast container', revealedBy: 'Trigger any toast' },
+      },
+      {
+        id: 'color-only-severity',
+        description: 'Severity is shown by color only.',
+        refs: [{ kind: 'wcag', criterion: '1.4.1' }],
+        target: { label: 'Colored severity stripe', revealedBy: 'Trigger any toast' },
+      },
     ],
   },
   designRationale:
     'Severity sets timing: success and info auto-dismiss, errors and anything with an action stay until dismissed. Errors jump to the top of the stack so they are never queued out of sight. The stack shows at most three; the rest wait behind an "N more" count with Dismiss all. Live regions exist from first render and only their text changes, which is the most reliable way to get announcements across NVDA, JAWS, and VoiceOver. Hover or focus pauses every timer, and F8 moves focus to the stack, so keyboard users can reach actions.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'ToastProvider.maxVisible', type: 'number', required: false, defaultValue: '3', description: 'Toasts shown at once. Extra toasts queue.' },
     { name: 'ToastProvider.defaultDuration', type: 'number (ms)', required: false, defaultValue: '6000', description: 'Auto-dismiss time for info, success, and warning toasts without actions.' },

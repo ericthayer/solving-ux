@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const typeaheadPattern: PatternDefinition = {
   id: 'search-filters.typeahead',
@@ -14,16 +15,42 @@ export const typeaheadPattern: PatternDefinition = {
   beforeState: {
     summary: 'Unbounded custom autocomplete over the full borrower list.',
     failures: [
-      'Renders every match; long lists cause input lag on each keystroke.',
-      'Results sorted by id, not relevance.',
-      'No combobox or listbox roles; arrow keys do nothing.',
-      'Result count is never announced; empty results show a blank box.',
-      'Clicking an option sometimes fails because blur closes the list first.',
+      {
+        id: 'renders-everything',
+        description: 'Renders every match; long lists cause input lag on each keystroke.',
+        refs: [{ kind: 'heuristic', id: 'H7' }, { kind: 'heuristic', id: 'H8' }],
+        target: { label: 'Results list', revealedBy: 'Type a letter, e.g. "r"' },
+      },
+      {
+        id: 'id-sort',
+        description: 'Results sorted by id, not relevance.',
+        refs: [{ kind: 'heuristic', id: 'H2' }, { kind: 'heuristic', id: 'H6' }],
+        target: { label: 'First result', revealedBy: 'Type "cedar"' },
+      },
+      {
+        id: 'no-combobox-roles',
+        description: 'No combobox or listbox roles; arrow keys do nothing.',
+        refs: [{ kind: 'wcag', criterion: '4.1.2' }, { kind: 'wcag', criterion: '2.1.1' }],
+        target: { label: 'Borrower search input' },
+      },
+      {
+        id: 'no-count',
+        description: 'Result count is never announced; empty results show a blank box.',
+        refs: [{ kind: 'wcag', criterion: '4.1.3' }, { kind: 'heuristic', id: 'H1' }],
+        target: { label: 'Results box', revealedBy: 'Type "zzz"' },
+      },
+      {
+        id: 'blur-race',
+        description: 'Clicking an option sometimes fails because blur closes the list first.',
+        refs: [{ kind: 'heuristic', id: 'H5' }, { kind: 'wcag', criterion: '2.1.1' }],
+        target: { label: 'Result options', revealedBy: 'Type a letter, then press and hold on a result' },
+      },
     ],
   },
   designRationale:
     'Show fewer, better results. Prefix matches rank above substring matches, and the list caps at 8 with a live message ("Showing 8 of 1,284 matches. Keep typing to narrow.") that turns an overwhelming list into a clear next step. useDeferredValue keeps typing responsive on large arrays without a debounce delay. The ARIA 1.2 combobox pattern with aria-activedescendant keeps focus in the input, so typing and arrowing work together. Options select on mousedown to beat the blur race. Highlighting uses weight and underline rather than color alone.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'label', type: 'string', required: true, description: 'Visible label; also names the listbox.' },
     { name: 'options', type: 'TypeaheadOption[]', required: true, description: '{ id, label, description? }. Description is searched and shown under the label.' },

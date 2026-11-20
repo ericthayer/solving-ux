@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const confirmDialogPattern: PatternDefinition = {
   id: 'modals.confirm-dialog',
@@ -14,16 +15,42 @@ export const confirmDialogPattern: PatternDefinition = {
   beforeState: {
     summary: 'Generic div-based "Are you sure? OK / Cancel" modal used for all actions.',
     failures: [
-      'Identical dialog for trivial and irreversible actions trains users to click OK.',
-      'Buttons say OK/Cancel instead of naming the action.',
-      'Focus is not trapped; Tab reaches the page behind the overlay.',
-      'Focus is not returned to the trigger on close.',
-      'Errors from the action are shown after the dialog closes, out of context.',
+      {
+        id: 'same-dialog',
+        description: 'Identical dialog for trivial and irreversible actions trains users to click OK.',
+        refs: [{ kind: 'heuristic', id: 'H5' }, { kind: 'wcag', criterion: '3.3.4' }],
+        target: { label: 'Archive and Delete buttons' },
+      },
+      {
+        id: 'ok-cancel',
+        description: 'Buttons say OK/Cancel instead of naming the action.',
+        refs: [{ kind: 'heuristic', id: 'H2' }, { kind: 'wcag', criterion: '2.4.6' }],
+        target: { label: 'OK and Cancel buttons', revealedBy: 'Click either action' },
+      },
+      {
+        id: 'no-focus-trap',
+        description: 'Focus is not trapped; Tab reaches the page behind the overlay.',
+        refs: [{ kind: 'wcag', criterion: '2.4.3' }, { kind: 'wcag', criterion: '4.1.2' }],
+        target: { label: 'Dialog box', revealedBy: 'Click either action' },
+      },
+      {
+        id: 'focus-not-returned',
+        description: 'Focus is not returned to the trigger on close.',
+        refs: [{ kind: 'wcag', criterion: '2.4.3' }],
+        target: { label: 'Delete facility button' },
+      },
+      {
+        id: 'error-after-close',
+        description: 'Errors from the action are shown after the dialog closes, out of context.',
+        refs: [{ kind: 'heuristic', id: 'H9' }, { kind: 'wcag', criterion: '4.1.3' }, { kind: 'wcag', criterion: '3.3.1' }],
+        target: { label: 'Page-level error message', revealedBy: 'Delete the facility and click OK' },
+      },
     ],
   },
   designRationale:
     'Friction should scale with consequence. Reversible actions get a plain dialog with a named button. Irreversible ones get alertdialog semantics, a red top rule, an itemized list of what will be lost, Cancel focused first, and an optional type-to-confirm field. The native <dialog> element with showModal() makes the background inert, handles Escape, and puts the dialog in the top layer, which removes a large amount of focus-trap code. If the action fails, the dialog stays open with the error inside it, so the user can retry or cancel with full context.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'open', type: 'boolean', required: true, description: 'Controlled visibility. The component calls showModal() and close() for you.' },
     { name: 'title', type: 'string', required: true, description: 'Phrase as a question naming the object, e.g. "Delete facility FAC-2231?"' },

@@ -1,9 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { EditablePatternFields, Pattern } from '../types/pattern';
+import type { BeforeState, EditablePatternFields, Pattern } from '../types/pattern';
 import { builtInPatterns } from '../patterns/registry';
 import { EMPTY_FILTERS, filterPatterns } from '../utils/filter';
 import type { PatternFilters } from '../utils/filter';
+import { normalizeFailures } from '../utils/failures';
 import { uniqueSlug } from '../utils/slug';
 import { useEditor } from './EditorContext';
 
@@ -12,7 +13,7 @@ export type NewPatternInput = EditablePatternFields & { code: string; testCode: 
 /** Editor changes live in localStorage until a pattern is promoted into src/patterns via PR. */
 type StoredState = {
   overrides: Record<string, EditablePatternFields & { lastUpdated: string }>;
-  created: Omit<Pattern, 'component'>[];
+  created: Omit<Pattern, 'component' | 'beforeComponent'>[];
 };
 
 const STORAGE_KEY = 'solving-ux:patterns:v1';
@@ -23,7 +24,13 @@ function load(): StoredState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return EMPTY_STATE;
     const parsed = JSON.parse(raw) as Partial<StoredState>;
-    return { overrides: parsed.overrides ?? {}, created: parsed.created ?? [] };
+    // Failures were plain strings before schema v2; upgrade them in place.
+    const upgrade = <T extends { beforeState: BeforeState }>(entry: T): T => ({
+      ...entry,
+      beforeState: { ...entry.beforeState, failures: normalizeFailures(entry.beforeState?.failures) },
+    });
+    const overrides = Object.fromEntries(Object.entries(parsed.overrides ?? {}).map(([id, entry]) => [id, upgrade(entry)]));
+    return { overrides, created: (parsed.created ?? []).map(upgrade) };
   } catch {
     return EMPTY_STATE;
   }
@@ -64,7 +71,7 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
       const override = stored.overrides[p.id];
       return override ? { ...p, ...override } : p;
     });
-    const created = stored.created.map((p): Pattern => ({ ...p, ...stored.overrides[p.id], component: null }));
+    const created = stored.created.map((p): Pattern => ({ ...p, ...stored.overrides[p.id], component: null, beforeComponent: null }));
     return [...merged, ...created];
   }, [seed, stored]);
 
@@ -89,7 +96,7 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
     (input: NewPatternInput): Pattern => {
       const { code, testCode, styles, componentName, ...fields } = input;
       const slug = uniqueSlug(fields.title, all.filter((p) => p.category === fields.category).map((p) => p.slug));
-      const created: Omit<Pattern, 'component'> = {
+      const created: Omit<Pattern, 'component' | 'beforeComponent'> = {
         ...fields,
         id: `${fields.category}.${slug}`,
         slug,
@@ -103,7 +110,7 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
         lastUpdated: today(),
       };
       setStored((s) => ({ ...s, created: [...s.created, created] }));
-      return { ...created, component: null };
+      return { ...created, component: null, beforeComponent: null };
     },
     [all],
   );
