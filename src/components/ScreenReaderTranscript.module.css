@@ -1,0 +1,32 @@
+/* Before/after columns sit side by side once the step itself has room, not the viewport. */
+.step {
+  container-type: inline-size;
+}
+
+.compare {
+  display: grid;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+@container (min-width: 36rem) {
+  .compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@supports not (container-type: inline-size) {
+  @media (min-width: 48rem) {
+    .compare {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+.speech::before {
+  content: '“';
+}
+
+.speech::after {
+  content: '”';
+}
