@@ -264,6 +264,11 @@
   background: #d21f1f;
 }
 
+/* Indentation is the only cue for depth in the tree view Before demo. */
+.indent {
+  padding-inline-start: 16px;
+}
+
 /* Unread shown by font weight alone. */
 .menuItemBold {
   composes: menuItem;
