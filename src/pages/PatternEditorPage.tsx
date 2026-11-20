@@ -5,6 +5,7 @@ import { usePatterns } from '../context/PatternContext';
 import { useToast } from '../patterns/notifications/toast-stack/ToastStack';
 import { CATEGORIES } from '../types/pattern';
 import type { CategoryId, EditablePatternFields, SourceApp, WcagLevel } from '../types/pattern';
+import { failuresFromText } from '../utils/failures';
 import { patternPath } from '../utils/slug';
 import { RequireEditor } from './EditorPage';
 import { NotFoundPage } from './NotFoundPage';
@@ -56,7 +57,7 @@ export function PatternEditorPage(): JSX.Element {
     tagsText: existing?.tags.join(', ') ?? '',
     problemStatement: existing?.problemStatement ?? '',
     beforeState: existing?.beforeState ?? { summary: '', failures: [] },
-    failuresText: existing?.beforeState.failures.join('\n') ?? '',
+    failuresText: existing?.beforeState.failures.map((f) => f.description).join('\n') ?? '',
     designRationale: existing?.designRationale ?? '',
     sourceApps: existing?.sourceApps ?? [],
     wcagLevel: existing?.wcagLevel ?? 'AA',
@@ -94,7 +95,7 @@ export function PatternEditorPage(): JSX.Element {
       category: draft.category,
       tags: draft.tagsText.split(',').map((t) => t.trim()).filter(Boolean),
       problemStatement: draft.problemStatement.trim(),
-      beforeState: { summary: draft.beforeState.summary.trim(), failures: draft.failuresText.split('\n').map((f) => f.trim()).filter(Boolean) },
+      beforeState: { summary: draft.beforeState.summary.trim(), failures: failuresFromText(draft.failuresText, draft.beforeState.failures) },
       designRationale: draft.designRationale.trim(),
       sourceApps: draft.sourceApps,
       wcagLevel: draft.wcagLevel,

@@ -2,8 +2,11 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { AccessibilityPanel } from '../components/AccessibilityPanel';
 import { AuditSummary } from '../components/AuditSummary';
+import { BeforeDemoNotice } from '../components/BeforeDemoNotice';
 import { SourceBadges, StatusBadge, WcagBadge } from '../components/Badges';
 import { CodeBlock } from '../components/CodeBlock';
+import { DemoVersionToggle } from '../components/DemoVersionToggle';
+import type { DemoVersion } from '../components/DemoVersionToggle';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { PropsTable } from '../components/PropsTable';
 import { Tabs } from '../components/Tabs';
@@ -17,18 +20,28 @@ const TAB_IDS = ['preview', 'code', 'tests', 'accessibility'] as const;
 type TabId = (typeof TAB_IDS)[number];
 const isTab = (value: string | null): value is TabId => TAB_IDS.includes(value as TabId);
 
-function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
-  const Demo = pattern.component;
+type PreviewProps = { pattern: Pattern; version: DemoVersion; onVersionChange: (version: DemoVersion) => void };
+
+function Preview({ pattern, version, onVersionChange }: PreviewProps): JSX.Element {
+  const showBefore = version === 'before' && pattern.beforeComponent !== null;
+  const Demo = showBefore ? pattern.beforeComponent : pattern.component;
   return (
     <div className="grid gap-8">
       <section aria-labelledby="demo-heading" className="grid gap-3">
-        <h2 id="demo-heading" className="m-0 text-base font-semibold">
-          Live demo
-        </h2>
-        <div className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="demo-heading" className="m-0 text-base font-semibold">
+            Live demo
+          </h2>
+          {pattern.beforeComponent && pattern.component && <DemoVersionToggle value={showBefore ? 'before' : 'after'} onChange={onVersionChange} />}
+        </div>
+        {showBefore && <BeforeDemoNotice failures={pattern.beforeState.failures} />}
+        <div
+          className={`rounded-md border p-5 [container-type:inline-size] lg:p-8 ${showBefore ? 'overflow-clip border-dashed border-line bg-sunken' : 'border-line bg-surface'}`}
+          data-demo-version={showBefore ? 'before' : 'after'}
+        >
           {Demo ? (
             <ErrorBoundary
-              key={pattern.id}
+              key={`${pattern.id}:${showBefore ? 'before' : 'after'}`}
               fallback={(error, reset) => (
                 <div role="alert" className="grid gap-2 text-sm">
                   <p className="m-0 font-semibold">The demo crashed: {error.message}</p>
@@ -99,6 +112,19 @@ export function PatternPage(): JSX.Element {
   const pattern = getPattern(category, slug);
   const tabParam = params.get('tab');
   const tab: TabId = isTab(tabParam) ? tabParam : 'preview';
+  const version: DemoVersion = params.get('demo') === 'before' ? 'before' : 'after';
+
+  /** Updates one query param and keeps the rest, so tab and demo version deep-link together. */
+  const setParam = (key: 'tab' | 'demo', value: string | null): void =>
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === null) next.delete(key);
+        else next.set(key, value);
+        return next;
+      },
+      { replace: true },
+    );
 
   useEffect(() => {
     if (pattern) document.title = `${pattern.title} · Solving UX`;
@@ -148,9 +174,9 @@ export function PatternPage(): JSX.Element {
       <Tabs<TabId>
         label="Pattern details"
         selected={tab}
-        onSelect={(id) => setParams(id === 'preview' ? {} : { tab: id }, { replace: true })}
+        onSelect={(id) => setParam('tab', id === 'preview' ? null : id)}
         tabs={[
-          { id: 'preview', label: 'Preview', panel: <Preview pattern={pattern} /> },
+          { id: 'preview', label: 'Preview', panel: <Preview pattern={pattern} version={version} onVersionChange={(v) => setParam('demo', v === 'before' ? 'before' : null)} /> },
           { id: 'code', label: 'Code', panel: <CodeTab pattern={pattern} /> },
           { id: 'tests', label: 'Tests', panel: <CodeBlock code={pattern.testCode} language="tsx" filename={pattern.files.test} /> },
           { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} /> },

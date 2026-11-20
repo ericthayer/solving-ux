@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const nestedNavPattern: PatternDefinition = {
   id: 'navigation.nested-nav',
@@ -14,15 +15,36 @@ export const nestedNavPattern: PatternDefinition = {
   beforeState: {
     summary: 'Hover flyout menu, four levels deep, with hand-written breadcrumbs.',
     failures: [
-      'Submenus open on hover only; keyboard and touch users cannot reach level 3+.',
-      'Menu state resets on navigation, hiding where the user is.',
-      'Breadcrumbs disagree with the menu on 1 in 5 pages because they are authored separately.',
-      'At tablet widths the flyouts render off screen.',
+      {
+        id: 'hover-only',
+        description: 'Submenus open on hover only; keyboard and touch users cannot reach level 3+.',
+        refs: [{ kind: 'wcag', criterion: '2.1.1' }, { kind: 'wcag', criterion: '1.4.13' }, { kind: 'wcag', criterion: '4.1.2' }],
+        target: { label: 'Customers menu item' },
+      },
+      {
+        id: 'state-reset',
+        description: 'Menu state resets on navigation, hiding where the user is.',
+        refs: [{ kind: 'heuristic', id: 'H1' }, { kind: 'wcag', criterion: '2.4.8' }],
+        target: { label: 'Top-level menu bar' },
+      },
+      {
+        id: 'breadcrumb-mismatch',
+        description: 'Breadcrumbs disagree with the menu on 1 in 5 pages because they are authored separately.',
+        refs: [{ kind: 'heuristic', id: 'H4' }, { kind: 'wcag', criterion: '3.2.3' }],
+        target: { label: 'Breadcrumb trail' },
+      },
+      {
+        id: 'offscreen-flyout',
+        description: 'At tablet widths the flyouts render off screen.',
+        refs: [{ kind: 'wcag', criterion: '1.4.10' }],
+        target: { label: 'Level 3 flyout', revealedBy: 'Hover Customers, then Relationships' },
+      },
     ],
   },
   designRationale:
     'Disclosure buttons (aria-expanded) replace hover so every level is reachable by click, tap, and keyboard. The tree auto-opens ancestors of the current page, so location is visible on arrival. Breadcrumbs are computed from the same data, which removes a whole class of drift bugs. The disclosure pattern is used instead of an ARIA tree because site navigation is a list of links; tree semantics add arrow-key expectations most users do not know. Escape collapses the enclosing group and returns focus to its toggle.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'label', type: 'string', required: true, description: 'Accessible name for the nav landmark, e.g. "Workspace".' },
     { name: 'items', type: 'NavItem[]', required: true, description: 'Tree of links ({ id, label, href }) and groups ({ id, label, href?, children }). A group with href is linkable in breadcrumbs.' },

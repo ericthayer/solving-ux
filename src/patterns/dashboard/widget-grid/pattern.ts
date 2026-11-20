@@ -1,5 +1,6 @@
 import type { PatternDefinition } from '../../../types/pattern';
 import Demo from './demo';
+import Before from './before';
 
 export const widgetGridPattern: PatternDefinition = {
   id: 'dashboard.widget-grid',
@@ -14,16 +15,42 @@ export const widgetGridPattern: PatternDefinition = {
   beforeState: {
     summary: 'Fixed 4-column dashboard with a global spinner and nested scrolling cards.',
     failures: [
-      'One failed request blanks the entire dashboard.',
-      'Global spinner hides data that has already arrived.',
-      'Cards with long lists create scroll traps inside a scrolling page.',
-      'Up/down meaning conveyed by red/green arrows only (fails 1.4.1).',
-      'Fixed 4-column layout breaks at tablet widths.',
+      {
+        id: 'global-failure',
+        description: 'One failed request blanks the entire dashboard.',
+        refs: [{ kind: 'heuristic', id: 'H9' }, { kind: 'heuristic', id: 'H1' }],
+        target: { label: 'Dashboard body', revealedBy: 'Check "Covenant service times out", then click Reload' },
+      },
+      {
+        id: 'global-spinner',
+        description: 'Global spinner hides data that has already arrived.',
+        refs: [{ kind: 'heuristic', id: 'H1' }, { kind: 'wcag', criterion: '4.1.3' }],
+        target: { label: 'Page-level loading message', revealedBy: 'Click Reload' },
+      },
+      {
+        id: 'scroll-trap',
+        description: 'Cards with long lists create scroll traps inside a scrolling page.',
+        refs: [{ kind: 'wcag', criterion: '2.1.1' }, { kind: 'heuristic', id: 'H8' }],
+        target: { label: 'Largest relationships list' },
+      },
+      {
+        id: 'color-only-trend',
+        description: 'Up/down meaning conveyed by red/green arrows only (fails 1.4.1).',
+        refs: [{ kind: 'wcag', criterion: '1.4.1' }],
+        target: { label: 'Exposure trend arrow' },
+      },
+      {
+        id: 'fixed-columns',
+        description: 'Fixed 4-column layout breaks at tablet widths.',
+        refs: [{ kind: 'wcag', criterion: '1.4.10' }],
+        target: { label: 'Four-column widget grid' },
+      },
     ],
   },
   designRationale:
     'Each widget owns its state through a discriminated union (loading, error, empty, ready), so one failure stays local and comes with its own retry. Skeletons keep layout stable while loading, and aria-busy tells assistive tech the region is updating. Cards show a bounded summary and link to the full view instead of scrolling internally. Layout responds to the container width, not the viewport, so the same grid works in a full page or a side panel. A density switch serves analysts who want more on screen without making it the default.',
   component: Demo,
+  beforeComponent: Before,
   props: [
     { name: 'DashboardGrid.title', type: 'string', required: true, description: 'Visible heading; also names the region.' },
     { name: 'DashboardGrid.defaultDensity', type: "'comfortable' | 'compact'", required: false, defaultValue: "'comfortable'", description: 'Starting density.' },

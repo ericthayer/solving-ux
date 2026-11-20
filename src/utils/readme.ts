@@ -1,5 +1,6 @@
 import type { AccessibilityNote, Pattern } from '../types/pattern';
 import { CATEGORIES } from '../types/pattern';
+import { refLabel } from '../types/failure';
 
 const escapeCell = (text: string): string => text.replace(/\|/g, '\\|').replace(/\n/g, ' ');
 
@@ -31,7 +32,7 @@ export function buildReadme(pattern: Pattern): string {
     '',
     pattern.beforeState.summary,
     '',
-    ...pattern.beforeState.failures.map((f) => `- ${f}`),
+    ...pattern.beforeState.failures.map((f) => `- ${f.description}${f.refs.length ? ` (${f.refs.map(refLabel).join(', ')})` : ''}`),
     '',
     '## Design rationale',
     '',

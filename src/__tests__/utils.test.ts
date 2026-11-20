@@ -64,7 +64,8 @@ describe('exports', () => {
   it('serializes pattern JSON without the component', () => {
     const json = toPatternJson(table, new Date('2026-01-01T00:00:00Z'));
     expect(json).not.toHaveProperty('component');
-    expect(json).toMatchObject({ schemaVersion: 1, path: '/patterns/data-table/bulk-actions', hasLiveDemo: true, exportedAt: '2026-01-01T00:00:00.000Z' });
+    expect(json).not.toHaveProperty('beforeComponent');
+    expect(json).toMatchObject({ schemaVersion: 2, path: '/patterns/data-table/bulk-actions', hasLiveDemo: true, hasBeforeDemo: true, exportedAt: '2026-01-01T00:00:00.000Z' });
     expect(JSON.parse(serializePattern(table)).code).toBe(table.code);
   });
 
