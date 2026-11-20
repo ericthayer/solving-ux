@@ -4,8 +4,10 @@ import { AccessibilityPanel } from '../components/AccessibilityPanel';
 import { AuditSummary } from '../components/AuditSummary';
 import { SourceBadges, StatusBadge, WcagBadge } from '../components/Badges';
 import { CodeBlock } from '../components/CodeBlock';
+import { DemoInspector } from '../components/demo-inspector';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { PropsTable } from '../components/PropsTable';
+import { ScreenReaderTranscript } from '../components/ScreenReaderTranscript';
 import { StressStage } from '../components/StressStage';
 import type { StageMeasurement } from '../components/StressStage';
 import { StressTestBar } from '../components/StressTestBar';
@@ -14,6 +16,7 @@ import { usePatterns } from '../context/PatternContext';
 import { useEditor } from '../context/EditorContext';
 import { useStressSettings } from '../hooks/useStressSettings';
 import { StressContext } from '../patterns/stress';
+import { getTranscript } from '../patterns/transcripts';
 import { CATEGORIES } from '../types/pattern';
 import type { Pattern } from '../types/pattern';
 import { NotFoundPage } from './NotFoundPage';
@@ -33,7 +36,7 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
           Live demo
         </h2>
         {Demo && <StressTestBar api={stress} measurement={measurement} />}
-        <div className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
+        <DemoInspector className="rounded-md border border-line bg-surface p-5 [container-type:inline-size] lg:p-8">
           {Demo ? (
             <ErrorBoundary
               key={pattern.id}
@@ -59,7 +62,7 @@ function Preview({ pattern }: { pattern: Pattern }): JSX.Element {
               registered. The Code and Tests tabs show the submitted source.
             </p>
           )}
-        </div>
+        </DemoInspector>
       </section>
       {pattern.usage && (
         <section aria-labelledby="usage-heading" className="grid gap-3">
@@ -100,6 +103,16 @@ function CodeTab({ pattern }: { pattern: Pattern }): JSX.Element {
       ) : (
         <CodeBlock code={pattern.styles} language="css" filename={pattern.files.styles} />
       )}
+    </div>
+  );
+}
+
+function AccessibilityTab({ pattern }: { pattern: Pattern }): JSX.Element {
+  const transcript = getTranscript(pattern.id);
+  return (
+    <div className="grid gap-8">
+      <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} />
+      {transcript && <ScreenReaderTranscript transcript={transcript} />}
     </div>
   );
 }
@@ -166,7 +179,7 @@ export function PatternPage(): JSX.Element {
           { id: 'preview', label: 'Preview', panel: <Preview key={pattern.id} pattern={pattern} /> },
           { id: 'code', label: 'Code', panel: <CodeTab pattern={pattern} /> },
           { id: 'tests', label: 'Tests', panel: <CodeBlock code={pattern.testCode} language="tsx" filename={pattern.files.test} /> },
-          { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityPanel notes={pattern.accessibilityNotes} level={pattern.wcagLevel} /> },
+          { id: 'accessibility', label: 'Accessibility', panel: <AccessibilityTab pattern={pattern} /> },
         ]}
       />
     </article>
