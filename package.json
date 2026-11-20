@@ -9,6 +9,7 @@
     "dev": "vite",
     "prebuild": "npm run gen",
     "build": "tsc -p tsconfig.json && vite build",
+    "build:clients": "node scripts/build-clients.mjs",
     "pretypecheck": "npm run gen",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "pretest": "npm run gen",

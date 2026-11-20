@@ -1,14 +1,16 @@
 import { NavLink } from 'react-router-dom';
+import { activeClient } from '../appConfig';
 import { usePatterns } from '../context/PatternContext';
 import { CATEGORIES } from '../types/pattern';
 import { activeFilterCount, allTags } from '../utils/filter';
 import type { SourceFilter } from '../utils/filter';
 import { patternPath } from '../utils/slug';
+import { CLIENT_LABELS } from '../types/client';
 
 const SOURCES: { value: SourceFilter; label: string }[] = [
   { value: 'All', label: 'All' },
-  { value: 'CoBank', label: 'CoBank' },
-  { value: 'ISW', label: 'ISW' },
+  { value: 'client-a', label: CLIENT_LABELS['client-a'] },
+  { value: 'client-b', label: CLIENT_LABELS['client-b'] },
   { value: 'Both', label: 'Both' },
 ];
 
@@ -19,6 +21,7 @@ export function Sidebar({ onNavigate }: { onNavigate: () => void }): JSX.Element
 
   return (
     <div className="grid gap-6 p-4">
+      {activeClient === null && (
       <fieldset className="m-0 grid gap-2 border-0 p-0">
         <legend className="mb-2 p-0 font-mono text-xs uppercase tracking-wider text-muted">Observed in</legend>
         <div className="grid grid-cols-4 rounded border border-line p-0.5">
@@ -39,6 +42,7 @@ export function Sidebar({ onNavigate }: { onNavigate: () => void }): JSX.Element
           ))}
         </div>
       </fieldset>
+      )}
 
       <div className="grid gap-2">
         <label htmlFor="tag-filter" className="font-mono text-xs uppercase tracking-wider text-muted">

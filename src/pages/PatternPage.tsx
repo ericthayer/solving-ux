@@ -190,7 +190,7 @@ export function PatternPage(): JSX.Element {
         <p className="m-0 max-w-[70ch] text-base leading-relaxed text-muted">{pattern.summary}</p>
         <div className="flex flex-wrap items-center gap-3 text-xs text-muted">
           <WcagBadge level={pattern.wcagLevel} />
-          <SourceBadges apps={pattern.sourceApps} />
+          <SourceBadges clients={pattern.clients} />
           <StatusBadge status={pattern.status} />
           <span>
             Updated <time dateTime={pattern.lastUpdated}>{pattern.lastUpdated}</time> by {pattern.author}

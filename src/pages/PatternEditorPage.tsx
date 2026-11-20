@@ -4,7 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { usePatterns } from '../context/PatternContext';
 import { useToast } from '../patterns/notifications/toast-stack/ToastStack';
 import { CATEGORIES } from '../types/pattern';
-import type { CategoryId, EditablePatternFields, SourceApp, WcagLevel } from '../types/pattern';
+import { CLIENT_IDS, CLIENT_LABELS } from '../types/client';
+import type { CategoryId, EditablePatternFields, WcagLevel } from '../types/pattern';
 import { failuresFromText } from '../utils/failures';
 import { patternPath } from '../utils/slug';
 import { RequireEditor } from './EditorPage';
@@ -32,7 +33,7 @@ export function validateDraft(draft: Draft, isNew: boolean): Errors {
   if (!draft.summary.trim()) errors.summary = 'Enter a one-sentence summary.';
   if (!draft.problemStatement.trim()) errors.problemStatement = 'Describe the problem you observed.';
   if (!draft.designRationale.trim()) errors.designRationale = 'Explain why the solution works.';
-  if (draft.sourceApps.length === 0) errors.sourceApps = 'Choose at least one source app.';
+  if (draft.clients.length === 0) errors.clients = 'Choose at least one client.';
   if (isNew && !/^[A-Z][A-Za-z0-9]*$/.test(draft.componentName)) errors.componentName = 'Use PascalCase, e.g. FilterChips.';
   if (isNew && !draft.code.trim()) errors.code = 'Paste the component source.';
   if (isNew && !draft.testCode.trim()) errors.testCode = 'Paste the test source.';
@@ -59,7 +60,7 @@ export function PatternEditorPage(): JSX.Element {
     beforeState: existing?.beforeState ?? { summary: '', failures: [] },
     failuresText: existing?.beforeState.failures.map((f) => f.description).join('\n') ?? '',
     designRationale: existing?.designRationale ?? '',
-    sourceApps: existing?.sourceApps ?? [],
+    clients: existing?.clients ?? [],
     wcagLevel: existing?.wcagLevel ?? 'AA',
     author: existing?.author ?? 'Design System Team',
     status: existing?.status ?? 'draft',
@@ -97,7 +98,7 @@ export function PatternEditorPage(): JSX.Element {
       problemStatement: draft.problemStatement.trim(),
       beforeState: { summary: draft.beforeState.summary.trim(), failures: failuresFromText(draft.failuresText, draft.beforeState.failures) },
       designRationale: draft.designRationale.trim(),
-      sourceApps: draft.sourceApps,
+      clients: draft.clients,
       wcagLevel: draft.wcagLevel,
       author: draft.author.trim() || 'Design System Team',
       status: draft.status,
@@ -141,19 +142,19 @@ export function PatternEditorPage(): JSX.Element {
             <input {...a11y('author')} className={inputClass} value={draft.author} onChange={(e) => set('author', e.target.value)} />
           </Field>
         </div>
-        <fieldset className="m-0 grid gap-2 border-0 p-0" aria-describedby={errors.sourceApps ? fid('sourceApps-error') : undefined}>
+        <fieldset className="m-0 grid gap-2 border-0 p-0" aria-describedby={errors.clients ? fid('clients-error') : undefined}>
           <legend className="mb-1 p-0 text-sm font-semibold">Observed in</legend>
-          {errors.sourceApps && <p id={fid('sourceApps-error')} className="m-0 text-sm font-medium text-danger">{errors.sourceApps}</p>}
+          {errors.clients && <p id={fid('clients-error')} className="m-0 text-sm font-medium text-danger">{errors.clients}</p>}
           <div className="flex gap-5">
-            {(['CoBank', 'ISW', 'Both'] as SourceApp[]).map((app, i) => (
-              <label key={app} className="inline-flex items-center gap-2 text-sm">
+            {CLIENT_IDS.map((client, i) => (
+              <label key={client} className="inline-flex items-center gap-2 text-sm">
                 <input
-                  id={i === 0 ? fid('sourceApps') : undefined}
+                  id={i === 0 ? fid('clients') : undefined}
                   type="checkbox"
-                  checked={draft.sourceApps.includes(app)}
-                  onChange={(e) => set('sourceApps', e.target.checked ? [...draft.sourceApps, app] : draft.sourceApps.filter((a) => a !== app))}
+                  checked={draft.clients.includes(client)}
+                  onChange={(e) => set('clients', e.target.checked ? [...draft.clients, client] : draft.clients.filter((c) => c !== client))}
                 />
-                {app}
+                {CLIENT_LABELS[client]}
               </label>
             ))}
           </div>

@@ -1,10 +1,13 @@
 import type { Pattern } from '../types/pattern';
 import { patternPath } from './slug';
 
-/** v2: beforeState.failures became structured Failure objects (src/types/failure.ts). */
-export const PATTERN_JSON_SCHEMA_VERSION = 2;
+/**
+ * v2: beforeState.failures became structured Failure objects (src/types/failure.ts).
+ * v3: client attribution (sourceApps) is no longer exported, so a shared file never names where a pattern came from.
+ */
+export const PATTERN_JSON_SCHEMA_VERSION = 3;
 
-export type PatternJson = Omit<Pattern, 'component' | 'beforeComponent'> & {
+export type PatternJson = Omit<Pattern, 'component' | 'beforeComponent' | 'clients'> & {
   schemaVersion: number;
   path: string;
   hasLiveDemo: boolean;
@@ -12,9 +15,9 @@ export type PatternJson = Omit<Pattern, 'component' | 'beforeComponent'> & {
   exportedAt: string;
 };
 
-/** Everything except the React component, which cannot be serialized. */
+/** Everything except the React components, which cannot be serialized, and client attribution. */
 export function toPatternJson(pattern: Pattern, exportedAt: Date = new Date()): PatternJson {
-  const { component, beforeComponent, ...rest } = pattern;
+  const { component, beforeComponent, clients, ...rest } = pattern;
   return {
     schemaVersion: PATTERN_JSON_SCHEMA_VERSION,
     ...rest,

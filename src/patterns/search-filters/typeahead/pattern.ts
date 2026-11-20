@@ -9,7 +9,7 @@ export const typeaheadPattern: PatternDefinition = {
   summary: 'ARIA 1.2 combobox with ranked matching, highlighted results, a capped list, and a live result count that tells users when to keep typing.',
   category: 'search-filters',
   tags: ['search', 'combobox', 'autocomplete', 'typeahead', 'large data'],
-  sourceApps: ['CoBank', 'ISW'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Borrower and account pickers use a native select with 5,000+ options, or a custom autocomplete that renders every match. Typing "farm" draws 3,000 rows and freezes the browser for a second. Matches appear in database order, so the exact name the user typed can be on row 400. The custom widget has no ARIA, so screen reader users hear nothing as results change.',
   beforeState: {

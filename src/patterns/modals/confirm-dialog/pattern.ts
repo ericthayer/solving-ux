@@ -9,7 +9,7 @@ export const confirmDialogPattern: PatternDefinition = {
   summary: 'Native <dialog> confirmation with severity tiers, itemized consequences, type-to-confirm for irreversible actions, and in-place error recovery.',
   category: 'modals',
   tags: ['modal', 'dialog', 'confirmation', 'destructive action', 'focus management'],
-  sourceApps: ['Both'],
+  clients: ['client-a', 'client-b'],
   problemStatement:
     'Every action, from saving a note to deleting a facility, triggers the same "Are you sure?" modal with OK and Cancel. Users click through without reading. Modals are div overlays that leave the background page tabbable, do not close on Escape, and drop focus at the top of the page when dismissed. When the action fails, the modal closes and an error appears somewhere else on the page, or not at all.',
   beforeState: {

@@ -1,8 +1,10 @@
 import { useSearchParams } from 'react-router-dom';
+import { activeClient } from '../appConfig';
 import { PatternCard } from '../components/PatternCard';
 import { usePatterns } from '../context/PatternContext';
 import { EmptyState } from '../patterns/empty-states/empty-state/EmptyState';
 import { CATEGORIES } from '../types/pattern';
+import { CLIENT_IDS, CLIENT_LABELS } from '../types/client';
 import { activeFilterCount } from '../utils/filter';
 
 export function HomePage(): JSX.Element {
@@ -10,27 +12,29 @@ export function HomePage(): JSX.Element {
   const [params, setParams] = useSearchParams();
   const category = params.get('category') ?? '';
   const visible = category ? filtered.filter((p) => p.category === category) : filtered;
-  const sourceCount = (app: 'CoBank' | 'ISW'): number =>
-    patterns.filter((p) => p.sourceApps.includes(app) || p.sourceApps.includes('Both')).length;
+  // Per-client counts are team-build only; a client build never hints that other clients exist.
+  const clientStats: [string, number][] =
+    activeClient === null ? CLIENT_IDS.map((id) => [`Seen in ${CLIENT_LABELS[id]}`, patterns.filter((p) => p.clients.includes(id)).length]) : [];
 
   return (
     <div className="grid gap-8">
       <header className="grid gap-4 border-b border-line pb-8">
         <p className="m-0 font-mono text-xs uppercase tracking-wider text-accent">Enterprise UX audit</p>
         <h1 className="m-0 max-w-[22ch] text-3xl font-semibold leading-tight tracking-tight lg:text-4xl">
-          Hard UI problems from CoBank and ISW, solved once.
+          Hard UI problems from enterprise apps, solved once.
         </h1>
         <p className="m-0 max-w-[62ch] text-base leading-relaxed text-muted">
           Each entry documents a failure we found in production apps, the redesigned component, its tests, and its accessibility contract.
           Copy the code, download it as a ZIP, or link a teammate straight to the pattern.
         </p>
         <dl className="m-0 mt-2 flex flex-wrap gap-x-10 gap-y-3">
-          {[
-            ['Patterns', patterns.length],
-            ['Categories', CATEGORIES.length],
-            ['Seen in CoBank', sourceCount('CoBank')],
-            ['Seen in ISW', sourceCount('ISW')],
-          ].map(([label, value]) => (
+          {(
+            [
+              ['Patterns', patterns.length],
+              ['Categories', CATEGORIES.length],
+              ...clientStats,
+            ] as [string, number][]
+          ).map(([label, value]) => (
             <div key={label} className="grid">
               <dt className="order-2 text-xs text-muted">{label}</dt>
               <dd className="order-1 m-0 font-mono text-2xl font-semibold">{value}</dd>

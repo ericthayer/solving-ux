@@ -1,6 +1,6 @@
 # Solving UX: Pattern Library & UI/UX Audit Platform
 
-Internal pattern library that documents hard UI/UX failures observed in CoBank and ISW enterprise apps and ships the redesigned, accessible React component for each one, with tests, docs, and export.
+Internal pattern library that documents hard UI/UX failures observed in client enterprise apps and ships the redesigned, accessible React component for each one, with tests, docs, and export.
 
 ## Quick start
 
@@ -60,7 +60,7 @@ VITE_ENABLE_EDITOR=true npm run dev
 ## Adding a pattern
 
 1. Create `src/patterns/<category>/<slug>/` with `<Component>.tsx`, `<Component>.module.css`, `<Component>.test.tsx`, `demo.tsx`, `before.tsx`, and `pattern.ts`.
-2. Register the definition in `src/patterns/registry.ts`.
+2. Set `clients` in `pattern.ts` to the opaque client ids (`client-a`, `client-b`) where the failure was observed. No registration step: `npm run gen` discovers every folder, including its optional `transcript.ts` and `walkthrough.ts`.
 3. `npm test`. The registry test fails if the pattern lacks an axe test, an edge-case test, props docs, or any of the four accessibility note kinds.
 
 Editors can also draft patterns in the browser (Editor Mode, then Manage). Drafts persist in localStorage and can be exported as JSON for a PR.
@@ -74,7 +74,7 @@ Pattern CSS reads `--sux-*` custom properties (surface, ink, muted, line, accent
 - **Deep links**: `/patterns/:category/:slug`, plus `?tab=code|tests|accessibility`.
 - **Copy link** in the top bar copies the absolute URL, keeping the open tab.
 - **Export → ZIP**: component, CSS Module, test, and a generated README with props and accessibility notes.
-- **Export → JSON**: versioned (`schemaVersion: 1`) metadata plus source for pipelines.
+- **Export → JSON**: versioned (`schemaVersion: 3`) metadata plus source for pipelines. Client attribution is never exported.
 - **Copy** buttons on every code block.
 
 ## Access control
@@ -86,9 +86,19 @@ Pattern CSS reads `--sux-*` custom properties (surface, ink, muted, line, accent
 
 This is a build-time flag, not authentication. Before exposing an editor build beyond the team, put `/editor` behind SSO.
 
-## Deployment
+## Clients and deployment
 
-Netlify (`netlify.toml`): builds with `npm run build`, publishes `dist`, and rewrites every path to `index.html` so deep links work on refresh. The public site builds with `VITE_ENABLE_EDITOR=false`. Live: https://solving-ux.netlify.app
+Patterns belong to one or more clients, named only by opaque ids in `src/types/client.ts`. Real client names never go in source, commit messages, PR text, or build output.
+
+Production (`npm run build:clients`, run by Netlify) builds one isolated app per client:
+
+- `scripts/gen-sources.mjs` with `VITE_CLIENT` set keeps only that client's pattern folders, so no other client's content is in the bundle.
+- Each app is served under its own unlisted path from `SUX_CLIENT_PATHS` (`client-a=<path>,client-b=<path>`), set in the Netlify environment, not in the repo.
+- Client builds drop every client attribution: no "Observed in" filter, no client badges, no per-client counts.
+- The site root is a neutral page with no links; unknown paths 404 to it. `_headers` sends `X-Robots-Tag: noindex` and `Referrer-Policy: no-referrer` on every path, and `robots.txt` disallows all without naming any path.
+- If `SUX_FORBIDDEN_TERMS` (comma list, Netlify environment only) is set, the build fails when any term appears anywhere in `dist/`.
+
+`npm run dev` and `npm run build` stay unscoped (all patterns, labeled Client A and Client B) for local and team use. The public builds use `VITE_ENABLE_EDITOR=false`.
 
 ## Stack
 

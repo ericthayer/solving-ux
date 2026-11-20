@@ -9,7 +9,7 @@ export const wizardValidationPattern: PatternDefinition = {
   summary: 'Config-driven wizard with blur-time validation, a focusable error summary, conditional fields, a review step, and submit failure recovery.',
   category: 'forms',
   tags: ['forms', 'wizard', 'validation', 'conditional fields', 'error recovery'],
-  sourceApps: ['CoBank'],
+  clients: ['client-a'],
   problemStatement:
     'Loan applications run 40+ fields on one page, validate only on final submit, and report errors in a red banner at the top that says "Please correct the errors below." Fields that do not apply to the borrower type are still shown and required. A server timeout clears the form, and users re-enter everything.',
   beforeState: {

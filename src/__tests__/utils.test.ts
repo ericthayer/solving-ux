@@ -45,27 +45,29 @@ describe('slug utils', () => {
 });
 
 describe('filters', () => {
-  it('treats "Both" patterns as matching either app', () => {
-    const both = { ...table, sourceApps: ['Both'] } as Pattern;
-    const cobank = { ...table, sourceApps: ['CoBank'] } as Pattern;
-    expect(matchesSource(both, 'ISW')).toBe(true);
-    expect(matchesSource(cobank, 'ISW')).toBe(false);
-    expect(matchesSource(cobank, 'Both')).toBe(false);
+  it('matches shared patterns under either client and "Both" only when every client saw it', () => {
+    const both = { ...table, clients: ['client-a', 'client-b'] } as Pattern;
+    const single = { ...table, clients: ['client-a'] } as Pattern;
+    expect(matchesSource(both, 'client-b')).toBe(true);
+    expect(matchesSource(both, 'Both')).toBe(true);
+    expect(matchesSource(single, 'client-b')).toBe(false);
+    expect(matchesSource(single, 'Both')).toBe(false);
   });
 
   it('combines query, tag, and source', () => {
     expect(filterPatterns(builtInPatterns, { ...EMPTY_FILTERS, query: 'combobox' }).map((p) => p.slug)).toEqual(['typeahead']);
     expect(filterPatterns(builtInPatterns, { ...EMPTY_FILTERS, tag: 'breadcrumbs' }).map((p) => p.slug)).toEqual(['nested-nav']);
-    expect(activeFilterCount({ query: ' ', tag: 'x', source: 'ISW' })).toBe(2);
+    expect(activeFilterCount({ query: ' ', tag: 'x', source: 'client-b' })).toBe(2);
   });
 });
 
 describe('exports', () => {
-  it('serializes pattern JSON without the component', () => {
+  it('serializes pattern JSON without the components or client attribution', () => {
     const json = toPatternJson(table, new Date('2026-01-01T00:00:00Z'));
     expect(json).not.toHaveProperty('component');
     expect(json).not.toHaveProperty('beforeComponent');
-    expect(json).toMatchObject({ schemaVersion: 2, path: '/patterns/data-table/bulk-actions', hasLiveDemo: true, hasBeforeDemo: true, exportedAt: '2026-01-01T00:00:00.000Z' });
+    expect(json).not.toHaveProperty('clients');
+    expect(json).toMatchObject({ schemaVersion: 3, path: '/patterns/data-table/bulk-actions', hasLiveDemo: true, hasBeforeDemo: true, exportedAt: '2026-01-01T00:00:00.000Z' });
     expect(JSON.parse(serializePattern(table)).code).toBe(table.code);
   });
 

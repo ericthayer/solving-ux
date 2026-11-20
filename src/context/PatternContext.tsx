@@ -1,5 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { activeClient } from '../appConfig';
+import { CLIENT_IDS, isClientId } from '../types/client';
+import type { ClientId } from '../types/client';
 import type { BeforeState, EditablePatternFields, Pattern } from '../types/pattern';
 import { builtInPatterns } from '../patterns/registry';
 import { EMPTY_FILTERS, filterPatterns } from '../utils/filter';
@@ -16,7 +19,8 @@ type StoredState = {
   created: Omit<Pattern, 'component' | 'beforeComponent'>[];
 };
 
-const STORAGE_KEY = 'solving-ux:patterns:v1';
+// Client builds share one origin, so each keeps its own key and never reads another client's edits.
+const STORAGE_KEY = activeClient ? `solving-ux:${activeClient}:patterns:v1` : 'solving-ux:patterns:v1';
 const EMPTY_STATE: StoredState = { overrides: {}, created: [] };
 
 function load(): StoredState {
@@ -24,13 +28,26 @@ function load(): StoredState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return EMPTY_STATE;
     const parsed = JSON.parse(raw) as Partial<StoredState>;
-    // Failures were plain strings before schema v2; upgrade them in place.
-    const upgrade = <T extends { beforeState: BeforeState }>(entry: T): T => ({
-      ...entry,
-      beforeState: { ...entry.beforeState, failures: normalizeFailures(entry.beforeState?.failures) },
+    // Failures were plain strings before schema v2; upgrade them in place. Client attribution
+    // replaced named source apps; legacy values are dropped so built-in patterns keep their own.
+    const upgrade = <T extends { beforeState: BeforeState; clients?: ClientId[] }>(entry: T): T => {
+      const { sourceApps: _legacy, ...rest } = entry as T & { sourceApps?: unknown };
+      const clients = Array.isArray(rest.clients) ? rest.clients.filter(isClientId) : [];
+      return {
+        ...(rest as T),
+        ...(clients.length > 0 ? { clients } : { clients: undefined }),
+        beforeState: { ...entry.beforeState, failures: normalizeFailures(entry.beforeState?.failures) },
+      };
+    };
+    const dropEmpty = <T extends object>(entry: T): T =>
+      Object.fromEntries(Object.entries(entry).filter(([, v]) => v !== undefined)) as T;
+    const overrides = Object.fromEntries(Object.entries(parsed.overrides ?? {}).map(([id, entry]) => [id, dropEmpty(upgrade(entry))]));
+    // A legacy draft with no valid client stays visible to the team build under every client.
+    const created = (parsed.created ?? []).map((entry) => {
+      const next = upgrade(entry);
+      return { ...next, clients: next.clients ?? [...CLIENT_IDS] };
     });
-    const overrides = Object.fromEntries(Object.entries(parsed.overrides ?? {}).map(([id, entry]) => [id, upgrade(entry)]));
-    return { overrides, created: (parsed.created ?? []).map(upgrade) };
+    return { overrides, created };
   } catch {
     return EMPTY_STATE;
   }
@@ -72,7 +89,8 @@ export function PatternProvider({ children, seed = builtInPatterns }: { children
       return override ? { ...p, ...override } : p;
     });
     const created = stored.created.map((p): Pattern => ({ ...p, ...stored.overrides[p.id], component: null, beforeComponent: null }));
-    return [...merged, ...created];
+    const inScope = (p: Pattern): boolean => activeClient === null || p.clients.includes(activeClient);
+    return [...merged, ...created].filter(inScope);
   }, [seed, stored]);
 
   const patterns = useMemo(() => (editorMode ? all : all.filter((p) => p.status === 'published')), [all, editorMode]);
