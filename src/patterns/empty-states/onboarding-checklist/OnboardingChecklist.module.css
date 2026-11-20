@@ -1,0 +1,193 @@
+.root {
+  container-type: inline-size;
+  inline-size: 100%;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--sux-line, #d4d4d8);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.count {
+  flex: 1;
+  color: var(--sux-muted, #52525b);
+  font-variant-numeric: tabular-nums;
+}
+
+.toggle,
+.secondary {
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.meter {
+  appearance: none;
+  inline-size: 100%;
+  block-size: 0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sux-sunken, #f4f4f5);
+  overflow: hidden;
+}
+
+.meter::-webkit-progress-bar {
+  background: var(--sux-sunken, #f4f4f5);
+}
+
+.meter::-webkit-progress-value {
+  background: var(--sux-accent, #0b6e4f);
+}
+
+.meter::-moz-progress-bar {
+  background: var(--sux-accent, #0b6e4f);
+}
+
+.body {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.body[hidden] {
+  display: none;
+}
+
+.doneNote {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-accent-soft, #e6f2ed);
+}
+
+.tasks {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.625rem;
+  align-items: start;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--sux-line, #d4d4d8);
+}
+
+.mark {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: none;
+  stroke: var(--sux-line-strong, #a1a1aa);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.task[data-complete] .mark {
+  border-radius: 999px;
+  background: var(--sux-accent, #0b6e4f);
+  stroke: var(--sux-accent-ink, #fff);
+  stroke-width: 2.5;
+}
+
+.taskText {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.taskLink {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--sux-accent, #0b6e4f);
+  font: inherit;
+  font-weight: 600;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+/* Done tasks stay reachable for reference, quieter but still a link (not color alone: the mark changes too). */
+.task[data-complete] .taskLink {
+  color: var(--sux-muted, #52525b);
+  font-weight: 500;
+}
+
+.description {
+  margin: 0;
+  color: var(--sux-muted, #52525b);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--sux-line, #d4d4d8);
+}
+
+.help {
+  color: var(--sux-accent, #0b6e4f);
+  font-weight: 500;
+  text-underline-offset: 2px;
+}
+
+.root :is(a, button):focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
+@container (min-width: 36rem) {
+  .root {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .meter::-webkit-progress-value {
+    transition: inline-size 200ms ease-out;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
