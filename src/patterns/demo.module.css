@@ -61,6 +61,12 @@
   cursor: pointer;
 }
 
+.button[aria-current='page'] {
+  border-color: var(--sux-ink, #18181b);
+  box-shadow: inset 0 -3px 0 var(--sux-ink, #18181b);
+  font-weight: 600;
+}
+
 .button:focus-visible {
   outline: 2px solid var(--sux-focus, #1d4ed8);
   outline-offset: 2px;
@@ -73,8 +79,77 @@
   color: var(--sux-muted, #52525b);
 }
 
+.textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--sux-line-strong, #a1a1aa);
+  border-radius: var(--sux-radius, 6px);
+  background: var(--sux-surface, #fff);
+  color: var(--sux-ink, #18181b);
+  font: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--sux-focus, #1d4ed8);
+  outline-offset: 2px;
+}
+
 @container (max-width: 36rem) {
   .split {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Data table for demos that place a pattern inside table cells. */
+.tableScroll {
+  overflow-x: auto;
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  color: var(--sux-ink, #18181b);
+  font-size: 0.875rem;
+}
+
+.table caption {
+  margin-block-end: 0.5rem;
+  text-align: start;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.75rem;
+  border-block-end: 1px solid var(--sux-line, #d4d4d8);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.table thead th {
+  color: var(--sux-muted, #52525b);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.table tbody th {
+  font-weight: 500;
+}
+
+/* Color-vision previews: check that a demo still reads without hue. */
+.simGrayscale {
+  filter: grayscale(1);
+}
+
+.simDeuteranopia {
+  filter: url('#sux-sim-deuteranopia');
+}
+
+.filterDefs {
+  position: absolute;
 }
