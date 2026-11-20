@@ -49,6 +49,7 @@ VITE_ENABLE_EDITOR=true npm run dev
 | Category | Pattern | Route |
 | --- | --- | --- |
 | Data Tables | Bulk action table (sort, page/cross-page selection, frozen column, pagination) | `/patterns/data-table/bulk-actions` |
+| Data Tables | Reorderable list without dragging (Move up/down, Move to position, focus follows the item) | `/patterns/data-table/reorderable-list` |
 | Navigation | Nested navigation with derived breadcrumbs | `/patterns/navigation/nested-nav` |
 | Forms | Multi-step form with inline validation, conditional fields, error recovery | `/patterns/forms/wizard-validation` |
 | Dashboards | Widget grid with per-widget loading/error/empty states and density | `/patterns/dashboard/widget-grid` |
