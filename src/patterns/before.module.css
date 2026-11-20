@@ -263,3 +263,27 @@
   composes: swatch;
   background: #d21f1f;
 }
+
+/* Approval workflow: status shown as a colored dot only. */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.dotPending {
+  composes: dot;
+  background: #e0a800;
+}
+
+.dotApproved {
+  composes: dot;
+  background: #138a36;
+}
+
+.dotRejected {
+  composes: dot;
+  background: #d21f1f;
+}
