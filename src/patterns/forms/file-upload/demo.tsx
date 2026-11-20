@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { FileUpload } from './FileUpload';
 import type { FileUploadHandle, UploadContext } from './FileUpload';
 import demo from '../../demo.module.css';
@@ -36,6 +36,7 @@ export default function FileUploadDemo(): JSX.Element {
   const upload = useFakeUpload();
   const uploader = useRef<FileUploadHandle>(null);
   const [uploaded, setUploaded] = useState<string[]>([]);
+  const samplesHeading = useId();
 
   const addSamples = (): void =>
     uploader.current?.addFiles([
@@ -56,9 +57,9 @@ export default function FileUploadDemo(): JSX.Element {
         upload={upload}
         onUploadedChange={(files) => setUploaded(files.map((f) => f.name))}
       />
-      <section className={`${demo.panel} ${demo.stack}`} aria-labelledby="file-upload-samples">
+      <section className={`${demo.panel} ${demo.stack}`} aria-labelledby={samplesHeading}>
         <div>
-          <h3 id="file-upload-samples" className={demo.panelTitle}>No files handy?</h3>
+          <h3 id={samplesHeading} className={demo.panelTitle}>No files handy?</h3>
           <p className={demo.panelText}>Adds four sample files: two valid, one of the wrong type, one too large. The second upload fails once so you can retry it.</p>
         </div>
         <div className={demo.row}>
