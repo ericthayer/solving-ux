@@ -19,7 +19,6 @@ const FIELDS: Field[] = [
   { name: 'phone', label: 'Phone', type: 'tel' },
 ];
 
-
 export default function WizardFormBefore(): JSX.Element {
   const form = useRef<HTMLFormElement>(null);
   const [invalid, setInvalid] = useState<Set<string>>(new Set());
