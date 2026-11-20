@@ -3,10 +3,10 @@ import { failureTarget } from '../../../types/failure';
 import s from '../../before.module.css';
 
 /** Deliberately broken. Reproduces beforeState.failures in ./pattern.ts; do not copy. */
-type Dot = 'green' | 'red' | 'yellow' | 'blue' | 'grey';
+type Dot = 'green' | 'red' | 'yellow' | 'blue';
 type Job = { id: string; name: string; dot: Dot; failure?: string };
 
-const DOT: Record<Dot, string | undefined> = { green: s.dotGreen, red: s.dotRed, yellow: s.dotYellow, blue: s.dotBlue, grey: s.dotGrey };
+const DOT: Record<Dot, string | undefined> = { green: s.dotGreen, red: s.dotRed, yellow: s.dotYellow, blue: s.dotBlue };
 
 const JOBS: Job[] = [
   { id: 'export', name: 'Nightly ledger export', dot: 'green', failure: 'color-only' },
@@ -14,7 +14,6 @@ const JOBS: Job[] = [
   { id: 'import', name: 'Vendor file import', dot: 'yellow', failure: 'low-contrast-dot' },
   { id: 'refresh', name: 'Rate table refresh', dot: 'blue', failure: 'no-text-alternative' },
   { id: 'report', name: 'Weekly report delivery', dot: 'blue' },
-  { id: 'archive', name: 'Archive cleanup', dot: 'grey' },
 ];
 
 export default function StatusIndicatorBefore(): JSX.Element {
@@ -46,7 +45,7 @@ export default function StatusIndicatorBefore(): JSX.Element {
               <th>
                 Status{' '}
                 {/* The only key is a native tooltip on a 10px icon: mouse hover only. */}
-                <span className={s.muted} title="Green = OK, Red = Failed, Yellow = Warning, Blue = Running or Scheduled, Grey = Paused" {...failureTarget('hover-only-legend')}>
+                <span className={s.muted} title="Green = OK, Red = Failed, Yellow = Warning, Blue = Running or Scheduled" {...failureTarget('hover-only-legend')}>
                   (?)
                 </span>
               </th>
@@ -61,6 +60,25 @@ export default function StatusIndicatorBefore(): JSX.Element {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td>Statement run</td>
+              <td>
+                {/* Pastel badge: pale text on a pale fill, about 1.6:1. */}
+                <span className={s.pastelBadge} {...failureTarget('pastel-badge')}>
+                  Pending
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td>Archive cleanup</td>
+              <td>
+                {/* Icon-only pause glyph with no accessible name. */}
+                <svg width="12" height="12" viewBox="0 0 12 12" {...failureTarget('icon-only')}>
+                  <rect x="2" y="1" width="3" height="10" fill="#9aa0a6" />
+                  <rect x="7" y="1" width="3" height="10" fill="#9aa0a6" />
+                </svg>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -10,6 +10,11 @@ export type StatusBadgeProps = {
   label: string;
   /** Optional context after the label, e.g. "Timed out after 30 min". */
   detail?: string;
+  /**
+   * compact shows the icon only, for dense grids. The label stays in the accessible name, and the
+   * distinct shape keeps it readable without color: pair compact badges with a visible StatusLegend.
+   */
+  density?: 'default' | 'compact';
 };
 
 type Shape = { outline: string; filled: boolean; glyph: string };
@@ -35,12 +40,13 @@ export function StatusIcon({ tone }: { tone: StatusTone }): JSX.Element {
 }
 
 /** A status that reads without color: shape, glyph, and visible text, each carrying the meaning on its own. */
-export function StatusBadge({ tone, label, detail }: StatusBadgeProps): JSX.Element {
+export function StatusBadge({ tone, label, detail, density = 'default' }: StatusBadgeProps): JSX.Element {
+  const compact = density === 'compact';
   return (
-    <span className={styles.badge} data-tone={tone}>
+    <span className={compact ? styles.compact : styles.badge} data-tone={tone}>
       <StatusIcon tone={tone} />
-      <span className={styles.label}>{label}</span>
-      {detail && (
+      <span className={compact ? styles.visuallyHidden : styles.label}>{label}</span>
+      {detail && !compact && (
         <span className={styles.detail}>
           <span className={styles.visuallyHidden}>, </span>
           {detail}
@@ -79,4 +85,29 @@ export function StatusLegend({ caption, entries }: StatusLegendProps): JSX.Eleme
       </dl>
     </figure>
   );
+}
+
+/** One entry in a product's status vocabulary: the domain state, its tone, its words. */
+export type StatusDefinition = { tone: StatusTone; label: string; meaning: string };
+
+export type StatusVocabulary<K extends string> = {
+  /** Badge for a domain state. Callers pass the state key, never a tone or a color. */
+  Badge: (props: { status: K; detail?: string; density?: StatusBadgeProps['density'] }) => JSX.Element;
+  /** Legend entries in definition order, for StatusLegend. */
+  entries: StatusLegendEntry[];
+  definitions: Readonly<Record<K, StatusDefinition>>;
+};
+
+/**
+ * Define a product's statuses once, in config. Every screen then renders the same word, shape,
+ * and meaning for the same state, and an unknown state is a type error.
+ */
+export function defineStatusVocabulary<K extends string>(definitions: Record<K, StatusDefinition>): StatusVocabulary<K> {
+  const keys = Object.keys(definitions) as K[];
+  const entries = keys.map((key) => ({ tone: definitions[key].tone, label: definitions[key].label, meaning: definitions[key].meaning }));
+  function Badge({ status, detail, density }: { status: K; detail?: string; density?: StatusBadgeProps['density'] }): JSX.Element {
+    const def = definitions[status];
+    return <StatusBadge tone={def.tone} label={def.label} detail={detail} density={density} />;
+  }
+  return { Badge, entries, definitions };
 }

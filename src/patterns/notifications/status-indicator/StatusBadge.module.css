@@ -40,6 +40,13 @@
   overflow-wrap: anywhere;
 }
 
+/* Icon-only for dense grids. The label is still in the accessible name; a visible StatusLegend explains the shapes. */
+.compact {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
 /* Pending and neutral are not outcomes; a dashed border separates them from finished states without color. */
 .badge[data-tone='pending'],
 .badge[data-tone='neutral'] {
@@ -65,7 +72,7 @@
   stroke-width: 1.5;
 }
 
-.badge[data-tone='pending'] .shapeOutline {
+[data-tone='pending'] .shapeOutline {
   stroke-dasharray: 2.4 1.6;
 }
 

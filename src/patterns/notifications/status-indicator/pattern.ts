@@ -11,9 +11,9 @@ export const statusIndicatorPattern: PatternDefinition = {
   tags: ['status', 'badge', 'color blindness', 'icons', 'legend', 'non-text contrast'],
   clients: ['client-a', 'client-b'],
   problemStatement:
-    'Job, record, and workflow screens show status as a small colored dot. Green and red dots look the same to about 1 in 12 men, the yellow dot almost disappears on white, and screen readers announce nothing at all. The only key is a hover tooltip on a tiny icon, so keyboard, touch, and screen reader users never find it. When a job fails after a rerun, the dot changes color silently.',
+    'Job, record, and workflow screens show status as small colored dots, pastel badges, and bare icons, and each screen names states differently. Green and red dots look the same to about 1 in 12 men, the yellow dot almost disappears on white, and screen readers announce nothing at all. The only key is a hover tooltip on a tiny icon, so keyboard, touch, and screen reader users never find it. When a job fails after a rerun, the dot changes color silently.',
   beforeState: {
-    summary: '10px colored dots in the Status column, explained only by a hover tooltip.',
+    summary: '10px colored dots, a pastel badge, and a bare icon in the Status column, explained only by a hover tooltip.',
     failures: [
       {
         id: 'color-only',
@@ -40,6 +40,18 @@ export const statusIndicatorPattern: PatternDefinition = {
         target: { label: 'Status dot for Rate table refresh' },
       },
       {
+        id: 'pastel-badge',
+        description: 'The "Pending" badge is pale blue text on a pale blue fill, about 1.6:1, far below the 4.5:1 text minimum.',
+        refs: [{ kind: 'wcag', criterion: '1.4.3' }],
+        target: { label: '"Pending" badge for Statement run' },
+      },
+      {
+        id: 'icon-only',
+        description: 'Paused is a grey pause glyph with no text and no accessible name, so screen readers skip it and sighted users must guess.',
+        refs: [{ kind: 'wcag', criterion: '1.1.1' }, { kind: 'wcag', criterion: '1.4.11' }],
+        target: { label: 'Pause icon for Archive cleanup' },
+      },
+      {
         id: 'hover-only-legend',
         description: 'The color key lives in a native title tooltip on a tiny "(?)", which keyboard and touch users cannot open.',
         refs: [{ kind: 'wcag', criterion: '2.1.1' }, { kind: 'heuristic', id: 'H6' }],
@@ -54,20 +66,27 @@ export const statusIndicatorPattern: PatternDefinition = {
     ],
   },
   designRationale:
-    'Color stays, because it is the fastest cue for people who see it, but it is never the only cue. Each tone has its own silhouette (circle, triangle, octagon, square, dashed ring, hollow ring) and its own glyph, so the six states stay distinct in grayscale, under red-green color blindness, and in Windows High Contrast. The status word is always visible text, which is also the accessible name, so the icon is decorative. Text stays on the ink color; tone colors are used only for the icon and border, at 3:1 or better in both themes, so a new tone can never break text contrast. Finished outcomes use filled shapes; not-yet states (running, paused) use outlined shapes and dashed borders. The key is a visible figure, not a tooltip. Status changes are announced by name in a polite live region owned by the page.',
+    'Color stays, because it is the fastest cue for people who see it, but it is never the only cue. Each tone has its own silhouette (circle, triangle, octagon, square, dashed ring, hollow ring) and its own glyph, so the six states stay distinct in grayscale, under red-green color blindness, and in Windows High Contrast. The status word is always visible text, which is also the accessible name, so the icon is decorative. Text stays on the ink color; tone colors are used only for the icon and border, at 3:1 or better in both themes, so a new tone can never break text contrast. Finished outcomes use filled shapes; not-yet states (running, paused) use outlined shapes and dashed borders. Compact mode drops the visible word for dense grids but keeps it as the accessible name, and leans on the distinct shape plus a visible key. Each product defines its statuses once with defineStatusVocabulary, so a state has the same word, shape, and meaning on every screen and an unknown state is a type error. The key is a visible figure, not a tooltip. Status changes are announced by name in a polite live region owned by the page.',
   component: Demo,
   beforeComponent: Before,
   props: [
     { name: 'tone', type: "'success' | 'warning' | 'error' | 'info' | 'pending' | 'neutral'", required: true, description: 'Selects color, shape, and glyph together. There is no way to set color alone.' },
     { name: 'label', type: 'string', required: true, description: 'Visible status word, e.g. "Failed". Always rendered; it is the accessible name.' },
     { name: 'detail', type: 'string', required: false, description: 'Context after the label, e.g. "Timed out after 30 min". Read after a pause.' },
+    { name: 'density', type: "'default' | 'compact'", required: false, defaultValue: "'default'", description: 'compact shows the icon only; the label stays in the accessible name. Pair with a visible StatusLegend.' },
+    { name: 'defineStatusVocabulary(definitions)', type: 'Record<K, { tone, label, meaning }>', required: true, description: 'Product config. Returns a Badge that takes a status key, plus legend entries.' },
     { name: 'StatusLegend: caption, entries', type: 'string, { tone, label, meaning }[]', required: true, description: 'Always-visible key, rendered as a captioned figure with a description list.' },
   ],
-  usage: `<td>
-  <StatusBadge tone="error" label="Failed" detail="Timed out after 30 min" />
-</td>
+  usage: `// status-config.ts: one vocabulary per product
+export const recordStatus = defineStatusVocabulary({
+  active: { tone: 'success', label: 'Active', meaning: 'In use.' },
+  pending: { tone: 'pending', label: 'Pending', meaning: 'Waiting on approval.' },
+  failed: { tone: 'error', label: 'Failed', meaning: 'Needs a fix before it can continue.' },
+  overdue: { tone: 'warning', label: 'Overdue', meaning: 'Past its due date.' },
+});
 
-<StatusLegend caption="Status key" entries={statusKey} />`,
+<recordStatus.Badge status="overdue" detail="3 days" />
+<StatusLegend caption="Status key" entries={recordStatus.entries} />`,
   accessibilityNotes: [
     { kind: 'wcag', criterion: '1.4.1', level: 'A', title: 'Use of color', detail: 'Shape, glyph, and visible text each carry the status; color is redundant.' },
     { kind: 'wcag', criterion: '1.4.11', level: 'AA', title: 'Non-text contrast', detail: 'Icon and border tones reach 3:1 against the surface in light and dark themes.' },

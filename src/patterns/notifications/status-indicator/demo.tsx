@@ -1,28 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
-import { StatusBadge, StatusLegend } from './StatusBadge';
-import type { StatusLegendEntry, StatusTone } from './StatusBadge';
+import { StatusLegend, defineStatusVocabulary } from './StatusBadge';
 import demo from '../../demo.module.css';
 import { useStressTest } from '../../stress';
 
-type Job = { id: string; name: string; tone: StatusTone; label: string; detail?: string };
+/** Product config: one status vocabulary, defined once, used by every screen. */
+const jobStatus = defineStatusVocabulary({
+  succeeded: { tone: 'success', label: 'Succeeded', meaning: 'Finished with no errors.' },
+  failed: { tone: 'error', label: 'Failed', meaning: 'Stopped. Rerun or open the log.' },
+  review: { tone: 'warning', label: 'Needs review', meaning: 'Finished, but some records were skipped.' },
+  running: { tone: 'pending', label: 'Running', meaning: 'In progress now.' },
+  scheduled: { tone: 'info', label: 'Scheduled', meaning: 'Queued for a future start time.' },
+  paused: { tone: 'neutral', label: 'Paused', meaning: 'Turned off until someone resumes it.' },
+});
+
+type JobStatus = keyof typeof jobStatus.definitions;
+type Job = { id: string; name: string; status: JobStatus; detail?: string };
 type View = 'color' | 'grayscale' | 'deuteranopia';
 
 const JOBS: Job[] = [
-  { id: 'export', name: 'Nightly ledger export', tone: 'success', label: 'Succeeded' },
-  { id: 'sync', name: 'Invoice sync', tone: 'error', label: 'Failed', detail: 'Timed out after 30 min' },
-  { id: 'import', name: 'Vendor file import', tone: 'warning', label: 'Needs review', detail: '2 rows skipped' },
-  { id: 'refresh', name: 'Rate table refresh', tone: 'pending', label: 'Running' },
-  { id: 'report', name: 'Weekly report delivery', tone: 'info', label: 'Scheduled', detail: 'Starts Monday 6:00 AM' },
-  { id: 'archive', name: 'Archive cleanup', tone: 'neutral', label: 'Paused' },
-];
-
-const LEGEND: StatusLegendEntry[] = [
-  { tone: 'success', label: 'Succeeded', meaning: 'Finished with no errors.' },
-  { tone: 'error', label: 'Failed', meaning: 'Stopped. Rerun or open the log.' },
-  { tone: 'warning', label: 'Needs review', meaning: 'Finished, but some records were skipped.' },
-  { tone: 'pending', label: 'Running', meaning: 'In progress now.' },
-  { tone: 'info', label: 'Scheduled', meaning: 'Queued for a future start time.' },
-  { tone: 'neutral', label: 'Paused', meaning: 'Turned off until someone resumes it.' },
+  { id: 'export', name: 'Nightly ledger export', status: 'succeeded' },
+  { id: 'sync', name: 'Invoice sync', status: 'failed', detail: 'Timed out after 30 min' },
+  { id: 'import', name: 'Vendor file import', status: 'review', detail: '2 rows skipped' },
+  { id: 'refresh', name: 'Rate table refresh', status: 'running' },
+  { id: 'report', name: 'Weekly report delivery', status: 'scheduled', detail: 'Starts Monday 6:00 AM' },
+  { id: 'archive', name: 'Archive cleanup', status: 'paused' },
 ];
 
 const VIEWS: Record<View, string> = { color: 'Full color', grayscale: 'Grayscale', deuteranopia: 'Red-green color blindness' };
@@ -33,21 +34,22 @@ export default function StatusIndicatorDemo(): JSX.Element {
   const { text } = useStressTest(['longText']);
   const [jobs, setJobs] = useState(JOBS);
   const [view, setView] = useState<View>('color');
+  const [compact, setCompact] = useState(false);
   const [announcement, setAnnouncement] = useState('');
   const timer = useRef<number>();
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
-  const setJob = (id: string, next: Pick<Job, 'tone' | 'label' | 'detail'>): void => {
-    setJobs((list) => list.map((job) => (job.id === id ? { ...job, ...next } : job)));
+  const setJob = (id: string, status: JobStatus, detail?: string): void => {
+    setJobs((list) => list.map((job) => (job.id === id ? { ...job, status, detail } : job)));
     const name = JOBS.find((job) => job.id === id)?.name ?? '';
-    setAnnouncement(`${name}: ${next.label}`);
+    setAnnouncement(`${name}: ${jobStatus.definitions[status].label}`);
   };
 
   const rerun = (): void => {
     window.clearTimeout(timer.current);
-    setJob('sync', { tone: 'pending', label: 'Running', detail: undefined });
-    timer.current = window.setTimeout(() => setJob('sync', { tone: 'success', label: 'Succeeded', detail: '1,204 invoices' }), RUN_MS);
+    setJob('sync', 'running');
+    timer.current = window.setTimeout(() => setJob('sync', 'succeeded', '1,204 invoices'), RUN_MS);
   };
 
   return (
@@ -61,6 +63,10 @@ export default function StatusIndicatorDemo(): JSX.Element {
           </label>
         ))}
       </fieldset>
+      <label className={demo.row}>
+        <input type="checkbox" checked={compact} onChange={(e) => setCompact(e.target.checked)} />
+        Compact (icon only, label kept for screen readers)
+      </label>
 
       <div className={`${demo.stack} ${VIEW_CLASS[view] ?? ''}`}>
         <div className={demo.tableScroll}>
@@ -77,14 +83,14 @@ export default function StatusIndicatorDemo(): JSX.Element {
                 <tr key={job.id}>
                   <th scope="row">{text(job.name)}</th>
                   <td>
-                    <StatusBadge tone={job.tone} label={text(job.label)} detail={job.detail && text(job.detail)} />
+                    <jobStatus.Badge status={job.status} detail={job.detail && text(job.detail)} density={compact ? 'compact' : 'default'} />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <StatusLegend caption="Status key" entries={LEGEND} />
+        <StatusLegend caption="Status key" entries={jobStatus.entries} />
       </div>
 
       <div className={demo.row}>

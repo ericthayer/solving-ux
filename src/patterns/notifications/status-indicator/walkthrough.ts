@@ -31,12 +31,13 @@ export const statusIndicatorWalkthrough: CodeAnnotation[] = [
   },
   {
     id: 'visible-label',
-    anchor: '<span className={styles.label}>{label}</span>',
+    anchor: "const compact = density === 'compact';",
+    endAnchor: '<span className={compact ? styles.visuallyHidden : styles.label}>{label}</span>',
     topic: 'semantics',
-    title: 'The status word is always on screen',
+    title: 'The status word is always there',
     rationale:
-      'There is no icon-only mode. A visible word works for color-blind users, for people who do not know the icon set, and for screen readers, with one source of truth.',
-    wcag: ['1.4.1', '1.3.1'],
+      'By default the word is visible, which works for color-blind users, for people who do not know the icon set, and for screen readers. Compact mode, for dense grids, hides the word visually but never removes it, so screen readers still hear "Failed". The audited icon-only statuses had no name at all.',
+    wcag: ['1.4.1', '1.1.1', '1.3.1'],
   },
   {
     id: 'detail-pause',
@@ -55,6 +56,16 @@ export const statusIndicatorWalkthrough: CodeAnnotation[] = [
     rationale:
       'The audited key was a title tooltip on "(?)", which keyboard and touch users cannot open. A captioned figure with a description list is always visible, read in order, and pairs each status with what to do about it.',
     wcag: ['1.3.1', '2.1.1'],
+  },
+  {
+    id: 'vocabulary',
+    anchor: 'export function defineStatusVocabulary<K extends string>',
+    endAnchor: 'return { Badge, entries, definitions };',
+    topic: 'state',
+    title: 'One status vocabulary per product',
+    rationale:
+      'The audit found the same state called "Pending", "In progress", and "Waiting" on different screens, each with its own color. Products define their states once in config. Screens pass a state key, so the word, shape, and meaning match everywhere, and the legend is generated from the same source.',
+    wcag: ['3.2.4'],
   },
   {
     id: 'tone-tokens',

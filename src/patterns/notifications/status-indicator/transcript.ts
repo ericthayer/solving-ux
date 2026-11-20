@@ -35,6 +35,14 @@ export const statusIndicatorTranscript: ScreenReaderTranscript = {
       criterion: '4.1.3',
     },
     {
+      action: 'Move to the Status cell of Archive cleanup',
+      keys: 'Ctrl+Alt+Down Arrow',
+      before: [{ kind: 'speech', text: 'blank' }],
+      after: [{ kind: 'speech', text: 'Paused' }],
+      failure: 'The pause icon has no accessible name. In compact mode the solved badge still says "Paused".',
+      criterion: '1.1.1',
+    },
+    {
       action: 'Read the whole row',
       keys: 'Ctrl+Alt+Down Arrow',
       before: [{ kind: 'speech', text: 'Vendor file import' }],

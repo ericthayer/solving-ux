@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { StatusBadge, StatusLegend } from './StatusBadge';
+import { StatusBadge, StatusLegend, defineStatusVocabulary } from './StatusBadge';
 import type { StatusTone } from './StatusBadge';
 
 expect.extend(toHaveNoViolations);
@@ -42,6 +42,32 @@ describe('StatusBadge', () => {
   });
 });
 
+describe('compact density', () => {
+  it('keeps the label as text for assistive tech and drops the visible detail', () => {
+    const { container } = render(<StatusBadge tone="error" label="Failed" detail="Timed out" density="compact" />);
+    expect(container.textContent).toBe('Failed');
+    expect(screen.getByText('Failed').className).not.toBe('');
+    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+  });
+});
+
+describe('defineStatusVocabulary', () => {
+  const recordStatus = defineStatusVocabulary({
+    active: { tone: 'success', label: 'Active', meaning: 'In use.' },
+    overdue: { tone: 'warning', label: 'Overdue', meaning: 'Past its due date.' },
+  });
+
+  it('renders a badge from a state key with the configured word and tone', () => {
+    const { container } = render(<recordStatus.Badge status="overdue" detail="3 days" />);
+    expect(container.textContent).toBe('Overdue, 3 days');
+    expect(container.firstElementChild).toHaveAttribute('data-tone', 'warning');
+  });
+
+  it('builds legend entries in definition order', () => {
+    expect(recordStatus.entries.map((e) => e.label)).toEqual(['Active', 'Overdue']);
+  });
+});
+
 describe('StatusLegend', () => {
   it('names the key by its caption and pairs each status with its meaning', () => {
     render(
@@ -76,6 +102,7 @@ describe('StatusLegend', () => {
                 <th scope="row">{tone} job</th>
                 <td>
                   <StatusBadge tone={tone} label={tone} detail="Detail" />
+                  <StatusBadge tone={tone} label={`${tone} compact`} density="compact" />
                 </td>
               </tr>
             ))}
