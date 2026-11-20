@@ -32,7 +32,7 @@ const toolbar = (): HTMLElement => screen.getByRole('group', { name: 'Stress tes
 describe('expandText', () => {
   it('adds an unbreakable word to labels and a sentence to copy', () => {
     expect(expandText('Approve')).toMatch(/^Approve \S{40,}$/);
-    expect(expandText('The servicing system did not respond.')).toMatch(/^The servicing system did not respond\. .+\.$/);
+    expect(expandText('The receiving system did not respond.')).toMatch(/^The receiving system did not respond\. .+\.$/);
   });
 });
 
@@ -99,7 +99,7 @@ describe('Stress-test controls', () => {
     await user.click(within(bar).getByRole('button', { name: 'RTL' }));
     await user.click(within(bar).getByRole('button', { name: 'Long text' }));
     await user.click(within(bar).getByRole('button', { name: '10k rows' }));
-    expect(screen.getByText(/Search 10,000 borrowers/)).toBeInTheDocument();
+    expect(screen.getByText(/Search 10,000 suppliers/)).toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
   });
 });

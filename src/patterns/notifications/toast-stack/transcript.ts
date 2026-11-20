@@ -10,7 +10,7 @@ export const toastStackTranscript: ScreenReaderTranscript = {
       before: [
         { kind: 'silence', note: 'The live region is created at the same moment as its text, so NVDA often misses it.' },
       ],
-      after: [{ kind: 'speech', text: 'Success: Draft saved. Saved to Cedar Ridge Farms renewal.' }],
+      after: [{ kind: 'speech', text: 'Success: Draft saved. Saved to Northwind Supply renewal.' }],
       failure: 'Confirmation is unreliable; users save twice or not at all.',
       criterion: '4.1.3',
     },

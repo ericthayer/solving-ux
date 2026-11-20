@@ -11,9 +11,9 @@ export const typeaheadPattern: PatternDefinition = {
   tags: ['search', 'combobox', 'autocomplete', 'typeahead', 'large data'],
   clients: ['client-a', 'client-b'],
   problemStatement:
-    'Borrower and account pickers use a native select with 5,000+ options, or a custom autocomplete that renders every match. Typing "farm" draws 3,000 rows and freezes the browser for a second. Matches appear in database order, so the exact name the user typed can be on row 400. The custom widget has no ARIA, so screen reader users hear nothing as results change.',
+    'Supplier and account pickers use a native select with 5,000+ options, or a custom autocomplete that renders every match. Typing "supp" draws 3,000 rows and freezes the browser for a second. Matches appear in database order, so the exact name the user typed can be on row 400. The custom widget has no ARIA, so screen reader users hear nothing as results change.',
   beforeState: {
-    summary: 'Unbounded custom autocomplete over the full borrower list.',
+    summary: 'Unbounded custom autocomplete over the full supplier list.',
     failures: [
       {
         id: 'renders-everything',
@@ -31,7 +31,7 @@ export const typeaheadPattern: PatternDefinition = {
         id: 'no-combobox-roles',
         description: 'No combobox or listbox roles; arrow keys do nothing.',
         refs: [{ kind: 'wcag', criterion: '4.1.2' }, { kind: 'wcag', criterion: '2.1.1' }],
-        target: { label: 'Borrower search input' },
+        target: { label: 'Supplier search input' },
       },
       {
         id: 'no-count',
@@ -60,10 +60,10 @@ export const typeaheadPattern: PatternDefinition = {
     { name: 'minChars', type: 'number', required: false, defaultValue: '1', description: 'Characters required before results appear. Raise to 2 or 3 for very large lists.' },
   ],
   usage: `<Typeahead
-  label="Borrower"
+  label="Supplier"
   hint="Search by name or account number."
-  options={borrowers}
-  onSelect={(b) => navigate(\`/borrowers/\${b.id}\`)}
+  options={suppliers}
+  onSelect={(b) => navigate(\`/suppliers/\${b.id}\`)}
 />`,
   accessibilityNotes: [
     { kind: 'wcag', criterion: '4.1.2', level: 'A', title: 'Name, role, value', detail: 'role="combobox" with aria-expanded, aria-controls, aria-autocomplete="list", and aria-activedescendant.' },
@@ -74,7 +74,7 @@ export const typeaheadPattern: PatternDefinition = {
     { kind: 'keyboard', keys: 'Escape', action: 'Close the list; press again to clear the input.' },
     { kind: 'aria', attribute: 'aria-selected', detail: 'Marks the active option; DOM focus stays in the input.' },
     { kind: 'screen-reader', title: 'Typing', detail: 'After a pause: "Showing 8 of 640 matches. Keep typing to narrow."' },
-    { kind: 'screen-reader', title: 'Arrowing', detail: 'Reads each option with its description: "Cedar Ridge Farms ACCT 10442 · IA, 2 of 8".' },
+    { kind: 'screen-reader', title: 'Arrowing', detail: 'Reads each option with its description: "Northwind Supply ACCT 10442 · CA, 2 of 8".' },
   ],
   wcagLevel: 'AA',
   lastUpdated: '2026-11-17',

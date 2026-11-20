@@ -3,16 +3,16 @@ import { failureTarget } from '../../../types/failure';
 import s from '../../before.module.css';
 
 /** Deliberately broken. Reproduces beforeState.failures in ./pattern.ts; do not copy. */
-type Row = { id: string; borrower: string; region: string; status: string; amount: number };
+type Row = { id: string; supplier: string; region: string; status: string; amount: number };
 
-const BORROWERS = ['Cedar Ridge Farms', 'North Plains Co-op', 'Halvorsen Dairy', 'Blue Mesa Grain', 'Riverbend Orchards', 'Sandhill Cattle'];
+const SUPPLIERS = ['Northwind Supply', 'Apex Industrial', 'Harbor Logistics', 'Summit Components', 'Bluefin Packaging', 'Granite Tooling'];
 const REGIONS = ['Midwest', 'Plains', 'Northwest', 'Southeast'];
-const EXTRA = ['Officer', 'Branch', 'Product', 'Rate', 'Maturity', 'Collateral', 'Risk', 'Covenants', 'Updated'];
+const EXTRA = ['Buyer', 'Site', 'Category', 'Terms', 'Due date', 'Incoterms', 'Risk', 'Contract', 'Updated'];
 const PAGE_SIZE = 8;
 
 const seed: Row[] = Array.from({ length: 27 }, (_, i) => ({
-  id: `APP-${(4100 + i * 7).toString()}`,
-  borrower: BORROWERS[i % BORROWERS.length] ?? 'Unknown',
+  id: `PO-${(4100 + i * 7).toString()}`,
+  supplier: SUPPLIERS[i % SUPPLIERS.length] ?? 'Unknown',
   region: REGIONS[i % REGIONS.length] ?? 'Unknown',
   status: ['Submitted', 'In review', 'Approved'][i % 3] ?? 'Submitted',
   amount: 125000 + ((i * 48271) % 900000),
@@ -44,7 +44,7 @@ export default function BulkActionTableBefore(): JSX.Element {
   return (
     <div className={s.frame}>
       <div className={s.toolbar}>
-        <span className={s.spacer}>Loan applications</span>
+        <span className={s.spacer}>Purchase orders</span>
         <span className={s.anchor}>
           <button type="button" className={s.btn} onClick={() => setMenuOpen((o) => !o)} {...failureTarget('selection-count')}>
             More actions ▾
@@ -76,10 +76,10 @@ export default function BulkActionTableBefore(): JSX.Element {
               <th onClick={() => setAsc((v) => !v)}>
                 Application<span className={s.tinyArrow} {...failureTarget('sort-state')}>{asc ? '▲' : '▼'}</span>
               </th>
-              <th>Borrower</th>
+              <th>Supplier</th>
               <th>Region</th>
               <th>Status</th>
-              <th>Requested</th>
+              <th>Total</th>
               {EXTRA.map((h) => (
                 <th key={h}>{h}</th>
               ))}
@@ -92,7 +92,7 @@ export default function BulkActionTableBefore(): JSX.Element {
                   <input type="checkbox" checked={selected.has(row.id)} onChange={() => toggle(row.id)} {...(i === 0 ? failureTarget('checkbox-names') : {})} />
                 </td>
                 <td>{row.id}</td>
-                <td>{row.borrower}</td>
+                <td>{row.supplier}</td>
                 <td>{row.region}</td>
                 <td>{row.status}</td>
                 <td>${row.amount.toLocaleString('en-US')}</td>

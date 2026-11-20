@@ -9,19 +9,19 @@ expect.extend(toHaveNoViolations);
 const items: NavItem[] = [
   { id: 'home', label: 'Home', href: '/' },
   {
-    id: 'lending',
-    label: 'Lending',
-    href: '/lending',
+    id: 'procurement',
+    label: 'Procurement',
+    href: '/procurement',
     children: [
       {
         id: 'applications',
         label: 'Applications',
         children: [
-          { id: 'pending', label: 'Pending', href: '/lending/applications/pending' },
-          { id: 'approved', label: 'Approved', href: '/lending/applications/approved' },
+          { id: 'pending', label: 'Pending', href: '/procurement/applications/pending' },
+          { id: 'approved', label: 'Approved', href: '/procurement/applications/approved' },
         ],
       },
-      { id: 'servicing', label: 'Servicing', href: '/lending/servicing' },
+      { id: 'receiving', label: 'Receiving', href: '/procurement/receiving' },
     ],
   },
   { id: 'reports', label: 'Reports', children: [{ id: 'monthly', label: 'Monthly', href: '/reports/monthly' }] },
@@ -42,7 +42,7 @@ describe('NestedNav', () => {
 
   it('opens ancestors of the current page and keeps unrelated groups closed', () => {
     setup();
-    expect(screen.getByRole('button', { name: 'Lending' })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button', { name: 'Procurement' })).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('button', { name: 'Applications' })).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('button', { name: 'Reports' })).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('link', { name: 'Monthly' })).not.toBeInTheDocument();
@@ -51,8 +51,8 @@ describe('NestedNav', () => {
   it('builds a breadcrumb trail with only linkable ancestors as links', () => {
     setup();
     const crumbs = within(screen.getByRole('navigation', { name: 'Breadcrumb' })).getAllByRole('listitem');
-    expect(crumbs.map((li) => li.textContent)).toEqual(['Lending', 'Applications', 'Pending']);
-    expect(within(crumbs[0]!).getByRole('link')).toHaveAttribute('href', '/lending');
+    expect(crumbs.map((li) => li.textContent)).toEqual(['Procurement', 'Applications', 'Pending']);
+    expect(within(crumbs[0]!).getByRole('link')).toHaveAttribute('href', '/procurement');
     expect(within(crumbs[1]!).queryByRole('link')).not.toBeInTheDocument();
     expect(within(crumbs[2]!).getByText('Pending')).toHaveAttribute('aria-current', 'page');
   });
@@ -78,14 +78,14 @@ describe('NestedNav', () => {
 
   it('calls onNavigate instead of following the link', async () => {
     const { user, onNavigate } = setup();
-    await user.click(screen.getByRole('link', { name: 'Servicing' }));
-    expect(onNavigate).toHaveBeenCalledWith(expect.objectContaining({ id: 'servicing' }));
+    await user.click(screen.getByRole('link', { name: 'Receiving' }));
+    expect(onNavigate).toHaveBeenCalledWith(expect.objectContaining({ id: 'receiving' }));
   });
 
   it('renders no breadcrumb when the current id is unknown (edge case)', () => {
     setup('missing');
     expect(screen.queryByRole('navigation', { name: 'Breadcrumb' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Lending' })).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByRole('button', { name: 'Procurement' })).toHaveAttribute('aria-expanded', 'false');
     expect(findPath(items, 'missing')).toBeNull();
   });
 

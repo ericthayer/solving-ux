@@ -11,7 +11,7 @@ export const bulkActionsPattern: PatternDefinition = {
   tags: ['table', 'selection', 'sorting', 'pagination', 'frozen columns'],
   clients: ['client-a', 'client-b'],
   problemStatement:
-    'Loan and account grids select rows with unlabeled checkboxes, then hide bulk actions in a kebab menu above the table. Users cannot tell how many rows are selected after paging, whether "select all" means this page or every record, or which column is sorted. Wide tables scroll the identifier column off screen, so users lose track of which row they are editing.',
+    'Order and invoice grids select rows with unlabeled checkboxes, then hide bulk actions in a kebab menu above the table. Users cannot tell how many rows are selected after paging, whether "select all" means this page or every record, or which column is sorted. Wide tables scroll the identifier column off screen, so users lose track of which row they are editing.',
   beforeState: {
     summary: 'A 14-column grid with checkbox selection and a "More actions" overflow menu.',
     failures: [
@@ -56,15 +56,15 @@ export const bulkActionsPattern: PatternDefinition = {
     { name: 'rows', type: 'T[] (T extends { id: string })', required: true, description: 'Row data. Selections for ids that disappear are dropped automatically.' },
     { name: 'columns', type: 'Column<T>[]', required: true, description: 'Column config: key, header, sortable, align, and an optional render function. The first column becomes the frozen row header.' },
     { name: 'bulkActions', type: 'BulkAction[]', required: true, description: 'Actions shown when rows are selected. Each receives the selected ids. Use tone "danger" for destructive actions.' },
-    { name: 'rowLabel', type: '(row: T) => string', required: true, description: 'Builds each checkbox label, e.g. "Select APP-4100, Cedar Ridge Farms".' },
+    { name: 'rowLabel', type: '(row: T) => string', required: true, description: 'Builds each checkbox label, e.g. "Select PO-4100, Northwind Supply".' },
     { name: 'pageSize', type: 'number', required: false, defaultValue: '10', description: 'Rows per page.' },
   ],
-  usage: `<BulkActionTable<Loan>
-  caption="Loan applications"
-  rows={loans}
-  columns={[{ key: 'id', header: 'Loan', sortable: true }, { key: 'amount', header: 'Amount', align: 'end' }]}
-  rowLabel={(loan) => loan.id}
-  bulkActions={[{ id: 'approve', label: 'Approve', onSelect: approveLoans }]}
+  usage: `<BulkActionTable<Order>
+  caption="Purchase orders"
+  rows={orders}
+  columns={[{ key: 'id', header: 'Order', sortable: true }, { key: 'amount', header: 'Amount', align: 'end' }]}
+  rowLabel={(order) => order.id}
+  bulkActions={[{ id: 'approve', label: 'Approve', onSelect: approveOrders }]}
 />`,
   accessibilityNotes: [
     { kind: 'wcag', criterion: '1.3.1', level: 'A', title: 'Info and relationships', detail: 'Uses a native table with caption, column headers (scope="col"), and row headers (scope="row") for the frozen column.' },
@@ -75,7 +75,7 @@ export const bulkActionsPattern: PatternDefinition = {
     { kind: 'keyboard', keys: 'Enter or Space on a header', action: 'Sort by that column; repeat to reverse direction.' },
     { kind: 'aria', attribute: 'aria-sort', detail: 'Set to ascending, descending, or none on every sortable column header.' },
     { kind: 'aria', attribute: 'indeterminate (DOM property)', detail: 'Select-all checkbox reports "mixed" when part of the page is selected.' },
-    { kind: 'screen-reader', title: 'Row checkboxes', detail: 'Announced as "Select APP-4100, Cedar Ridge Farms, checkbox, not checked" rather than an unnamed checkbox.' },
+    { kind: 'screen-reader', title: 'Row checkboxes', detail: 'Announced as "Select PO-4100, Northwind Supply, checkbox, not checked" rather than an unnamed checkbox.' },
     { kind: 'screen-reader', title: 'After a bulk action', detail: 'Hears "Approve applied to 3 rows." without focus moving.' },
   ],
   wcagLevel: 'AA',

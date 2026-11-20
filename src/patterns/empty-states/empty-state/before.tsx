@@ -36,7 +36,7 @@ export default function EmptyStateBefore(): JSX.Element {
           <thead>
             <tr>
               <th>Date</th>
-              <th>Facility</th>
+              <th>Contract</th>
               <th>Amount</th>
               <th>Status</th>
             </tr>

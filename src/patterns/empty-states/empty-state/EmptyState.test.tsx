@@ -53,8 +53,8 @@ describe('EmptyState', () => {
   });
 
   it('explains who to ask in the no-access state', () => {
-    render(<EmptyState variant="no-access" resource="Credit memos" ownerName="Credit Administration" requestAccessHref="/access" />);
-    expect(screen.getByRole('heading', { name: 'You do not have access to Credit memos' })).toBeInTheDocument();
+    render(<EmptyState variant="no-access" resource="Vendor contracts" ownerName="Procurement Operations" requestAccessHref="/access" />);
+    expect(screen.getByRole('heading', { name: 'You do not have access to Vendor contracts' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Request access' })).toHaveAttribute('href', '/access');
   });
 

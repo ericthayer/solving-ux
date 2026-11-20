@@ -9,7 +9,7 @@ export const emptyStateTranscript: ScreenReaderTranscript = {
       keys: 'Browse mode',
       before: [{ kind: 'speech', text: 'No data' }],
       after: [
-        { kind: 'speech', text: 'No saved portfolio views yet, heading level 3' },
+        { kind: 'speech', text: 'No saved views yet, heading level 3' },
         { kind: 'speech', text: 'Save a combination of filters and columns to reopen it in one click and share it with your team.' },
         { kind: 'speech', text: 'Create a view, button' },
       ],
@@ -17,10 +17,10 @@ export const emptyStateTranscript: ScreenReaderTranscript = {
     },
     {
       action: 'Type a search that matches nothing',
-      keys: 'Type "halvorsn dairy"',
+      keys: 'Type "harbr logistics"',
       before: [{ kind: 'silence', note: 'The grid empties silently. "No data" is only found by browsing.' }],
       after: [
-        { kind: 'speech', text: 'No results for “halvorsn dairy”. 3 filters are narrowing these results.' },
+        { kind: 'speech', text: 'No results for “harbr logistics”. 3 filters are narrowing these results.' },
       ],
       failure: 'The change is never announced, and the user is not told filters caused it.',
       criterion: '4.1.3',
@@ -36,7 +36,7 @@ export const emptyStateTranscript: ScreenReaderTranscript = {
       before: [{ kind: 'speech', text: 'No data' }],
       after: [
         { kind: 'speech', text: 'alert, Payment history could not be loaded' },
-        { kind: 'speech', text: 'The servicing system did not respond. Your other data is unaffected.' },
+        { kind: 'speech', text: 'The receiving system did not respond. Your other data is unaffected.' },
       ],
       failure: 'An outage sounds exactly like an empty account.',
       criterion: '3.3.1',

@@ -79,17 +79,17 @@ describe('Audit worksheet', () => {
   it('restores findings from storage and exports them as Markdown', async () => {
     localStorage.setItem(
       WORKSHEET_STORAGE_KEY,
-      JSON.stringify({ appName: 'Loan portal', auditor: '', findings: [{ id: 'a', title: 'Low contrast labels', severity: 'serious', observation: 'Grey on grey.' }] }),
+      JSON.stringify({ appName: 'Supplier portal', auditor: '', findings: [{ id: 'a', title: 'Low contrast labels', severity: 'serious', observation: 'Grey on grey.' }] }),
     );
     const { user } = renderAt();
     expect(await screen.findByRole('heading', { level: 3, name: /Low contrast labels/ })).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: 'App or flow audited' })).toHaveValue('Loan portal');
+    expect(screen.getByRole('textbox', { name: 'App or flow audited' })).toHaveValue('Supplier portal');
     await user.click(screen.getByRole('button', { name: 'Download .md' }));
     expect(saveAs).toHaveBeenCalledTimes(1);
     const [blob, filename] = jest.mocked(saveAs).mock.calls[0] as [Blob, string];
-    expect(filename).toMatch(/^ux-audit-loan-portal-\d{4}-\d{2}-\d{2}\.md$/);
+    expect(filename).toMatch(/^ux-audit-supplier-portal-\d{4}-\d{2}-\d{2}\.md$/);
     expect(blob.type).toBe('text/markdown;charset=utf-8');
-    expect(screen.getByLabelText('Markdown preview')).toHaveTextContent('# UX audit: Loan portal');
+    expect(screen.getByLabelText('Markdown preview')).toHaveTextContent('# UX audit: Supplier portal');
   });
 
   it('edits a finding and returns focus to it', async () => {

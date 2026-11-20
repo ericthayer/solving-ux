@@ -88,17 +88,16 @@ This is a build-time flag, not authentication. Before exposing an editor build b
 
 ## Clients and deployment
 
-Patterns belong to one or more clients, named only by opaque ids in `src/types/client.ts`. Real client names never go in source, commit messages, PR text, or build output.
+Patterns record the opaque client ids (`src/types/client.ts`) where a failure was observed. Real client names never go in source, commit messages, PR text, or build output. Demo data uses a neutral procurement domain.
 
-Production (`npm run build:clients`, run by Netlify) builds one isolated app per client:
+Production (`npm run build:public`, run by Netlify) publishes one client-neutral site at the root with every pattern:
 
-- `scripts/gen-sources.mjs` with `VITE_CLIENT` set keeps only that client's pattern folders, so no other client's content is in the bundle.
-- Each app is served under its own unlisted path from `SUX_CLIENT_PATHS` (`client-a=<path>,client-b=<path>`), set in the Netlify environment, not in the repo.
-- Client builds compile out every client attribution with the `__TEAM_BUILD__` flag (`src/globals.d.ts`): no "Observed in" filter, client badges, per-client counts, client ids, or editor routes, and each pattern's `clients` list is blanked. Categories with no patterns are hidden. The build fails if any team-only string reaches a client app.
-- The site root is a neutral page with no links; unknown paths 404 to it. `_headers` sends `X-Robots-Tag: noindex` and `Referrer-Policy: no-referrer` on every path, and `robots.txt` disallows all without naming any path.
-- If `SUX_FORBIDDEN_TERMS` (comma list, Netlify environment only) is set, the build fails when any term appears anywhere in `dist/`.
+- `__TEAM_BUILD__` (`src/globals.d.ts`) is false, so the "Observed in" filter, client badges, per-client counts, and editor routes are compiled out, and each pattern's `clients` list is blanked.
+- The build fails if any team-only attribution string, or any term in `SUX_FORBIDDEN_TERMS` (Netlify environment only), appears anywhere in `dist/`.
+- Retired path slugs in `SUX_LEGACY_PATHS` 301-redirect to the root.
+- `_headers` sends `X-Robots-Tag: noindex` and `Referrer-Policy: no-referrer`; `robots.txt` disallows all.
 
-`npm run dev` and `npm run build` stay unscoped (all patterns, labeled Client A and Client B) for local and team use. The public builds use `VITE_ENABLE_EDITOR=false`.
+`npm run dev` and `npm run build` are the team build (client labels and filter visible). Public builds use `VITE_ENABLE_EDITOR=false`.
 
 ## Stack
 

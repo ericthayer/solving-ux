@@ -6,8 +6,8 @@ import { useStressTest } from '../../stress';
 
 const buildSteps = (t: (value: string) => string): WizardStep[] => [
   {
-    id: 'borrower',
-    title: t('Borrower'),
+    id: 'supplier',
+    title: t('Supplier'),
     fields: [
       { name: 'legalName', label: t('Legal entity name'), type: 'text', required: true, hint: t('As it appears on your tax filings.') },
       {
@@ -17,16 +17,16 @@ const buildSteps = (t: (value: string) => string): WizardStep[] => [
         required: true,
         options: [
           { value: 'llc', label: t('Limited liability company') },
-          { value: 'coop', label: t('Cooperative') },
+          { value: 'partnership', label: t('Partnership') },
           { value: 'sole', label: t('Sole proprietor') },
         ],
       },
       {
         name: 'memberCount',
-        label: t('Number of members'),
+        label: t('Number of partners'),
         type: 'number',
         required: true,
-        visibleWhen: (v) => v.entityType === 'coop',
+        visibleWhen: (v) => v.entityType === 'partnership',
         validate: (value) => (Number.isInteger(Number(value)) && Number(value) >= 2 ? null : 'Enter a whole number of 2 or more.'),
       },
       { name: 'taxId', label: t('Tax ID (EIN)'), type: 'text', required: true, hint: t('Format: 12-3456789'), validate: (v) => (/^\d{2}-\d{7}$/.test(v) ? null : 'Enter the EIN as 2 digits, a hyphen, then 7 digits.') },
@@ -38,17 +38,17 @@ const buildSteps = (t: (value: string) => string): WizardStep[] => [
     fields: [
       {
         name: 'purpose',
-        label: t('Loan purpose'),
+        label: t('Supply category'),
         type: 'select',
         required: true,
         options: [
           { value: 'equipment', label: t('Equipment') },
-          { value: 'operating', label: t('Operating line') },
-          { value: 'real-estate', label: t('Real estate') },
+          { value: 'operating', label: t('Raw materials') },
+          { value: 'facilities', label: t('Facilities services') },
         ],
       },
-      { name: 'amount', label: t('Requested amount (USD)'), type: 'number', required: true, validate: (v) => (Number(v) >= 10000 ? null : 'The minimum request is $10,000.') },
-      { name: 'acreage', label: t('Acreage'), type: 'number', required: false, visibleWhen: (v) => v.purpose === 'real-estate' },
+      { name: 'amount', label: t('Annual contract value (USD)'), type: 'number', required: true, validate: (v) => (Number(v) >= 10000 ? null : 'The minimum contract value is $10,000.') },
+      { name: 'sites', label: t('Service sites'), type: 'number', required: false, visibleWhen: (v) => v.purpose === 'facilities' },
     ],
   },
   {

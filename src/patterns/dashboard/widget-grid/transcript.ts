@@ -11,8 +11,8 @@ export const widgetGridTranscript: ScreenReaderTranscript = {
         { kind: 'silence', note: 'One global spinner covers everything, including widgets that already loaded.' },
       ],
       after: [
-        { kind: 'speech', text: 'Committed exposure, region, busy' },
-        { kind: 'speech', text: 'Loading 30+ day delinquency' },
+        { kind: 'speech', text: 'Committed spend, region, busy' },
+        { kind: 'speech', text: 'Loading Late deliveries (30 days)' },
       ],
       failure: 'The user cannot tell what is loading, what has loaded, or how long to wait.',
       criterion: '4.1.3',
@@ -22,7 +22,7 @@ export const widgetGridTranscript: ScreenReaderTranscript = {
       keys: 'NVDA+F7, Landmarks',
       before: [{ kind: 'silence', note: 'No landmarks. Cards are unnamed divs, so the only option is reading line by line.' }],
       after: [
-        { kind: 'speech', text: 'Portfolio health, Committed exposure, 30+ day delinquency, Covenant breaches, Largest relationships' },
+        { kind: 'speech', text: 'Supply chain health, Committed spend, Late deliveries (30 days), Contract breaches, Largest suppliers' },
       ],
       failure: 'Widgets have no names or structure, so they cannot be navigated directly.',
       criterion: '1.3.1',
@@ -41,7 +41,7 @@ export const widgetGridTranscript: ScreenReaderTranscript = {
         { kind: 'silence', note: 'The whole dashboard goes blank. No error is read.' },
       ],
       after: [
-        { kind: 'speech', text: 'Covenant breaches did not load. The covenant service timed out.' },
+        { kind: 'speech', text: 'Contract breaches did not load. The contracts service timed out.' },
       ],
       failure: 'A single failure removes data that loaded fine, with no explanation.',
       criterion: '4.1.3',
@@ -51,8 +51,8 @@ export const widgetGridTranscript: ScreenReaderTranscript = {
       keys: 'Tab, Enter',
       before: [{ kind: 'silence', note: 'No retry control. The only recovery is reloading the page.' }],
       after: [
-        { kind: 'speech', text: 'Retry loading Covenant breaches, button' },
-        { kind: 'speech', text: 'Loading Covenant breaches' },
+        { kind: 'speech', text: 'Retry loading Contract breaches, button' },
+        { kind: 'speech', text: 'Loading Contract breaches' },
       ],
     },
   ],

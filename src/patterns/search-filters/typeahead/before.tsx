@@ -3,34 +3,34 @@ import { failureTarget } from '../../../types/failure';
 import s from '../../before.module.css';
 
 /** Deliberately broken. Reproduces beforeState.failures in ./pattern.ts; do not copy. */
-type Borrower = { id: number; label: string };
+type Supplier = { id: number; label: string };
 
 const PREFIXES = ['Cedar', 'North', 'Blue', 'Prairie', 'River', 'Sand', 'High', 'Golden', 'Willow', 'Stone', 'Elk', 'Clear'];
 const MIDDLES = ['Ridge', 'Plains', 'Mesa', 'Valley', 'Bend', 'Hill', 'Creek', 'Point', 'Field', 'Lake'];
-const SUFFIXES = ['Farms', 'Co-op', 'Dairy', 'Grain', 'Orchards', 'Cattle', 'Ag Supply', 'Ranch'];
+const SUFFIXES = ['Supply', 'Industrial', 'Logistics', 'Components', 'Packaging', 'Tooling', 'Metals', 'Systems'];
 
-function buildBorrowers(): Borrower[] {
-  const list: Borrower[] = [];
+function buildSuppliers(): Supplier[] {
+  const list: Supplier[] = [];
   for (const p of PREFIXES) for (const m of MIDDLES) for (const x of SUFFIXES) list.push({ id: 10000 + ((list.length * 7919) % 9000), label: `${p} ${m} ${x}` });
   return list;
 }
 
 export default function TypeaheadBefore(): JSX.Element {
-  const borrowers = useMemo(buildBorrowers, []);
+  const suppliers = useMemo(buildSuppliers, []);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('Nothing selected.');
 
   // Substring match over the whole list, sorted by account id, never capped.
   const q = query.trim().toLowerCase();
-  const matches = q ? borrowers.filter((b) => b.label.toLowerCase().includes(q)).sort((a, b) => a.id - b.id) : [];
+  const matches = q ? suppliers.filter((b) => b.label.toLowerCase().includes(q)).sort((a, b) => a.id - b.id) : [];
 
   return (
     <div className={s.frame}>
       <div className={s.field}>
-        <label htmlFor="before-borrower">Borrower</label>
+        <label htmlFor="before-supplier">Supplier</label>
         <input
-          id="before-borrower"
+          id="before-supplier"
           className={s.input}
           value={query}
           autoComplete="off"

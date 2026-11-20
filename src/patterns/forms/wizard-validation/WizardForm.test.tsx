@@ -19,7 +19,7 @@ const steps: WizardStep[] = [
         required: true,
         options: [
           { value: 'llc', label: 'LLC' },
-          { value: 'coop', label: 'Cooperative' },
+          { value: 'partnership', label: 'Partnership' },
         ],
       },
       {
@@ -27,8 +27,8 @@ const steps: WizardStep[] = [
         label: 'Member count',
         type: 'number',
         required: true,
-        visibleWhen: (v) => v.entityType === 'coop',
-        validate: (value) => (Number(value) < 2 ? 'A cooperative needs at least 2 members.' : null),
+        visibleWhen: (v) => v.entityType === 'partnership',
+        validate: (value) => (Number(value) < 2 ? 'A partnership needs at least 2 partners.' : null),
       },
     ],
   },
@@ -79,16 +79,16 @@ describe('WizardForm', () => {
 
   it('reveals a conditional field and completes the flow with the keyboard', async () => {
     const { user, onSubmit } = setup();
-    await user.type(screen.getByLabelText('Legal name'), 'North Plains');
-    await user.click(screen.getByLabelText('Cooperative'));
+    await user.type(screen.getByLabelText('Legal name'), 'Apex Industrial');
+    await user.click(screen.getByLabelText('Partnership'));
     await user.type(screen.getByLabelText('Member count'), '40');
     await user.keyboard('{Enter}');
     expect(screen.getByRole('heading', { name: 'Step 2 of 3: Contact' })).toHaveFocus();
 
-    await user.type(screen.getByLabelText('Email'), 'ops@northplains.coop{Enter}');
-    expect(screen.getByText('North Plains')).toBeInTheDocument();
+    await user.type(screen.getByLabelText('Email'), 'ops@apexindustrial.example{Enter}');
+    expect(screen.getByText('Apex Industrial')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Submit' }));
-    expect(onSubmit).toHaveBeenCalledWith({ legalName: 'North Plains', entityType: 'coop', members: '40', email: 'ops@northplains.coop' });
+    expect(onSubmit).toHaveBeenCalledWith({ legalName: 'Apex Industrial', entityType: 'partnership', members: '40', email: 'ops@apexindustrial.example' });
     expect(await screen.findByRole('status')).toHaveTextContent('Submitted');
   });
 

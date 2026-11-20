@@ -2,8 +2,6 @@
 // - sources.generated.ts: raw component, stylesheet, and test source, so the Code and Tests
 //   tabs, ZIP export, and JSON export stay in sync with the files that actually run.
 // - catalog.generated.ts: imports of each folder's pattern, transcript, and walkthrough.
-// With VITE_CLIENT set (scripts/build-clients.mjs), both only include that client's patterns,
-// so another client's content never reaches the bundle.
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
@@ -11,8 +9,6 @@ const root = new URL('../src/patterns/', import.meta.url).pathname;
 const out = join(root, 'sources.generated.ts');
 const catalogOut = join(root, 'catalog.generated.ts');
 const CLIENT_IDS = ['client-a', 'client-b'];
-const client = process.env.VITE_CLIENT || '';
-if (client && !CLIENT_IDS.includes(client)) throw new Error(`Unknown VITE_CLIENT "${client}". Expected one of ${CLIENT_IDS.join(', ')}.`);
 
 const entries = [];
 const catalog = [];
@@ -25,7 +21,7 @@ function exportName(file) {
   return match[1];
 }
 
-/** The `clients: [...]` list in a pattern.ts, so folders can be filtered without executing TS. */
+/** Validates the `clients: [...]` list in a pattern.ts without executing TS. */
 function clientsOf(file) {
   const match = /clients:\s*\[([^\]]*)\]/.exec(readFileSync(file, 'utf8'));
   const ids = match ? [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]) : [];
@@ -50,7 +46,7 @@ for (const category of readdirSync(root)) {
     }
     const patternFile = join(dir, 'pattern.ts');
     if (!existsSync(patternFile)) throw new Error(`Pattern folder ${relative(root, dir)} needs a pattern.ts.`);
-    if (client && !clientsOf(patternFile).includes(client)) continue;
+    clientsOf(patternFile);
     catalog.push({
       key: `${category}/${slug}`,
       pattern: exportName(patternFile),
@@ -106,4 +102,4 @@ writeFileSync(
     '',
   ].join('\n'),
 );
-console.log(`gen-sources: wrote ${entries.length} pattern sources${client ? ' (client-scoped build)' : ''}`);
+console.log(`gen-sources: wrote ${entries.length} pattern sources`);

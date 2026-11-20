@@ -86,7 +86,7 @@ export const bulkActionsWalkthrough: CodeAnnotation[] = [
     topic: 'semantics',
     title: 'Each checkbox says which row it selects',
     rationale:
-      'rowLabel is a required prop, so a consumer cannot ship 40 checkboxes that all announce "checkbox, not checked". The name matches the row header text for voice control users who say "click Select Loan 1042".',
+      'rowLabel is a required prop, so a consumer cannot ship 40 checkboxes that all announce "checkbox, not checked". The name matches the row header text for voice control users who say "click Select Order 1042".',
     wcag: ['4.1.2', '2.4.6'],
   },
   {
@@ -96,7 +96,7 @@ export const bulkActionsWalkthrough: CodeAnnotation[] = [
     topic: 'semantics',
     title: 'The first column names each row',
     rationale:
-      'Rendering the first cell as <th scope="row"> means a screen reader announces "Loan 1042" with every cell in that row, not just a bare amount. The same cell is the frozen column, so the sighted user and the screen reader user keep the same anchor while scrolling sideways.',
+      'Rendering the first cell as <th scope="row"> means a screen reader announces "Order 1042" with every cell in that row, not just a bare amount. The same cell is the frozen column, so the sighted user and the screen reader user keep the same anchor while scrolling sideways.',
     wcag: ['1.3.1'],
   },
   {

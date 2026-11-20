@@ -11,7 +11,7 @@ export const wizardValidationPattern: PatternDefinition = {
   tags: ['forms', 'wizard', 'validation', 'conditional fields', 'error recovery'],
   clients: ['client-a'],
   problemStatement:
-    'Loan applications run 40+ fields on one page, validate only on final submit, and report errors in a red banner at the top that says "Please correct the errors below." Fields that do not apply to the borrower type are still shown and required. A server timeout clears the form, and users re-enter everything.',
+    'Supplier onboarding forms run 40+ fields on one page, validate only on final submit, and report errors in a red banner at the top that says "Please correct the errors below." Fields that do not apply to the supplier type are still shown and required. A server timeout clears the form, and users re-enter everything.',
   beforeState: {
     summary: 'Single-page application form with submit-time validation.',
     failures: [
@@ -29,9 +29,9 @@ export const wizardValidationPattern: PatternDefinition = {
       },
       {
         id: 'irrelevant-fields',
-        description: 'Cooperative-only fields are shown to every borrower type.',
+        description: 'Partnership-only fields are shown to every supplier type.',
         refs: [{ kind: 'heuristic', id: 'H8' }, { kind: 'wcag', criterion: '3.3.2' }],
-        target: { label: 'Number of members field' },
+        target: { label: 'Number of partners field' },
       },
       {
         id: 'clears-data',
@@ -61,7 +61,7 @@ export const wizardValidationPattern: PatternDefinition = {
     { name: 'FieldConfig.validate', type: '(value: string, values: Values) => string | null', required: false, description: 'Return a message that says how to fix the problem, not just that one exists.' },
   ],
   usage: `<WizardForm
-  steps={[{ id: 'borrower', title: 'Borrower', fields: [{ name: 'legalName', label: 'Legal name', type: 'text', required: true }] }]}
+  steps={[{ id: 'supplier', title: 'Supplier', fields: [{ name: 'legalName', label: 'Legal name', type: 'text', required: true }] }]}
   onSubmit={(values) => api.submitApplication(values)}
   submitLabel="Submit application"
 />`,

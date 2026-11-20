@@ -4,7 +4,7 @@ import type { WidgetState } from './DashboardGrid';
 import demo from '../../demo.module.css';
 import { useStressTest } from '../../stress';
 
-const TOP_BORROWERS = ['Blue Mesa Grain — $182M', 'North Plains Co-op — $164M', 'Cedar Ridge Farms — $131M', 'Halvorsen Dairy — $97M', 'Riverbend Orchards — $88M'];
+const TOP_SUPPLIERS = ['Summit Components — $182M', 'Apex Industrial — $164M', 'Northwind Supply — $131M', 'Harbor Logistics — $97M', 'Bluefin Packaging — $88M'];
 
 function useSimulatedLoad(delay: number, failFirst = false): [WidgetState['status'], () => void] {
   const [status, setStatus] = useState<WidgetState['status']>('loading');
@@ -22,43 +22,43 @@ function useSimulatedLoad(delay: number, failFirst = false): [WidgetState['statu
 
 export default function DashboardGridDemo(): JSX.Element {
   const { text } = useStressTest(['longText']);
-  const [exposure] = useSimulatedLoad(500);
-  const [delinquency] = useSimulatedLoad(1100);
-  const [covenants, retryCovenants] = useSimulatedLoad(900, true);
-  const [borrowers] = useSimulatedLoad(1400);
+  const [spend] = useSimulatedLoad(500);
+  const [lateDeliveries] = useSimulatedLoad(1100);
+  const [contracts, retryContracts] = useSimulatedLoad(900, true);
+  const [suppliers] = useSimulatedLoad(1400);
 
   return (
     <div className={demo.stack}>
-      <DashboardGrid title={text('Portfolio health')}>
+      <DashboardGrid title={text('Supply chain health')}>
         <Widget
-          title={text('Committed exposure')}
+          title={text('Committed spend')}
           description={text('As of today')}
-          state={exposure === 'ready' ? { status: 'ready', content: <Stat label="Total" value="$4.21B" change={{ value: '3.1% vs last quarter', direction: 'up', good: true }} /> } : { status: 'loading' }}
+          state={spend === 'ready' ? { status: 'ready', content: <Stat label="Total" value="$4.21B" change={{ value: '3.1% vs last quarter', direction: 'up', good: true }} /> } : { status: 'loading' }}
         />
         <Widget
-          title={text('30+ day delinquency')}
-          description={text('Share of outstanding balance')}
-          state={delinquency === 'ready' ? { status: 'ready', content: <Stat label="Rate" value="0.42%" change={{ value: '0.08 pts', direction: 'up', good: false }} /> } : { status: 'loading' }}
+          title={text('Late deliveries (30 days)')}
+          description={text('Share of open orders')}
+          state={lateDeliveries === 'ready' ? { status: 'ready', content: <Stat label="Rate" value="0.42%" change={{ value: '0.08 pts', direction: 'up', good: false }} /> } : { status: 'loading' }}
         />
         <Widget
-          title={text('Covenant breaches')}
+          title={text('Contract breaches')}
           description={text('Open, last 90 days')}
           state={
-            covenants === 'error'
-              ? { status: 'error', message: 'The covenant service timed out.', onRetry: retryCovenants }
-              : covenants === 'ready'
+            contracts === 'error'
+              ? { status: 'error', message: 'The contracts service timed out.', onRetry: retryContracts }
+              : contracts === 'ready'
                 ? { status: 'empty', message: text('No open breaches. Nothing needs action.') }
                 : { status: 'loading' }
           }
         />
         <Widget
-          title={text('Largest relationships')}
-          description={text('Top 5 of 1,284 by commitment')}
+          title={text('Largest suppliers')}
+          description={text('Top 5 of 1,284 by spend')}
           span={2}
-          viewAll={{ label: 'View all 1,284 relationships', href: '#relationships' }}
+          viewAll={{ label: 'View all 1,284 suppliers', href: '#suppliers' }}
           state={
-            borrowers === 'ready'
-              ? { status: 'ready', content: <ol className={demo.log}>{TOP_BORROWERS.map((b) => <li key={b}>{text(b)}</li>)}</ol> }
+            suppliers === 'ready'
+              ? { status: 'ready', content: <ol className={demo.log}>{TOP_SUPPLIERS.map((b) => <li key={b}>{text(b)}</li>)}</ol> }
               : { status: 'loading' }
           }
         />
