@@ -1,31 +1,33 @@
 import { useState } from 'react';
 import { ToastProvider, useToast } from './ToastStack';
 import demo from '../../demo.module.css';
+import { useStressTest } from '../../stress';
 
 function Controls(): JSX.Element {
   const { notify } = useToast();
+  const { text } = useStressTest(['longText']);
   const [count, setCount] = useState(0);
   const [log, setLog] = useState('');
 
   return (
     <div className={demo.stack}>
       <div className={demo.row}>
-        <button type="button" className={demo.button} onClick={() => notify({ tone: 'success', title: 'Draft saved', description: 'Saved to Cedar Ridge Farms renewal.' })}>
+        <button type="button" className={demo.button} onClick={() => notify({ tone: 'success', title: text('Draft saved'), description: text('Saved to Cedar Ridge Farms renewal.') })}>
           Success
         </button>
-        <button type="button" className={demo.button} onClick={() => notify({ tone: 'info', title: 'Export started', description: 'You will get an email when the file is ready.' })}>
+        <button type="button" className={demo.button} onClick={() => notify({ tone: 'info', title: text('Export started'), description: text('You will get an email when the file is ready.') })}>
           Info
         </button>
-        <button type="button" className={demo.button} onClick={() => notify({ tone: 'warning', title: 'Rate lock expires today', description: 'Lock FAC-2231 before 5:00 PM CT.' })}>
+        <button type="button" className={demo.button} onClick={() => notify({ tone: 'warning', title: text('Rate lock expires today'), description: text('Lock FAC-2231 before 5:00 PM CT.') })}>
           Warning
         </button>
-        <button type="button" className={demo.button} onClick={() => notify({ tone: 'error', title: 'Payment file rejected', description: 'Row 18 has an invalid routing number.' })}>
+        <button type="button" className={demo.button} onClick={() => notify({ tone: 'error', title: text('Payment file rejected'), description: text('Row 18 has an invalid routing number.') })}>
           Error
         </button>
         <button
           type="button"
           className={demo.button}
-          onClick={() => notify({ tone: 'success', title: 'Relationship archived', action: { label: 'Undo', onClick: () => setLog('Archive undone.') } })}
+          onClick={() => notify({ tone: 'success', title: text('Relationship archived'), action: { label: text('Undo'), onClick: () => setLog('Archive undone.') } })}
         >
           Success with Undo
         </button>
