@@ -104,6 +104,35 @@
   }
 }
 
+/* Sticky focus demo (navigation/sticky-focus): a fixed-height window that shrinks in CSS px as zoom rises. */
+.viewport {
+  block-size: var(--demo-viewport-height, 30rem);
+}
+
+.formGrid {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.formField {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.formLabel {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.formInput {
+  min-block-size: 2.25rem;
+  max-inline-size: 28rem;
+  padding: 0.375rem 0.625rem;
+}
+
 .select {
   max-width: 16rem;
   min-height: 2.5rem;
@@ -113,12 +142,22 @@
   background: var(--sux-surface, #fff);
   color: var(--sux-ink, #18181b);
   font: inherit;
+}
+
+.formInput:focus-visible {
   font-size: 0.875rem;
 }
 
 .select:focus-visible {
   outline: 2px solid var(--sux-focus, #1d4ed8);
   outline-offset: 2px;
+}
+
+.buttonPrimary {
+  composes: button;
+  border-color: var(--sux-accent, #0b6e4f);
+  background: var(--sux-accent, #0b6e4f);
+  color: #fff;
 }
 
 /* Data table for demos that place a pattern inside table cells. */

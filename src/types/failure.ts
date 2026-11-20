@@ -36,6 +36,7 @@ export type HeuristicId = (typeof HEURISTICS)[number]['id'];
 export const WCAG_CRITERIA = {
   '1.1.1': { title: 'Non-text Content', level: 'A' },
   '1.3.1': { title: 'Info and Relationships', level: 'A' },
+  '1.3.2': { title: 'Meaningful Sequence', level: 'A' },
   '1.3.5': { title: 'Identify Input Purpose', level: 'AA' },
   '1.4.1': { title: 'Use of Color', level: 'A' },
   '1.4.3': { title: 'Contrast (Minimum)', level: 'AA' },
